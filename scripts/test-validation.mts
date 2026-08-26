@@ -99,6 +99,7 @@ check(
 
 console.log('Profila pārbaudes')
 const base: ProfileDraft = {
+  slug: 'ilze-berzina',
   full_name: 'Ilze Bērziņa',
   tagline: 'Vadītājiem',
   bio: '',
@@ -171,6 +172,37 @@ check(
   'melnraksts bez jomas drīkst',
   validateProfile({ ...base, niches: [] }).niches,
   undefined
+)
+check('derīgs slug', validateProfile(base).slug, undefined)
+check(
+  'slug ar garumzīmi',
+  validateProfile({ ...base, slug: 'ilze-bērziņa' }).slug,
+  'Atļauti tikai mazie burti bez garumzīmēm, cipari un defises.'
+)
+check(
+  'slug ar lielajiem burtiem',
+  validateProfile({ ...base, slug: 'Ilze-Berzina' }).slug,
+  'Atļauti tikai mazie burti bez garumzīmēm, cipari un defises.'
+)
+check(
+  'slug ar atstarpi',
+  validateProfile({ ...base, slug: 'ilze berzina' }).slug,
+  'Atļauti tikai mazie burti bez garumzīmēm, cipari un defises.'
+)
+check(
+  'slug ar slīpsvītru (ceļa uzbrukums)',
+  validateProfile({ ...base, slug: '../admin' }).slug,
+  'Atļauti tikai mazie burti bez garumzīmēm, cipari un defises.'
+)
+check(
+  'slug ar defisi galā',
+  validateProfile({ ...base, slug: 'ilze-' }).slug,
+  'Atļauti tikai mazie burti bez garumzīmēm, cipari un defises.'
+)
+check(
+  'slug par īsu',
+  validateProfile({ ...base, slug: 'ab' }).slug,
+  'Adresei jābūt vismaz 3 rakstzīmes garai.'
 )
 check(
   'publicēt bez valodas',

@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { BadgeCheck, CalendarCheck, Eye, Languages, ShieldCheck } from 'lucide-react'
+import { CoachAvatar } from '@/components/coach-avatar'
 import { CultureMatch } from '@/components/culture-match'
 import { GalleryGrid } from '@/components/gallery-grid'
 import { LinkButton } from '@/components/link-button'
@@ -55,15 +56,6 @@ export async function generateMetadata({
     alternates: { canonical: `/coach/${coach.slug}` },
     openGraph: { title, description, type: 'profile' },
   }
-}
-
-function initials(name: string) {
-  return name
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((part) => part[0] ?? '')
-    .join('')
-    .toUpperCase()
 }
 
 const LANGUAGE_LABELS: Record<string, string> = {
@@ -122,12 +114,12 @@ export default async function CoachProfilePage({
           </LinkButton>
 
           <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
-            <span
-              aria-hidden="true"
-              className="grid size-24 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-gold/25 to-coral/20 font-display text-3xl text-gold"
-            >
-              {initials(coach.full_name)}
-            </span>
+            <CoachAvatar
+              name={coach.full_name}
+              url={coach.avatar_url}
+              px={96}
+              className="rounded-2xl"
+            />
 
             <div className="min-w-0 flex-1">
               <h1 className="flex flex-wrap items-center gap-2 font-display text-3xl sm:text-4xl">

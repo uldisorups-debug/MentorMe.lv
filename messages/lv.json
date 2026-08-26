@@ -254,6 +254,9 @@
     "uploadWrongType": "Neatbalstīts formāts. Atļauts: {allowed}.",
     "uploadTooMany": "Vairāk par {max} bildēm nevar.",
     "uploadFailed": "Augšupielāde neizdevās. Pamēģini vēlreiz.",
-    "remove": "Noņemt"
+    "remove": "Noņemt",
+    "slug": "Publiskā adrese",
+    "slugHint": "Šī saite ved uz tavu profilu. Mainot to, vecā saite vairs nestrādās — tāpēc labāk to nokārtot uzreiz un pēc tam neaiztikt.",
+    "slugTaken": "Šī adrese jau ir aizņemta. Izvēlies citu."
   }
 }

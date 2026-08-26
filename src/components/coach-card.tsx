@@ -3,18 +3,9 @@ import { useTranslations } from 'next-intl'
 import { BadgeCheck, Star } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { LinkButton } from '@/components/link-button'
+import { CoachAvatar } from '@/components/coach-avatar'
 import { certLabel, PRICE_TIER_STEPS, type CoachCardData } from '@/lib/coaches'
 import { cn } from '@/lib/utils'
-
-/** Iniciāļi avatāra vietā, kamēr bildes nav. */
-function initials(name: string): string {
-  return name
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((part) => part[0] ?? '')
-    .join('')
-    .toUpperCase()
-}
 
 function PriceTag({ coach }: { coach: CoachCardData }) {
   const t = useTranslations('Price')
@@ -97,12 +88,12 @@ export function CoachCard({
       )}
     >
       <div className="flex items-start gap-4">
-        <span
-          aria-hidden="true"
-          className="grid size-14 shrink-0 place-items-center rounded-full bg-gradient-to-br from-gold/25 to-coral/20 font-display text-lg text-gold"
-        >
-          {initials(coach.full_name)}
-        </span>
+        <CoachAvatar
+          name={coach.full_name}
+          url={coach.avatar_url}
+          px={56}
+          className="rounded-full"
+        />
 
         <div className="min-w-0 flex-1">
           <h3 className="flex items-center gap-1.5 font-display text-lg leading-tight">

@@ -9,6 +9,7 @@
  */
 
 export type ProfileDraft = {
+  slug: string
   full_name: string
   tagline: string
   bio: string
@@ -24,8 +25,24 @@ export type ProfileDraft = {
 export type FieldErrors = Partial<Record<keyof ProfileDraft, string>>
 
 /** Publicēšanai vajag vairāk nekā melnrakstam. */
+/**
+ * Publiskā adrese: mazie burti, cipari un defises.
+ * Bez diakritikas — tā URL'os salūzt un kopējot pārvēršas par %C4%81.
+ */
+const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
+
 export function validateProfile(draft: ProfileDraft): FieldErrors {
   const errors: FieldErrors = {}
+
+  const slug = draft.slug.trim()
+  if (slug.length < 3) {
+    errors.slug = 'Adresei jābūt vismaz 3 rakstzīmes garai.'
+  } else if (slug.length > 60) {
+    errors.slug = 'Adrese nedrīkst pārsniegt 60 rakstzīmes.'
+  } else if (!SLUG_PATTERN.test(slug)) {
+    errors.slug =
+      'Atļauti tikai mazie burti bez garumzīmēm, cipari un defises.'
+  }
 
   if (draft.full_name.trim().length < 2) {
     errors.full_name = 'Vārds ir obligāts.'

@@ -9,6 +9,7 @@ import { CertificateUpload } from '@/components/dashboard/certificate-upload'
 import { ChipPicker } from '@/components/dashboard/chip-picker'
 import { CultureEditor } from '@/components/dashboard/culture-editor'
 import { Field, Section } from '@/components/dashboard/field'
+import { initials } from '@/components/coach-avatar'
 import { GalleryUpload } from '@/components/dashboard/gallery-upload'
 import { LinkButton } from '@/components/link-button'
 import { Badge } from '@/components/ui/badge'
@@ -46,15 +47,6 @@ const LANGUAGE_OPTIONS = [
 
 const MAX_NICHES = 4
 
-function initials(name: string) {
-  return name
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((part) => part[0] ?? '')
-    .join('')
-    .toUpperCase()
-}
-
 export function ProfileEditor({
   userId,
   coach,
@@ -70,6 +62,7 @@ export function ProfileEditor({
   // Teksta lauki dzīvo kā virknes — tā tukšs lauks paliek tukšs,
   // nevis pārvēršas par 0.
   const [draft, setDraft] = useState<ProfileDraft>({
+    slug: coach.slug,
     full_name: coach.full_name,
     tagline: coach.tagline ?? '',
     bio: coach.bio ?? '',
@@ -147,6 +140,7 @@ export function ProfileEditor({
     const { error } = await supabase
       .from('coach_profiles')
       .update({
+        slug: draft.slug.trim(),
         full_name: draft.full_name.trim(),
         tagline: draft.tagline.trim() || null,
         bio: draft.bio.trim() || null,
@@ -178,7 +172,13 @@ export function ProfileEditor({
 
     if (error) {
       console.error('Profila saglabāšana neizdevās:', error.message)
-      setSaveError(t('saveError'))
+      // 23505 = unikalitātes pārkāpums, praksē vienmēr aizņemts slug
+      if (error.code === '23505') {
+        setErrors({ slug: t('slugTaken') })
+        setSaveError(null)
+      } else {
+        setSaveError(t('saveError'))
+      }
       return
     }
 
@@ -209,6 +209,26 @@ export function ProfileEditor({
             onChange={(event) => set('full_name', event.target.value)}
             className="bg-ink"
           />
+        </Field>
+
+        <Field
+          label={t('slug')}
+          htmlFor="slug"
+          hint={t('slugHint')}
+          error={errors.slug}
+        >
+          <div className="flex items-center gap-1 rounded-lg border border-input bg-ink px-3">
+            <span className="shrink-0 text-sm text-mist">mentorme.lv/coach/</span>
+            <Input
+              id="slug"
+              value={draft.slug}
+              maxLength={60}
+              onChange={(event) =>
+                set('slug', event.target.value.toLowerCase().replace(/\s+/g, '-'))
+              }
+              className="h-10 border-0 bg-transparent px-0 focus-visible:ring-0"
+            />
+          </div>
         </Field>
 
         <Field
