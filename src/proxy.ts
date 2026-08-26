@@ -1,0 +1,20 @@
+import type { NextRequest } from 'next/server'
+import { updateSession } from '@/lib/supabase/middleware'
+
+/**
+ * Next 16 pārsauca "middleware" par "proxy" — funkcionalitāte tā pati.
+ * Atsvaidzina Supabase sesiju un sargā /dashboard.
+ */
+export async function proxy(request: NextRequest) {
+  return updateSession(request)
+}
+
+export const config = {
+  matcher: [
+    /*
+     * Visi ceļi izņemot statiku un attēlus — tiem sesijas
+     * atsvaidzināšana ir lieks datubāzes pieprasījums.
+     */
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico)$).*)',
+  ],
+}

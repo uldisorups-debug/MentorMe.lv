@@ -1,0 +1,45 @@
+import Link from 'next/link'
+import { useTranslations } from 'next-intl'
+import { LinkButton } from '@/components/link-button'
+
+export function SiteHeader() {
+  const t = useTranslations('Nav')
+
+  return (
+    <header className="sticky top-0 z-40 h-16 border-b border-hairline bg-ink/80 backdrop-blur-lg">
+      <a
+        href="#saturs"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-50 focus:rounded-md focus:bg-gold focus:px-3 focus:py-2 focus:text-sm focus:text-ink"
+      >
+        {t('skipToContent')}
+      </a>
+
+      <div className="mx-auto flex h-full max-w-6xl items-center justify-between px-6">
+        <Link href="/" className="font-display text-lg tracking-tight">
+          Mentor<span className="text-gold">Me</span>
+          <span className="text-mist">.lv</span>
+        </Link>
+
+        <nav className="flex items-center gap-1">
+          <LinkButton
+            href="#ka-tas-darbojas"
+            variant="ghost"
+            className="hidden text-mist hover:text-cream sm:inline-flex"
+          >
+            {t('howItWorks')}
+          </LinkButton>
+          <LinkButton
+            href="#kouciem"
+            variant="ghost"
+            className="hidden text-mist hover:text-cream sm:inline-flex"
+          >
+            {t('forCoaches')}
+          </LinkButton>
+          <LinkButton href="/auth/login" variant="outline" className="ml-2 h-9">
+            {t('login')}
+          </LinkButton>
+        </nav>
+      </div>
+    </header>
+  )
+}
