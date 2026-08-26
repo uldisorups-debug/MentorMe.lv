@@ -7,9 +7,12 @@ export const metadata: Metadata = {
 }
 
 /**
- * MELNRAKSTS. Atbilst tam, ko kods tiešām dara, bet pirms īstas
- * plūsmas to būtu vērts iedot juristam apskatīt. Vietas, kas prasa
- * Ulda lēmumu, atzīmētas ar [AIZPILDĪT].
+ * Atbilst tam, ko kods tiešām dara. Rekvizīti no SIA "Forge Core"
+ * oficiālā dokumenta. Pirms īstas plūsmas to būtu vērts iedot juristam
+ * apskatīt — es neesmu jurists.
+ *
+ * Bankas rekvizītus šeit neliekam ar nolūku: publiskā privātuma
+ * politikā tiem nav ko darīt.
  */
 
 const UPDATED = '2026. gada 27. augusts'
@@ -41,15 +44,21 @@ export default function PrivacyPage() {
         <Section title="Kas ir pārzinis">
           <p>
             Par datu apstrādi MentorMe.lv atbild{' '}
-            <strong className="text-cream">
-              SIA &quot;Forge Core&quot;, reģ. nr. [AIZPILDĪT]
-            </strong>
-            , juridiskā adrese [AIZPILDĪT], Rīga, Latvija.
+            <strong className="text-cream">SIA &quot;Forge Core&quot;</strong>,
+            reģistrācijas numurs 40203671821, PVN numurs LV40203671821.
+          </p>
+          <p>
+            Juridiskā adrese: &quot;Klapēni&quot;, Roja, Rojas pagasts, Talsu
+            novads, LV-3264, Latvija.
           </p>
           <p>
             Jautājumos par datiem raksti uz{' '}
             <a href="mailto:info@forgecore.lv" className="text-gold hover:underline">
               info@forgecore.lv
+            </a>{' '}
+            vai zvani{' '}
+            <a href="tel:+37128348301" className="text-gold hover:underline">
+              +371 28 348 301
             </a>
             .
           </p>
