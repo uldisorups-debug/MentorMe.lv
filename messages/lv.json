@@ -153,5 +153,42 @@
     "alreadyReviewed": "Tu jau esi novērtējis šo kouču.",
     "success": "Paldies! Atsauksme publicēta.",
     "errorGeneric": "Neizdevās saglabāt. Pamēģini vēlreiz."
+  },
+  "Auth": {
+    "loginTitle": "Ienāc MentorMe.lv",
+    "loginLead": "Bez paroles. Izvēlies kontu, ar kuru ienākt — tas aizņem dažas sekundes.",
+    "google": "Turpināt ar Google",
+    "linkedin": "Turpināt ar LinkedIn",
+    "redirecting": "Novirza...",
+    "why": "Kāpēc jāienāk?",
+    "whyBody": "Reģistrētie konti neļauj rakstīt viltus atsauksmes. Tavu e-pastu neredz ne kouči, ne citi lietotāji.",
+    "errorTitle": "Pieteikšanās neizdevās",
+    "errorBody": "Saite bija novecojusi vai pieteikšanās tika atcelta. Pamēģini vēlreiz.",
+    "errorRetry": "Mēģināt vēlreiz",
+    "signOut": "Iziet",
+    "myProfile": "Mans profils",
+    "account": "Konts"
+  },
+  "Onboarding": {
+    "title": "Kas tu esi?",
+    "lead": "Vienu reizi — lai zinām, ko tev rādīt.",
+    "clientTitle": "Meklēju kouču",
+    "clientBody": "Gribu atrast cilvēku, kas man palīdz. Varēšu atstāt atsauksmes.",
+    "coachTitle": "Esmu koučs",
+    "coachBody": "Gribu izveidot savu profilu un saņemt klientus. Bez maksas.",
+    "submit": "Turpināt",
+    "submitting": "Saglabā...",
+    "error": "Neizdevās saglabāt izvēli. Pamēģini vēlreiz.",
+    "changeLater": "Izvēli vēlāk varēs mainīt."
+  },
+  "Dashboard": {
+    "title": "Mans profils",
+    "greeting": "Sveiks, {name}!",
+    "stubTitle": "Profila redaktors top",
+    "stubBody": "Šeit varēsi pievienot bildi, aprakstu, cenu, sertifikātus un Calendly saiti. Pagaidām tavs profils ir izveidots, bet vēl nav publicēts.",
+    "stubStatus": "Profila statuss",
+    "notPublished": "Nav publicēts",
+    "published": "Publicēts",
+    "backHome": "Uz sākumu"
   }
 }

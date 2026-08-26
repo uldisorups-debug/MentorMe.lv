@@ -28,6 +28,7 @@ export type Database = {
           role: UserRole
           display_name: string | null
           avatar_url: string | null
+          onboarded_at: string | null
           created_at: string
         }
         Insert: {
@@ -35,6 +36,7 @@ export type Database = {
           role?: UserRole
           display_name?: string | null
           avatar_url?: string | null
+          onboarded_at?: string | null
           created_at?: string
         }
         Update: {
@@ -42,6 +44,7 @@ export type Database = {
           role?: UserRole
           display_name?: string | null
           avatar_url?: string | null
+          onboarded_at?: string | null
           created_at?: string
         }
         Relationships: []

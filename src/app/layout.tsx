@@ -49,6 +49,9 @@ export default async function RootLayout({ children }: LayoutProps<'/'>) {
     Coaches: messages.Coaches,
     Price: messages.Price,
     Reviews: messages.Reviews,
+    Auth: messages.Auth,
+    Nav: messages.Nav,
+    Onboarding: messages.Onboarding,
   }
 
   return (

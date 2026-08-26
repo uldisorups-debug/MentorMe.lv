@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
+import { HeaderAuth } from '@/components/header-auth'
 import { LinkButton } from '@/components/link-button'
 
 export function SiteHeader() {
@@ -35,9 +36,7 @@ export function SiteHeader() {
           >
             {t('forCoaches')}
           </LinkButton>
-          <LinkButton href="/auth/login" variant="outline" className="ml-2 h-9">
-            {t('login')}
-          </LinkButton>
+          <HeaderAuth />
         </nav>
       </div>
     </header>

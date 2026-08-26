@@ -4,7 +4,7 @@ import type { Database } from '@/types/database'
 import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from './config'
 
 /** Ceļi, kuros bez sesijas nav ko darīt. */
-const PROTECTED_PREFIXES = ['/dashboard']
+const PROTECTED_PREFIXES = ['/dashboard', '/auth/onboarding']
 
 /**
  * Atsvaidzina Supabase sesiju katrā pieprasījumā un aizsargā /dashboard.
