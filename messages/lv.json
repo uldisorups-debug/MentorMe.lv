@@ -257,6 +257,44 @@
     "remove": "Noņemt",
     "slug": "Publiskā adrese",
     "slugHint": "Šī saite ved uz tavu profilu. Mainot to, vecā saite vairs nestrādās — tāpēc labāk to nokārtot uzreiz un pēc tam neaiztikt.",
-    "slugTaken": "Šī adrese jau ir aizņemta. Izvēlies citu."
+    "slugTaken": "Šī adrese jau ir aizņemta. Izvēlies citu.",
+    "sectionContacts": "Saziņa",
+    "contactsHint": "Šos kontaktus redz tikai reģistrēti lietotāji. Neielogotam tie netiek atdoti vispār — arī lapas kodā tos nevar atrast.",
+    "contactEmail": "E-pasts",
+    "contactWhatsapp": "WhatsApp numurs",
+    "contactTelegram": "Telegram lietotājvārds",
+    "contactMessenger": "Messenger saite",
+    "contactLinkedin": "LinkedIn saite",
+    "contactOtherLabel": "Cits kanāls — nosaukums",
+    "contactOtherValue": "Cits kanāls — saite vai adrese",
+    "consentLabel": "Piekrītu, ka šie kontakti tiek rādīti reģistrētiem MentorMe.lv lietotājiem",
+    "consentHint": "Bez šīs piekrišanas kontaktus nerādām nevienam. Piekrišanu vari atsaukt jebkurā brīdī, noņemot ķeksi.",
+    "consentRequired": "Lai kontakti būtu redzami, jāapstiprina piekrišana.",
+    "needContactToPublish": "Lai publicētu profilu, pievieno vismaz vienu saziņas veidu vai kalendāra saiti — citādi tevi neviens nevarēs uzrunāt."
+  },
+  "Contact": {
+    "sendMessage": "Sūtīt ziņu",
+    "dialogTitle": "Sazinies ar {name}",
+    "dialogLeadOpen": "Izvēlies, kur rakstīt. Saruna notiks tur — {name} to redzēs uzreiz, arī neienākot MentorMe.",
+    "loginTitle": "Kontakti redzami reģistrētiem lietotājiem",
+    "loginBody": "Kontaktus paslēpjam, lai kouču numuri un e-pasti nenonāktu spama sarakstos. Ienākšana aizņem dažas sekundes.",
+    "loginCta": "Ienākt un redzēt kontaktus",
+    "loading": "Ielādē kontaktus...",
+    "noContacts": "{name} vēl nav pievienojis nevienu saziņas veidu.",
+    "close": "Aizvērt",
+    "copyEmail": "Kopēt",
+    "copied": "Nokopēts"
+  },
+  "Account": {
+    "sectionTitle": "Konts",
+    "deleteTitle": "Dzēst kontu",
+    "deleteBody": "Tiks neatgriezeniski izdzēsts tavs profils, kontakti, bildes, raksti un atsauksmes, ko esi saņēmis. Šo atsaukt nevar.",
+    "deleteCta": "Dzēst manu kontu",
+    "deleteConfirmTitle": "Vai tiešām dzēst kontu?",
+    "deleteConfirmBody": "Ieraksti DZĒST, lai apstiprinātu.",
+    "deleteConfirmWord": "DZĒST",
+    "deleting": "Dzēš...",
+    "deleteError": "Neizdevās izdzēst kontu. Pamēģini vēlreiz.",
+    "cancel": "Atcelt"
   }
 }

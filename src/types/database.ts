@@ -9,6 +9,7 @@
 export type UserRole  = 'client' | 'coach'
 export type PriceTier = 'free' | 'affordable' | 'mid' | 'premium'
 export type CertLevel = 'none' | 'acc' | 'pcc' | 'mcc' | 'metacoach' | 'other'
+export type PostStatus = 'draft' | 'published'
 
 export type BookEntry  = { title: string; author: string; visible: boolean }
 export type MovieEntry = { title: string; year: number | null; visible: boolean }
@@ -201,6 +202,79 @@ export type Database = {
         ]
       }
 
+      coach_contacts: {
+        Row: {
+          coach_id: string
+          email: string | null
+          whatsapp: string | null
+          telegram: string | null
+          messenger_url: string | null
+          linkedin_url: string | null
+          other_label: string | null
+          other_value: string | null
+          consent_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          coach_id: string
+          email?: string | null
+          whatsapp?: string | null
+          telegram?: string | null
+          messenger_url?: string | null
+          linkedin_url?: string | null
+          other_label?: string | null
+          other_value?: string | null
+          consent_at?: string | null
+        }
+        Update: Partial<Omit<Database['public']['Tables']['coach_contacts']['Insert'], 'coach_id'>>
+        Relationships: [
+          {
+            foreignKeyName: "coach_contacts_coach_id_fkey"
+            columns: ["coach_id"]
+            isOneToOne: true
+            referencedRelation: "coach_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+
+      posts: {
+        Row: {
+          id: string
+          author_id: string
+          title: string
+          slug: string
+          excerpt: string | null
+          content: string
+          cover_image_url: string | null
+          status: PostStatus
+          published_at: string | null
+          view_count: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          author_id: string
+          title: string
+          slug?: string
+          excerpt?: string | null
+          content: string
+          cover_image_url?: string | null
+          status?: PostStatus
+        }
+        Update: Partial<Omit<Database['public']['Tables']['posts']['Insert'], 'author_id'>>
+        Relationships: [
+          {
+            foreignKeyName: "posts_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "coach_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+
       categories: {
         Row: {
           id: string
@@ -241,12 +315,21 @@ export type Database = {
         Args: { coach_slug: string }
         Returns: undefined
       }
+      increment_post_views: {
+        Args: { post_slug: string }
+        Returns: undefined
+      }
+      delete_own_account: {
+        Args: Record<string, never>
+        Returns: undefined
+      }
     }
 
     Enums: {
       user_role: UserRole
       price_tier: PriceTier
       cert_level: CertLevel
+      post_status: PostStatus
     }
   }
 }
@@ -257,4 +340,6 @@ export type CoachProfile = Database['public']['Tables']['coach_profiles']['Row']
 export type Review       = Database['public']['Tables']['reviews']['Row']
 export type Category     = Database['public']['Tables']['categories']['Row']
 export type ReviewReport = Database['public']['Tables']['review_reports']['Row']
+export type CoachContacts = Database['public']['Tables']['coach_contacts']['Row']
+export type Post          = Database['public']['Tables']['posts']['Row']
 export type CoachRating  = Database['public']['Views']['coach_ratings']['Row']

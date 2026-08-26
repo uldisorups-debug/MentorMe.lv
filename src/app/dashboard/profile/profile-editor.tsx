@@ -7,6 +7,10 @@ import { ExternalLink, Save } from 'lucide-react'
 import { AvatarUpload } from '@/components/dashboard/avatar-upload'
 import { CertificateUpload } from '@/components/dashboard/certificate-upload'
 import { ChipPicker } from '@/components/dashboard/chip-picker'
+import {
+  ContactsSection,
+  type ContactDraft,
+} from '@/components/dashboard/contacts-section'
 import { CultureEditor } from '@/components/dashboard/culture-editor'
 import { Field, Section } from '@/components/dashboard/field'
 import { initials } from '@/components/coach-avatar'
@@ -30,8 +34,10 @@ import {
   type FieldErrors,
   type ProfileDraft,
 } from '@/lib/profile-validation'
+import { hasAnyContact } from '@/lib/contacts'
 import type {
   BookEntry,
+  CoachContacts,
   CertLevel,
   CoachProfile,
   MovieEntry,
@@ -50,10 +56,12 @@ const MAX_NICHES = 4
 export function ProfileEditor({
   userId,
   coach,
+  contacts: savedContacts,
   categories,
 }: {
   userId: string
   coach: CoachProfile
+  contacts: CoachContacts | null
   categories: { value: string; label: string }[]
 }) {
   const t = useTranslations('Editor')
@@ -74,6 +82,9 @@ export function ProfileEditor({
     niches: coach.niches,
     session_languages: coach.session_languages,
     is_published: coach.is_published,
+    has_contact: false, // aizpildās save() brīdī
+    contacts_filled: false,
+    consent_given: false,
   })
 
   const [certification, setCertification] = useState<CertLevel>(
@@ -87,6 +98,17 @@ export function ProfileEditor({
   const [books, setBooks] = useState<BookEntry[]>(coach.books_top)
   const [movies, setMovies] = useState<MovieEntry[]>(coach.movies_top)
   const [music, setMusic] = useState<MusicEntry[]>(coach.music_top)
+
+  const [contacts, setContacts] = useState<ContactDraft>({
+    email: savedContacts?.email ?? '',
+    whatsapp: savedContacts?.whatsapp ?? '',
+    telegram: savedContacts?.telegram ?? '',
+    messenger_url: savedContacts?.messenger_url ?? '',
+    linkedin_url: savedContacts?.linkedin_url ?? '',
+    other_label: savedContacts?.other_label ?? '',
+    other_value: savedContacts?.other_value ?? '',
+  })
+  const [consent, setConsent] = useState(Boolean(savedContacts?.consent_at))
 
   const [errors, setErrors] = useState<FieldErrors>({})
   const [saving, setSaving] = useState(false)
@@ -121,7 +143,30 @@ export function ProfileEditor({
   )
 
   async function save() {
-    const found = validateProfile(draft)
+    // Kontaktu klātbūtne nav atsevišķs lauks formā — to aprēķinām no
+    // ievadītā tieši pirms pārbaudes, lai stāvoklis nenovecotu
+    const contactValues = {
+      email: contacts.email || null,
+      whatsapp: contacts.whatsapp || null,
+      telegram: contacts.telegram || null,
+      messenger_url: contacts.messenger_url || null,
+      linkedin_url: contacts.linkedin_url || null,
+      other_label: contacts.other_label || null,
+      other_value: contacts.other_value || null,
+    }
+    const contactsFilled = Object.values(contactValues).some((v) => v !== null)
+    const reachable =
+      (consent && hasAnyContact(contactValues)) ||
+      draft.calendly_url.trim() !== ''
+
+    const checked = {
+      ...draft,
+      has_contact: reachable,
+      contacts_filled: contactsFilled,
+      consent_given: consent,
+    }
+
+    const found = validateProfile(checked)
     setErrors(found)
     if (hasErrors(found)) {
       setSaveError(draft.is_published ? t('publishBlocked') : null)
@@ -179,6 +224,25 @@ export function ProfileEditor({
       } else {
         setSaveError(t('saveError'))
       }
+      return
+    }
+
+    // Kontakti dzīvo atsevišķā tabulā, tāpēc atsevišķs upsert.
+    // consent_at glabā datumu, nevis boolean — lai vēlāk var pierādīt,
+    // kad tieši cilvēks piekrita.
+    const { error: contactError } = await supabase
+      .from('coach_contacts')
+      .upsert({
+        coach_id: coach.id,
+        ...contactValues,
+        consent_at: consent
+          ? (savedContacts?.consent_at ?? new Date().toISOString())
+          : null,
+      })
+
+    if (contactError) {
+      console.error('Kontaktu saglabāšana neizdevās:', contactError.message)
+      setSaveError(t('saveError'))
       return
     }
 
@@ -410,6 +474,22 @@ export function ProfileEditor({
         </Field>
       </Section>
 
+      <Section title={t('sectionContacts')}>
+        <ContactsSection
+          contacts={contacts}
+          onChange={(next) => {
+            setContacts(next)
+            setSavedAt(null)
+          }}
+          consent={consent}
+          onConsent={(next) => {
+            setConsent(next)
+            setSavedAt(null)
+          }}
+          consentError={errors.consent_given}
+        />
+      </Section>
+
       <Section title={t('sectionGallery')}>
         <GalleryUpload
           userId={userId}
@@ -455,6 +535,10 @@ export function ProfileEditor({
             </label>
             <p className="mt-1.5 text-xs text-mist">{t('publishHint')}</p>
           </div>
+
+          {errors.has_contact && (
+            <p className="w-full text-xs text-coral">{errors.has_contact}</p>
+          )}
 
           <Badge variant={draft.is_published ? 'default' : 'outline'}>
             {draft.is_published ? t('statusLive') : t('statusDraft')}

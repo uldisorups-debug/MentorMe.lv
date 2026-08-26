@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter, Playfair_Display } from 'next/font/google'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, getTranslations } from 'next-intl/server'
+import { publicMessages } from '@/i18n/client-messages'
 import { SITE_URL } from '@/lib/supabase/config'
 import './globals.css'
 
@@ -41,18 +42,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RootLayout({ children }: LayoutProps<'/'>) {
   const messages = await getMessages()
 
-  // Klientam sūtām tikai tās grupas, ko lieto client komponentes.
-  // Pārējais (Meta, Nav, Hero, HowItWorks, ForCoaches, Footer, Coach,
-  // Culture) tiek atrenderēts serverī un bundlē nav vajadzīgs.
-  const clientMessages = {
-    Filters: messages.Filters,
-    Coaches: messages.Coaches,
-    Price: messages.Price,
-    Reviews: messages.Reviews,
-    Auth: messages.Auth,
-    Nav: messages.Nav,
-    Editor: messages.Editor,
-  }
+  const clientMessages = publicMessages(messages)
 
   return (
     <html

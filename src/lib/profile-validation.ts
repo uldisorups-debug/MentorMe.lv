@@ -20,7 +20,14 @@ export type ProfileDraft = {
   niches: string[]
   session_languages: string[]
   is_published: boolean
+  /** Vai ir kaut viens kanāls vai kalendārs — publicēšanas priekšnoteikums */
+  has_contact: boolean
+  /** Vai ievadītajiem kontaktiem ir apstiprināta piekrišana */
+  contacts_filled: boolean
+  consent_given: boolean
 }
+
+export type ContactFieldErrors = { contacts?: string; consent?: string }
 
 export type FieldErrors = Partial<Record<keyof ProfileDraft, string>>
 
@@ -100,8 +107,18 @@ export function validateProfile(draft: ProfileDraft): FieldErrors {
     }
   }
 
+  // Kontakti bez piekrišanas netiek rādīti, tāpēc tie būtu velti ievadīti
+  if (draft.contacts_filled && !draft.consent_given) {
+    errors.consent_given = 'Lai kontakti būtu redzami, jāapstiprina piekrišana.'
+  }
+
   // Publicētam profilam prasības ir stingrākas
   if (draft.is_published) {
+    if (!draft.has_contact) {
+      errors.has_contact =
+        'Lai publicētu profilu, pievieno vismaz vienu saziņas veidu vai kalendāra saiti — citādi tevi neviens nevarēs uzrunāt.'
+    }
+
     if (draft.tagline.trim() === '') {
       errors.tagline = 'Lai publicētu, vajag īso aprakstu.'
     }

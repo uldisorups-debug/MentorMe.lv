@@ -9,6 +9,14 @@ import {
   extensionFor,
 } from '../src/lib/uploads.ts'
 import {
+  validateContact,
+  buildContactLinks,
+  normalizePhone,
+  normalizeTelegram,
+  hasAnyContact,
+  type ContactValues,
+} from '../src/lib/contacts.ts'
+import {
   validateProfile,
   hasErrors,
   type ProfileDraft,
@@ -110,6 +118,9 @@ const base: ProfileDraft = {
   niches: ['bizness'],
   session_languages: ['lv'],
   is_published: false,
+  has_contact: true,
+  contacts_filled: true,
+  consent_given: true,
 }
 check('derīgs melnraksts', validateProfile(base), {})
 check('derīgs publicēts', validateProfile({ ...base, is_published: true }), {})
@@ -209,6 +220,91 @@ check(
   validateProfile({ ...base, is_published: true, session_languages: [] })
     .session_languages,
   'Lai publicētu, izvēlies vismaz vienu valodu.'
+)
+
+check(
+  'publicēt bez neviena kontakta',
+  validateProfile({ ...base, is_published: true, has_contact: false }).has_contact,
+  'Lai publicētu profilu, pievieno vismaz vienu saziņas veidu vai kalendāra saiti — citādi tevi neviens nevarēs uzrunāt.'
+)
+check(
+  'melnraksts bez kontakta drīkst',
+  validateProfile({ ...base, has_contact: false }).has_contact,
+  undefined
+)
+check(
+  'kontakti bez piekrišanas',
+  validateProfile({ ...base, contacts_filled: true, consent_given: false }).consent_given,
+  'Lai kontakti būtu redzami, jāapstiprina piekrišana.'
+)
+check(
+  'nav kontaktu, nav vajadzīga piekrišana',
+  validateProfile({ ...base, contacts_filled: false, consent_given: false }).consent_given,
+  undefined
+)
+
+console.log('Kontakti')
+const noContacts: ContactValues = {
+  email: null, whatsapp: null, telegram: null,
+  messenger_url: null, linkedin_url: null,
+  other_label: null, other_value: null,
+}
+
+check('tukšs lauks ir atļauts', validateContact('email', ''), null)
+check('derīgs e-pasts', validateContact('email', 'uldis@forgecore.lv'), null)
+check('e-pasts bez @', validateContact('email', 'uldis.lv'), 'Nederīga e-pasta adrese.')
+check('derīgs numurs ar atstarpēm', validateContact('whatsapp', '+371 28 348 301'), null)
+check(
+  'numurs par īsu',
+  validateContact('whatsapp', '2834'),
+  'Numuram jābūt starptautiskā formā, piem. +371 28 348 301.'
+)
+check('telegram ar @', validateContact('telegram', '@uldisorups'), null)
+check('telegram kā saite', validateContact('telegram', 'https://t.me/uldisorups'), null)
+check(
+  'telegram par īsu',
+  validateContact('telegram', 'abc'),
+  'Lietotājvārds: 5–32 rakstzīmes, tikai burti, cipari un _.'
+)
+check('http messenger nederīgs', validateContact('messenger', 'http://m.me/x'), 'Jābūt pilnai https:// saitei.')
+check('https messenger derīgs', validateContact('messenger', 'https://m.me/x'), null)
+
+check('numura tīrīšana', normalizePhone('+371 28 348 301'), '37128348301')
+check('telegram tīrīšana no saites', normalizeTelegram('https://t.me/uldis'), 'uldis')
+check('telegram tīrīšana no @', normalizeTelegram('@uldis'), 'uldis')
+
+check('bez kontaktiem nav saišu', buildContactLinks(noContacts), [])
+check('bez kontaktiem hasAnyContact', hasAnyContact(noContacts), false)
+
+check(
+  'WhatsApp saite',
+  buildContactLinks({ ...noContacts, whatsapp: '+371 28 348 301' })[0].href,
+  'https://wa.me/37128348301'
+)
+check(
+  'e-pasta saite',
+  buildContactLinks({ ...noContacts, email: 'uldis@forgecore.lv' })[0].href,
+  'mailto:uldis@forgecore.lv'
+)
+check(
+  'Telegram saite',
+  buildContactLinks({ ...noContacts, telegram: '@uldis_o' })[0].href,
+  'https://t.me/uldis_o'
+)
+check(
+  'nederīgs numurs saitē neparādās',
+  buildContactLinks({ ...noContacts, whatsapp: '123' }),
+  []
+)
+check(
+  'brīvais kanāls ar saiti',
+  buildContactLinks({ ...noContacts, other_label: 'Signal', other_value: 'https://signal.me/x' })[0],
+  { kind: 'other', label: 'Signal', href: 'https://signal.me/x', external: true }
+)
+check(
+  'divi kanāli, WhatsApp pirmais',
+  buildContactLinks({ ...noContacts, email: 'a@b.lv', whatsapp: '+37128348301' }).map((l) => l.kind),
+  ['whatsapp', 'email']
 )
 
 console.log(`\n  ${passed} izturēja, ${failed} kritušas\n`)

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
+import { DeleteAccount } from '@/components/dashboard/delete-account'
 import { ProfileEditor } from './profile-editor'
 import { createClient } from '@/lib/supabase/server'
 import { createPublicClient } from '@/lib/supabase/public'
@@ -62,6 +63,12 @@ export default async function DashboardProfilePage() {
     coach = created
   }
 
+  const { data: contacts } = await supabase
+    .from('coach_contacts')
+    .select('*')
+    .eq('coach_id', coach.id)
+    .maybeSingle()
+
   const publicClient = createPublicClient()
   const { data: categoryRows } = await publicClient
     .from('categories')
@@ -82,8 +89,13 @@ export default async function DashboardProfilePage() {
         <ProfileEditor
           userId={user.id}
           coach={coach}
+          contacts={contacts ?? null}
           categories={categories}
         />
+      </div>
+
+      <div className="mt-10">
+        <DeleteAccount />
       </div>
     </div>
   )

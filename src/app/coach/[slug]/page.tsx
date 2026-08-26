@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { BadgeCheck, CalendarCheck, Eye, Languages, ShieldCheck } from 'lucide-react'
 import { CoachAvatar } from '@/components/coach-avatar'
+import { ContactDialog } from '@/components/contact-dialog'
 import { CultureMatch } from '@/components/culture-match'
 import { GalleryGrid } from '@/components/gallery-grid'
 import { LinkButton } from '@/components/link-button'
@@ -215,21 +216,24 @@ export default async function CoachProfilePage({
             </p>
             <p className="mt-1 font-display text-2xl text-gold">{priceText}</p>
 
-            {coach.calendly_url ? (
-              <LinkButton
-                href={coach.calendly_url}
-                className="mt-5 h-11 w-full gap-2 text-sm"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <CalendarCheck className="size-4" />
-                {t('bookCall')}
-              </LinkButton>
-            ) : (
-              <p className="mt-5 rounded-lg border border-dashed border-hairline px-4 py-3 text-center text-xs text-mist">
-                {t('noCalendly')}
-              </p>
-            )}
+            <div className="mt-5 flex flex-col gap-2">
+              {/* Ziņa ir pamata darbība — tā ir vienmēr */}
+              <ContactDialog coachId={coach.id} coachName={coach.full_name} />
+
+              {/* Kalendārs tikai tiem, kas to pievienojuši */}
+              {coach.calendly_url && (
+                <LinkButton
+                  href={coach.calendly_url}
+                  variant="outline"
+                  className="h-11 w-full gap-2 text-sm"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <CalendarCheck className="size-4" />
+                  {t('bookCall')}
+                </LinkButton>
+              )}
+            </div>
 
             <dl className="mt-6 flex flex-col gap-4 border-t border-hairline pt-5 text-sm">
               {cert && (
