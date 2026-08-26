@@ -4,6 +4,15 @@ import createNextIntlPlugin from 'next-intl/plugin'
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
 
 const nextConfig: NextConfig = {
+  // Adrese mainīta no /coach/ uz /profils/. 301 tāpēc, ka Google
+  // vecajai saitei jau var būt piešķīris svaru — pāradresācija to
+  // pārnes, 404 to izmestu.
+  async redirects() {
+    return [
+      { source: '/coach/:slug', destination: '/profils/:slug', permanent: true },
+    ]
+  },
+
   images: {
     remotePatterns: [
       // Supabase Storage — avatāri un galerijas

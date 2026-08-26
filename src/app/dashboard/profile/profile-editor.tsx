@@ -282,7 +282,7 @@ export function ProfileEditor({
           error={errors.slug}
         >
           <div className="flex items-center gap-1 rounded-lg border border-input bg-ink px-3">
-            <span className="shrink-0 text-sm text-mist">mentorme.lv/coach/</span>
+            <span className="shrink-0 text-sm text-mist">mentorme.lv/profils/</span>
             <Input
               id="slug"
               value={draft.slug}
@@ -560,7 +560,7 @@ export function ProfileEditor({
 
         {coach.is_published && (
           <LinkButton
-            href={`/coach/${coach.slug}`}
+            href={`/profils/${coach.slug}`}
             variant="ghost"
             target="_blank"
             rel="noopener noreferrer"

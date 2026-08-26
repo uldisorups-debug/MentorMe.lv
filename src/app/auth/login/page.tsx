@@ -21,7 +21,7 @@ export default async function LoginPage({
   // Pieteikšanās nekad nav sveiciens — vienmēr solis ceļā uz kaut ko.
   const lead = next.startsWith('/dashboard')
     ? t('loginLeadCoach')
-    : next.startsWith('/coach/')
+    : next.startsWith('/profils/')
       ? t('loginLeadReview')
       : t('loginLead')
 

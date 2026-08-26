@@ -5,7 +5,7 @@ export function SiteFooter() {
   const t = useTranslations('Footer')
 
   const links = [
-    { href: '/par-platformu', label: t('about') },
+    { href: '/par-mums', label: t('about') },
     { href: '/auth/login?next=%2Fdashboard%2Fprofile', label: t('addProfile') },
     { href: '/kontakti', label: t('contact') },
     { href: '/privatums', label: t('privacy') },

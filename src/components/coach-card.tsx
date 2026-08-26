@@ -99,7 +99,7 @@ export function CoachCard({
           <h3 className="flex items-center gap-1.5 font-display text-lg leading-tight">
             {/* Visa kartīte kļūst klikšķināma caur šo pseido-elementu */}
             <Link
-              href={`/coach/${coach.slug}`}
+              href={`/profils/${coach.slug}`}
               className="after:absolute after:inset-0 after:rounded-2xl focus-visible:outline-none"
             >
               {coach.full_name}
@@ -152,7 +152,7 @@ export function CoachCard({
 
         {/* relative + z-10, lai poga stāv virs kartītes klikšķa laukuma */}
         <LinkButton
-          href={`/coach/${coach.slug}`}
+          href={`/profils/${coach.slug}`}
           variant="secondary"
           className="relative z-10 h-9"
         >
