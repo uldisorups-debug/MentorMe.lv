@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { ShieldCheck } from 'lucide-react'
-import { safeNext } from '@/lib/safe-next'
 import { LoginButtons } from './login-buttons'
+import { safeNext } from '@/lib/safe-next'
 
 export const metadata: Metadata = {
   title: 'Ienākt',
@@ -17,10 +17,18 @@ export default async function LoginPage({
 
   const next = safeNext(typeof params.next === 'string' ? params.next : null)
 
+  // Paskaidrojums atkarīgs no tā, kāpēc cilvēks šeit nonāca.
+  // Pieteikšanās nekad nav sveiciens — vienmēr solis ceļā uz kaut ko.
+  const lead = next.startsWith('/dashboard')
+    ? t('loginLeadCoach')
+    : next.startsWith('/coach/')
+      ? t('loginLeadReview')
+      : t('loginLead')
+
   return (
     <div className="mx-auto flex max-w-md flex-col px-6 py-20">
       <h1 className="font-display text-3xl">{t('loginTitle')}</h1>
-      <p className="mt-3 text-mist">{t('loginLead')}</p>
+      <p className="mt-3 text-mist">{lead}</p>
 
       <div className="mt-8">
         <LoginButtons next={next} />

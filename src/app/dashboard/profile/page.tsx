@@ -23,23 +23,44 @@ export default async function DashboardProfilePage() {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('display_name, role')
+    .select('display_name')
     .eq('id', user.id)
     .maybeSingle()
 
-  if (profile && profile.role !== 'coach') redirect('/')
-
-  const { data: coach, error } = await supabase
+  const loaded = await supabase
     .from('coach_profiles')
     .select('*')
     .eq('user_id', user.id)
     .maybeSingle()
 
-  if (error) console.error('Neizdevās ielādēt kouča profilu:', error.message)
+  if (loaded.error) {
+    console.error('Neizdevās ielādēt kouča profilu:', loaded.error.message)
+  }
 
-  // Profils tiek izveidots lomas izvēles brīdī. Ja tā nav — kaut kas
-  // gājis greizi, un sūtām cauri onboarding vēlreiz.
-  if (!coach) redirect('/auth/onboarding?next=/dashboard/profile')
+  let coach = loaded.data
+
+  // Lomas jautājuma vairs nav: kas atnāk uz šo lapu, tas grib izlikt
+  // profilu. Ja tā vēl nav, izveidojam tukšu melnrakstu — tas nav
+  // publicēts, tāpēc neviens to neredz, kamēr pats to neieslēdz.
+  if (!coach) {
+    const fallbackName =
+      profile?.display_name ?? user.email?.split('@')[0] ?? 'Koučs'
+
+    const { data: created, error: createError } = await supabase
+      .from('coach_profiles')
+      .insert({ user_id: user.id, full_name: fallbackName })
+      .select('*')
+      .single()
+
+    if (createError || !created) {
+      console.error('Kouča profila izveide neizdevās:', createError?.message)
+      redirect('/')
+    }
+
+    // Loma seko darbībai, nevis anketai
+    await supabase.from('profiles').update({ role: 'coach' }).eq('id', user.id)
+    coach = created
+  }
 
   const publicClient = createPublicClient()
   const { data: categoryRows } = await publicClient

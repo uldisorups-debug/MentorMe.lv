@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -22,9 +21,7 @@ type State =
  */
 export function HeaderAuth() {
   const t = useTranslations('Auth')
-  const tNav = useTranslations('Nav')
   const router = useRouter()
-  const pathname = usePathname()
   const [state, setState] = useState<State>({ kind: 'loading' })
 
   useEffect(() => {
@@ -68,10 +65,15 @@ export function HeaderAuth() {
   }
 
   if (state.kind === 'anonymous') {
-    const next = pathname && pathname !== '/' ? `?next=${encodeURIComponent(pathname)}` : ''
+    // Galvenē pieteikšanās nozīmē tikai vienu: gribu izlikt savu profilu.
+    // Atsauksmju rakstītājs pieteiksies no profila lapas, kad tas vajadzīgs.
     return (
-      <LinkButton href={`/auth/login${next}`} variant="outline" className="ml-2 h-9">
-        {tNav('login')}
+      <LinkButton
+        href="/auth/login?next=%2Fdashboard%2Fprofile"
+        variant="outline"
+        className="ml-2 h-9"
+      >
+        {t('addProfile')}
       </LinkButton>
     )
   }

@@ -83,7 +83,11 @@ export function ReviewList({
                   {t('averageOf', { rating: review.rating })}
                 </span>
                 <p className="mt-2 text-sm font-medium">
-                  {review.author_name ?? '—'}
+                  {review.author_name ?? (
+                    <span className="text-mist italic">
+                      {t('anonymousAuthor')}
+                    </span>
+                  )}
                 </p>
               </div>
               <time

@@ -211,7 +211,7 @@ export default async function CoachProfilePage({
             </div>
 
             <ReviewList reviews={reviews} canReport={!isDemo} />
-            <ReviewForm coachId={coach.id} coachUserId={null} />
+            <ReviewForm coachId={coach.id} coachUserId={coach.user_id} />
           </section>
         </div>
 

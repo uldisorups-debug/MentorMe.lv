@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { Star } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -77,10 +77,12 @@ export function ReviewForm({
 }) {
   const t = useTranslations('Reviews')
   const router = useRouter()
+  const pathname = usePathname()
 
   const [status, setStatus] = useState<Status>({ kind: 'loading' })
   const [rating, setRating] = useState(0)
   const [body, setBody] = useState('')
+  const [anonymous, setAnonymous] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -137,6 +139,7 @@ export function ReviewForm({
       client_id: status.userId,
       rating,
       body: body.trim() || null,
+      is_anonymous: anonymous,
     })
 
     setSubmitting(false)
@@ -174,7 +177,10 @@ export function ReviewForm({
       <div className="mt-8 flex flex-col items-start gap-3 rounded-xl border border-hairline bg-surface px-5 py-5">
         <p className="text-sm text-mist">{message}</p>
         {status.kind === 'anonymous' && (
-          <LinkButton href="/auth/login" variant="outline">
+          <LinkButton
+            href={`/auth/login?next=${encodeURIComponent(pathname ?? '/')}`}
+            variant="outline"
+          >
             {t('loginCta')}
           </LinkButton>
         )}
@@ -213,6 +219,27 @@ export function ReviewForm({
           className="mt-2 bg-ink"
         />
       </div>
+
+      <div className="mt-5 rounded-lg border border-hairline bg-ink px-4 py-3">
+        <label className="flex cursor-pointer items-start gap-3">
+          <input
+            type="checkbox"
+            checked={anonymous}
+            onChange={(event) => setAnonymous(event.target.checked)}
+            className="mt-0.5 size-4 accent-[var(--gold)]"
+          />
+          <span>
+            <span className="block text-sm font-medium">
+              {t('anonymousToggle')}
+            </span>
+            <span className="mt-1 block text-xs leading-relaxed text-mist">
+              {t('anonymousHint')}
+            </span>
+          </span>
+        </label>
+      </div>
+
+      <p className="mt-3 text-xs text-mist">{t('permanentNote')}</p>
 
       {error && <p className="mt-3 text-sm text-coral">{error}</p>}
 

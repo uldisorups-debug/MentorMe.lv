@@ -36,7 +36,7 @@ export function HeroSection({ coachCount }: { coachCount: number }) {
             <ArrowRight className="size-4" />
           </LinkButton>
           <LinkButton
-            href="/auth/login"
+            href="/auth/login?next=%2Fdashboard%2Fprofile"
             size="lg"
             variant="outline"
             className="h-12 w-full px-6 text-base sm:w-auto"

@@ -51,7 +51,6 @@ export default async function RootLayout({ children }: LayoutProps<'/'>) {
     Reviews: messages.Reviews,
     Auth: messages.Auth,
     Nav: messages.Nav,
-    Onboarding: messages.Onboarding,
     Editor: messages.Editor,
   }
 

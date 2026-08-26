@@ -8,6 +8,8 @@ import { createPublicClient } from '@/lib/supabase/public'
 
 /** Pilnais profila lapas datu apjoms. */
 export type CoachDetail = CoachCardData & {
+  /** Vajadzīgs, lai koučam nerādītu atsauksmes formu par sevi pašu */
+  user_id: string | null
   bio: string | null
   calendly_url: string | null
   cert_other_label: string | null
@@ -24,6 +26,7 @@ export type ReviewWithAuthor = {
   rating: number
   body: string | null
   created_at: string
+  /** null, ja autors izvēlējies palikt anonīms */
   author_name: string | null
 }
 
@@ -209,7 +212,7 @@ function demoPage(slug: string): CoachPage | null {
   if (!card || !extras) return null
 
   return {
-    coach: { ...card, cert_proof_url: null, ...extras },
+    coach: { ...card, user_id: null, cert_proof_url: null, ...extras },
     reviews: DEMO_REVIEWS[slug] ?? [],
     isDemo: true,
   }
@@ -239,7 +242,7 @@ export async function loadCoachPage(slug: string): Promise<CoachPage | null> {
   const { data: coach, error } = await supabase
     .from('coach_profiles')
     .select(
-      'id, slug, full_name, tagline, bio, avatar_url, certification, cert_other_label, cert_proof_url, is_verified, years_experience, session_languages, price_tier, price_from, price_to, niches, calendly_url, books_top, movies_top, music_top, gallery_urls, profile_views'
+      'id, user_id, slug, full_name, tagline, bio, avatar_url, certification, cert_other_label, cert_proof_url, is_verified, years_experience, session_languages, price_tier, price_from, price_to, niches, calendly_url, books_top, movies_top, music_top, gallery_urls, profile_views'
     )
     .eq('slug', slug)
     .eq('is_published', true)
@@ -261,7 +264,7 @@ export async function loadCoachPage(slug: string): Promise<CoachPage | null> {
       .maybeSingle(),
     supabase
       .from('reviews')
-      .select('id, rating, body, created_at, client_id, profiles(display_name)')
+      .select('id, rating, body, created_at, is_anonymous, client_id, profiles(display_name)')
       .eq('coach_id', coach.id)
       .eq('is_visible', true)
       .order('created_at', { ascending: false }),
@@ -272,9 +275,11 @@ export async function loadCoachPage(slug: string): Promise<CoachPage | null> {
     rating: row.rating,
     body: row.body,
     created_at: row.created_at,
-    author_name:
-      (row.profiles as { display_name: string | null } | null)?.display_name ??
-      null,
+    // Anonīmajiem vārdu neizvelkam vispār — tas nedrīkst nonākt HTML'ā
+    author_name: row.is_anonymous
+      ? null
+      : ((row.profiles as { display_name: string | null } | null)
+          ?.display_name ?? null),
   }))
 
   return {

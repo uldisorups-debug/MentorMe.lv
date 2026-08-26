@@ -6,7 +6,7 @@ export function SiteFooter() {
 
   const links = [
     { href: '/par-platformu', label: t('about') },
-    { href: '/auth/login', label: t('addProfile') },
+    { href: '/auth/login?next=%2Fdashboard%2Fprofile', label: t('addProfile') },
     { href: '/kontakti', label: t('contact') },
     { href: '/privatums', label: t('privacy') },
   ]

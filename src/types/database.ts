@@ -124,6 +124,7 @@ export type Database = {
           client_id: string
           rating: number
           body: string | null
+          is_anonymous: boolean
           is_visible: boolean
           created_at: string
         }
@@ -133,12 +134,14 @@ export type Database = {
           client_id: string
           rating: number
           body?: string | null
+          is_anonymous?: boolean
           is_visible?: boolean
           created_at?: string
         }
         Update: {
           rating?: number
           body?: string | null
+          is_anonymous?: boolean
           is_visible?: boolean
         }
         Relationships: [

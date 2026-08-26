@@ -32,7 +32,7 @@ export function ForCoaches() {
               <p className="mt-4 leading-relaxed text-mist">{t('lead')}</p>
 
               <LinkButton
-                href="/auth/login"
+                href="/auth/login?next=%2Fdashboard%2Fprofile"
                 size="lg"
                 className="mt-8 h-12 gap-2 bg-coral px-6 text-base text-ink hover:bg-coral-soft"
               >
