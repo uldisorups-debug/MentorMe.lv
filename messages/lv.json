@@ -8,7 +8,9 @@
     "howItWorks": "Kā tas darbojas",
     "forCoaches": "Es kaut ko protu",
     "login": "Ienākt",
-    "skipToContent": "Pāriet uz saturu"
+    "skipToContent": "Pāriet uz saturu",
+    "blog": "Raksti",
+    "myPosts": "Mani raksti"
   },
   "Hero": {
     "greeting": "Sveiki. Tu meklē",
@@ -306,7 +308,8 @@
     "cityHint": "Piemēram, Talsi vai Roja. Neobligāti, bet palīdz cilvēkiem tuvumā tevi atrast.",
     "regionHint": "Ja māci tikai attālināti, reģions nav obligāts.",
     "forTourists": "Piedāvāju pieredzes tūristiem",
-    "forTouristsHint": "Meistarklases, ko var nopirkt kā piedzīvojumu — kūpināšana, vainagu pīšana, tautas dejas. Parādīsies atsevišķā sadaļā."
+    "forTouristsHint": "Meistarklases, ko var nopirkt kā piedzīvojumu — kūpināšana, vainagu pīšana, tautas dejas. Parādīsies atsevišķā sadaļā.",
+    "myPosts": "Mani raksti"
   },
   "Contact": {
     "sendMessage": "Sūtīt ziņu",
@@ -332,5 +335,57 @@
     "deleting": "Dzēš...",
     "deleteError": "Neizdevās izdzēst kontu. Pamēģini vēlreiz.",
     "cancel": "Atcelt"
+  },
+  "Blog": {
+    "title": "Raksti",
+    "metaTitle": "Raksti — MentorMe.lv",
+    "metaDescription": "Skolotāji, meistari un kouči raksta par to, ko paši prot. Praktiski raksti no cilvēkiem, kas ar to nodarbojas ikdienā.",
+    "lead": "Cilvēki, kas šeit māca, raksta par to, ko paši prot. Bez teorijas no grāmatām.",
+    "empty": "Vēl nav neviena raksta. Ja tev ir ko pastāstīt — tavs būs pirmais.",
+    "readMore": "Lasīt",
+    "by": "Raksta",
+    "readingTime": "{minutes} min lasīšanai",
+    "views": "{count, plural, one {# skatījums} other {# skatījumi}}",
+    "backToBlog": "Visi raksti",
+    "authorProfile": "Skatīt profilu",
+    "notFound": "Tāda raksta nav",
+    "notFoundBody": "Iespējams, autors to noņēmis vai saite ir nepareiza.",
+    "writeOwn": "Uzraksti savu rakstu"
+  },
+  "PostEditor": {
+    "listTitle": "Mani raksti",
+    "listLead": "Raksti par to, ko pats proti. Tie parādās kopējā blogā ar tavu vārdu un saiti uz profilu.",
+    "new": "Jauns raksts",
+    "creating": "Veido...",
+    "empty": "Vēl neesi uzrakstījis nevienu rakstu.",
+    "edit": "Rediģēt",
+    "view": "Skatīt",
+    "statusDraft": "Melnraksts",
+    "statusPublished": "Publicēts",
+    "backToList": "Visi mani raksti",
+    "title": "Virsraksts",
+    "titleHint": "No 5 līdz 140 rakstzīmēm. Tas kļūs arī par saiti.",
+    "slug": "Saite",
+    "slugHint": "Mainot to pēc publicēšanas, vecā saite pārtrūks.",
+    "excerpt": "Kopsavilkums",
+    "excerptHint": "Šo redz Google un raksta kartīte. Ja atstāsi tukšu, paņemsim pirmās rindas.",
+    "content": "Teksts",
+    "contentHint": "Markdown: ## virsraksts, **treknraksts**, - saraksts, [saite](https://…). Saites uz savu lapu drīkst.",
+    "cover": "Vāka bilde",
+    "coverHint": "Neobligāti. JPG, PNG vai WebP, līdz 5 MB.",
+    "preview": "Priekšskatījums",
+    "write": "Rakstīt",
+    "publish": "Publicēt",
+    "unpublish": "Atgriezt melnrakstā",
+    "save": "Saglabāt",
+    "saving": "Saglabā...",
+    "saved": "Saglabāts",
+    "saveError": "Neizdevās saglabāt. Pamēģini vēlreiz.",
+    "slugTaken": "Šī saite jau aizņemta. Izvēlies citu.",
+    "deletePost": "Dzēst rakstu",
+    "deleteConfirm": "Dzēst šo rakstu neatgriezeniski?",
+    "errTitle": "Virsrakstam jābūt no 5 līdz 140 rakstzīmēm.",
+    "errContent": "Teksts nedrīkst būt tukšs.",
+    "errSlug": "Atļauti tikai mazie burti bez garumzīmēm, cipari un defises."
   }
 }

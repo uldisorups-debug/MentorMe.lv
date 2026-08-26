@@ -16,9 +16,15 @@ const PUBLIC_GROUPS = [
   'Auth',
   'Nav',
   'Contact',
+  'Blog',
 ] as const
 
-const DASHBOARD_GROUPS = [...PUBLIC_GROUPS, 'Editor', 'Account'] as const
+const DASHBOARD_GROUPS = [
+  ...PUBLIC_GROUPS,
+  'Editor',
+  'Account',
+  'PostEditor',
+] as const
 
 function pick(
   messages: AbstractIntlMessages,

@@ -30,6 +30,13 @@ export function SiteHeader() {
             {t('howItWorks')}
           </LinkButton>
           <LinkButton
+            href="/blog"
+            variant="ghost"
+            className="hidden text-mist hover:text-cream sm:inline-flex"
+          >
+            {t('blog')}
+          </LinkButton>
+          <LinkButton
             href="#kouciem"
             variant="ghost"
             className="hidden text-mist hover:text-cream sm:inline-flex"

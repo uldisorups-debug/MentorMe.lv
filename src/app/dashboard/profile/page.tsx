@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import { DeleteAccount } from '@/components/dashboard/delete-account'
+import { LinkButton } from '@/components/link-button'
 import { ProfileEditor } from './profile-editor'
 import { createClient } from '@/lib/supabase/server'
 import { createPublicClient } from '@/lib/supabase/public'
@@ -103,6 +104,12 @@ export default async function DashboardProfilePage() {
           categories={categories}
           regions={regions}
         />
+      </div>
+
+      <div className="mt-10">
+        <LinkButton href="/dashboard/raksti" variant="outline" className="h-11">
+          {t('myPosts')}
+        </LinkButton>
       </div>
 
       <div className="mt-10">
