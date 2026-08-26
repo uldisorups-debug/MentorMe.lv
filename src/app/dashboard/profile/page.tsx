@@ -1,10 +1,9 @@
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
-import { Construction } from 'lucide-react'
-import { LinkButton } from '@/components/link-button'
-import { Badge } from '@/components/ui/badge'
+import { ProfileEditor } from './profile-editor'
 import { createClient } from '@/lib/supabase/server'
+import { createPublicClient } from '@/lib/supabase/public'
 
 export const metadata: Metadata = {
   title: 'Mans profils',
@@ -12,7 +11,7 @@ export const metadata: Metadata = {
 }
 
 export default async function DashboardProfilePage() {
-  const t = await getTranslations('Dashboard')
+  const t = await getTranslations('Editor')
 
   const supabase = await createClient()
   const {
@@ -30,43 +29,41 @@ export default async function DashboardProfilePage() {
 
   if (profile && profile.role !== 'coach') redirect('/')
 
-  const { data: coach } = await supabase
+  const { data: coach, error } = await supabase
     .from('coach_profiles')
-    .select('slug, full_name, is_published')
+    .select('*')
     .eq('user_id', user.id)
     .maybeSingle()
 
+  if (error) console.error('Neizdevās ielādēt kouča profilu:', error.message)
+
+  // Profils tiek izveidots lomas izvēles brīdī. Ja tā nav — kaut kas
+  // gājis greizi, un sūtām cauri onboarding vēlreiz.
+  if (!coach) redirect('/auth/onboarding?next=/dashboard/profile')
+
+  const publicClient = createPublicClient()
+  const { data: categoryRows } = await publicClient
+    .from('categories')
+    .select('slug, name_lv')
+    .order('sort_order')
+
+  const categories = (categoryRows ?? []).map((row) => ({
+    value: row.slug,
+    label: row.name_lv,
+  }))
+
   return (
-    <div className="mx-auto max-w-2xl px-6 py-16">
+    <div className="mx-auto max-w-2xl px-6 py-12">
       <h1 className="font-display text-3xl">{t('title')}</h1>
-      <p className="mt-2 text-mist">
-        {t('greeting', { name: profile?.display_name ?? coach?.full_name ?? '' })}
-      </p>
+      <p className="mt-2 text-mist">{t('lead')}</p>
 
-      <div className="mt-8 rounded-2xl border border-hairline bg-surface p-6">
-        <div className="flex items-center justify-between gap-4">
-          <span className="text-xs tracking-widest text-mist uppercase">
-            {t('stubStatus')}
-          </span>
-          <Badge variant={coach?.is_published ? 'default' : 'outline'}>
-            {coach?.is_published ? t('published') : t('notPublished')}
-          </Badge>
-        </div>
-
-        <div className="mt-6 flex gap-4 border-t border-hairline pt-6">
-          <Construction className="mt-0.5 size-5 shrink-0 text-gold" />
-          <div>
-            <h2 className="font-medium">{t('stubTitle')}</h2>
-            <p className="mt-1 text-sm leading-relaxed text-mist">
-              {t('stubBody')}
-            </p>
-          </div>
-        </div>
+      <div className="mt-8">
+        <ProfileEditor
+          userId={user.id}
+          coach={coach}
+          categories={categories}
+        />
       </div>
-
-      <LinkButton href="/" variant="outline" className="mt-8 h-10">
-        {t('backHome')}
-      </LinkButton>
     </div>
   )
 }
