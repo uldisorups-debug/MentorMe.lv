@@ -9,6 +9,11 @@ import {
   extensionFor,
 } from '../src/lib/uploads.ts'
 import {
+  filterCoaches,
+  EMPTY_FILTERS,
+  type CoachCardData,
+} from '../src/lib/coaches.ts'
+import {
   validateContact,
   buildContactLinks,
   normalizePhone,
@@ -306,6 +311,65 @@ check(
   buildContactLinks({ ...noContacts, email: 'a@b.lv', whatsapp: '+37128348301' }).map((l) => l.kind),
   ['whatsapp', 'email']
 )
+
+console.log('Meklēšanas filtrs')
+
+const coach = (over: Partial<CoachCardData>): CoachCardData => ({
+  id: 'x', slug: 'x', full_name: 'Testa Cilvēks', tagline: null,
+  avatar_url: null, certification: 'none', is_verified: false,
+  years_experience: null, session_languages: ['lv'], price_tier: 'free',
+  price_from: null, price_to: null, niches: [], teaching_format: 'remote',
+  region_slug: null, city: null, for_tourists: false,
+  avg_rating: null, review_count: 0, ...over,
+})
+
+const sphereMap = {
+  kokle: 'muzika', bungas: 'muzika',
+  matematika: 'skola', 'kouc-dzive': 'koucings',
+}
+
+const koklePasniedzejs = coach({
+  full_name: 'Zaiga', niches: ['kokle'],
+  teaching_format: 'in_person', region_slug: 'kurzeme', for_tourists: true,
+})
+const matZoom = coach({
+  full_name: 'Andris', niches: ['matematika'],
+  teaching_format: 'remote', region_slug: 'riga',
+})
+const bungas = coach({
+  full_name: 'Mareks', niches: ['bungas'],
+  teaching_format: 'hybrid', region_slug: 'riga',
+})
+const visi = [koklePasniedzejs, matZoom, bungas]
+const names = (f: typeof EMPTY_FILTERS) =>
+  filterCoaches(visi, f, sphereMap).map((c) => c.full_name)
+
+check('bez filtriem visi', names(EMPTY_FILTERS), ['Zaiga', 'Andris', 'Mareks'])
+check('sfēra mūzika', names({ ...EMPTY_FILTERS, sphere: 'muzika' }), ['Zaiga', 'Mareks'])
+check('grupa kokle', names({ ...EMPTY_FILTERS, niche: 'kokle' }), ['Zaiga'])
+check('formāts klātienē', names({ ...EMPTY_FILTERS, format: 'in_person' }), ['Zaiga'])
+check(
+  'reģions Kurzeme — attālinātais Andris arī der',
+  names({ ...EMPTY_FILTERS, region: 'kurzeme' }),
+  ['Zaiga', 'Andris']
+)
+check(
+  'Kurzeme + klātienē — Andris izkrīt',
+  names({ ...EMPTY_FILTERS, region: 'kurzeme', format: 'in_person' }),
+  ['Zaiga']
+)
+check(
+  'Rīga — Zaiga izkrīt, viņa māca tikai Kurzemē klātienē',
+  names({ ...EMPTY_FILTERS, region: 'riga' }),
+  ['Andris', 'Mareks']
+)
+check('tūristiem', names({ ...EMPTY_FILTERS, tourists: true }), ['Zaiga'])
+check(
+  'sfēra + reģions kopā',
+  names({ ...EMPTY_FILTERS, sphere: 'muzika', region: 'riga' }),
+  ['Mareks']
+)
+check('meklēšana pēc vārda', names({ ...EMPTY_FILTERS, query: 'zaig' }), ['Zaiga'])
 
 console.log(`\n  ${passed} izturēja, ${failed} kritušas\n`)
 process.exit(failed === 0 ? 0 : 1)

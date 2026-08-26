@@ -10,6 +10,7 @@ export type UserRole  = 'client' | 'coach'
 export type PriceTier = 'free' | 'affordable' | 'mid' | 'premium'
 export type CertLevel = 'none' | 'acc' | 'pcc' | 'mcc' | 'metacoach' | 'other'
 export type PostStatus = 'draft' | 'published'
+export type TeachingFormat = 'remote' | 'in_person' | 'hybrid'
 
 export type BookEntry  = { title: string; author: string; visible: boolean }
 export type MovieEntry = { title: string; year: number | null; visible: boolean }
@@ -70,6 +71,10 @@ export type Database = {
           price_from: number | null
           price_to: number | null
           niches: string[]
+          teaching_format: TeachingFormat
+          region_slug: string | null
+          city: string | null
+          for_tourists: boolean
           calendly_url: string | null
           books_top: BookEntry[]
           movies_top: MovieEntry[]
@@ -99,6 +104,10 @@ export type Database = {
           price_from?: number | null
           price_to?: number | null
           niches?: string[]
+          teaching_format?: TeachingFormat
+          region_slug?: string | null
+          city?: string | null
+          for_tourists?: boolean
           calendly_url?: string | null
           books_top?: BookEntry[]
           movies_top?: MovieEntry[]
@@ -275,6 +284,46 @@ export type Database = {
         ]
       }
 
+      spheres: {
+        Row: {
+          slug: string
+          name_lv: string
+          name_en: string
+          name_ru: string
+          icon: string | null
+          sort_order: number
+        }
+        Insert: {
+          slug: string
+          name_lv: string
+          name_en: string
+          name_ru: string
+          icon?: string | null
+          sort_order?: number
+        }
+        Update: Partial<Database['public']['Tables']['spheres']['Insert']>
+        Relationships: []
+      }
+
+      regions: {
+        Row: {
+          slug: string
+          name_lv: string
+          name_en: string
+          name_ru: string
+          sort_order: number
+        }
+        Insert: {
+          slug: string
+          name_lv: string
+          name_en: string
+          name_ru: string
+          sort_order?: number
+        }
+        Update: Partial<Database['public']['Tables']['regions']['Insert']>
+        Relationships: []
+      }
+
       categories: {
         Row: {
           id: string
@@ -284,6 +333,7 @@ export type Database = {
           name_ru: string | null
           icon: string | null
           sort_order: number
+          sphere_slug: string
         }
         Insert: {
           id?: string
@@ -293,6 +343,7 @@ export type Database = {
           name_ru?: string | null
           icon?: string | null
           sort_order?: number
+          sphere_slug: string
         }
         Update: Partial<Database['public']['Tables']['categories']['Insert']>
         Relationships: []
@@ -330,6 +381,7 @@ export type Database = {
       price_tier: PriceTier
       cert_level: CertLevel
       post_status: PostStatus
+      teaching_format: TeachingFormat
     }
   }
 }
@@ -342,4 +394,6 @@ export type Category     = Database['public']['Tables']['categories']['Row']
 export type ReviewReport = Database['public']['Tables']['review_reports']['Row']
 export type CoachContacts = Database['public']['Tables']['coach_contacts']['Row']
 export type Post          = Database['public']['Tables']['posts']['Row']
+export type Sphere        = Database['public']['Tables']['spheres']['Row']
+export type Region        = Database['public']['Tables']['regions']['Row']
 export type CoachRating  = Database['public']['Views']['coach_ratings']['Row']

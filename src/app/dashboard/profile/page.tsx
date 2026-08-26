@@ -75,7 +75,17 @@ export default async function DashboardProfilePage() {
     .select('slug, name_lv')
     .order('sort_order')
 
+  const { data: regionRows } = await publicClient
+    .from('regions')
+    .select('slug, name_lv')
+    .order('sort_order')
+
   const categories = (categoryRows ?? []).map((row) => ({
+    value: row.slug,
+    label: row.name_lv,
+  }))
+
+  const regions = (regionRows ?? []).map((row) => ({
     value: row.slug,
     label: row.name_lv,
   }))
@@ -91,6 +101,7 @@ export default async function DashboardProfilePage() {
           coach={coach}
           contacts={contacts ?? null}
           categories={categories}
+          regions={regions}
         />
       </div>
 

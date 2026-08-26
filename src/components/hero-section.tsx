@@ -3,7 +3,13 @@ import { ArrowRight } from 'lucide-react'
 import { LinkButton } from '@/components/link-button'
 import { TypingHeadline } from '@/components/typing-headline'
 
-export function HeroSection({ coachCount }: { coachCount: number }) {
+export function HeroSection({
+  coachCount,
+  sphereCount,
+}: {
+  coachCount: number
+  sphereCount: number
+}) {
   const t = useTranslations('Hero')
   const rotating = t.raw('rotating') as string[]
 
@@ -53,7 +59,7 @@ export function HeroSection({ coachCount }: { coachCount: number }) {
           </div>
           <div className="flex items-baseline gap-2">
             <dt className="sr-only">{t('statFields')}</dt>
-            <dd className="font-display text-2xl text-gold">12</dd>
+            <dd className="font-display text-2xl text-gold">{sphereCount}</dd>
             <span className="text-mist">{t('statFields')}</span>
           </div>
           <div className="flex items-baseline gap-2">

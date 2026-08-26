@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { CoachCard } from '@/components/coach-card'
-import { FilterBar } from '@/components/filter-bar'
+import { FilterBar, type FilterTaxonomy } from '@/components/filter-bar'
 import {
   EMPTY_FILTERS,
   filterCoaches,
@@ -13,25 +13,28 @@ import {
 
 export function CoachDirectory({
   coaches,
-  categories,
-  isDemo,
+  taxonomy,
 }: {
   coaches: CoachCardData[]
-  categories: { value: string; label: string }[]
-  /** true, kamēr datubāzē vēl nav publicētu kouču */
-  isDemo: boolean
+  taxonomy: FilterTaxonomy
 }) {
   const t = useTranslations('Coaches')
   const [filters, setFilters] = useState<CoachFilters>(EMPTY_FILTERS)
 
+  // grupas slug -> sfēras slug, lai filtrs pēc nozares zinātu, kas kur pieder
+  const nicheToSphere = useMemo(
+    () => Object.fromEntries(taxonomy.groups.map((g) => [g.value, g.sphere])),
+    [taxonomy.groups]
+  )
+
   const visible = useMemo(
-    () => filterCoaches(coaches, filters),
-    [coaches, filters]
+    () => filterCoaches(coaches, filters, nicheToSphere),
+    [coaches, filters, nicheToSphere]
   )
 
   const nicheNames = useMemo(
-    () => Object.fromEntries(categories.map((c) => [c.value, c.label])),
-    [categories]
+    () => Object.fromEntries(taxonomy.groups.map((g) => [g.value, g.label])),
+    [taxonomy.groups]
   )
 
   return (
@@ -39,7 +42,7 @@ export function CoachDirectory({
       <FilterBar
         filters={filters}
         onChange={setFilters}
-        categories={categories}
+        taxonomy={taxonomy}
         resultCount={visible.length}
       />
 
@@ -49,17 +52,11 @@ export function CoachDirectory({
             {t('sectionTitle')}
           </h2>
           <p className="mt-4 max-w-xl text-mist">{t('sectionLead')}</p>
-
-          {isDemo && (
-            <p className="mt-4 rounded-lg border border-coral/30 bg-coral/10 px-4 py-2.5 text-sm text-coral-soft">
-              {t('demoNotice')}
-            </p>
-          )}
         </header>
 
         {visible.length === 0 ? (
           <p className="rounded-2xl border border-dashed border-hairline px-6 py-16 text-center text-mist">
-            {t('empty')}
+            {coaches.length === 0 ? t('emptyAll') : t('empty')}
           </p>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

@@ -43,6 +43,7 @@ import type {
   MovieEntry,
   MusicEntry,
   PriceTier,
+  TeachingFormat,
 } from '@/types/database'
 
 const LANGUAGE_OPTIONS = [
@@ -58,11 +59,13 @@ export function ProfileEditor({
   coach,
   contacts: savedContacts,
   categories,
+  regions,
 }: {
   userId: string
   coach: CoachProfile
   contacts: CoachContacts | null
   categories: { value: string; label: string }[]
+  regions: { value: string; label: string }[]
 }) {
   const t = useTranslations('Editor')
   const router = useRouter()
@@ -109,6 +112,10 @@ export function ProfileEditor({
     other_value: savedContacts?.other_value ?? '',
   })
   const [consent, setConsent] = useState(Boolean(savedContacts?.consent_at))
+  const [format, setFormat] = useState<TeachingFormat>(coach.teaching_format)
+  const [region, setRegion] = useState(coach.region_slug ?? 'none')
+  const [city, setCity] = useState(coach.city ?? '')
+  const [forTourists, setForTourists] = useState(coach.for_tourists)
 
   const [errors, setErrors] = useState<FieldErrors>({})
   const [saving, setSaving] = useState(false)
@@ -130,6 +137,20 @@ export function ProfileEditor({
       { value: 'other', label: 'Cita' },
     ],
     []
+  )
+
+  const formatOptions = useMemo(
+    () => [
+      { value: 'remote', label: t('formatRemote') },
+      { value: 'in_person', label: t('formatInPerson') },
+      { value: 'hybrid', label: t('formatHybrid') },
+    ],
+    [t]
+  )
+
+  const regionOptions = useMemo(
+    () => [{ value: 'none', label: t('regionNone') }, ...regions],
+    [regions, t]
   )
 
   const tierOptions = useMemo(
@@ -204,6 +225,10 @@ export function ProfileEditor({
           draft.price_from.trim() === '' ? null : Number(draft.price_from),
         price_to: draft.price_to.trim() === '' ? null : Number(draft.price_to),
         niches: draft.niches,
+        teaching_format: format,
+        region_slug: region === 'none' ? null : region,
+        city: city.trim() || null,
+        for_tourists: forTourists,
         calendly_url: draft.calendly_url.trim() || null,
         books_top: cleanBooks,
         movies_top: cleanMovies,
@@ -453,6 +478,88 @@ export function ProfileEditor({
             max={MAX_NICHES}
           />
         </Field>
+      </Section>
+
+      <Section title={t('sectionWhere')}>
+        <Field label={t('teachingFormat')}>
+          <Select
+            items={formatOptions}
+            value={format}
+            onValueChange={(next) => {
+              setFormat(String(next) as TeachingFormat)
+              setSavedAt(null)
+            }}
+          >
+            <SelectTrigger className="h-10 w-full bg-ink">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {formatOptions.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </Field>
+
+        <Field label={t('region')} hint={t('regionHint')}>
+          <Select
+            items={regionOptions}
+            value={region}
+            onValueChange={(next) => {
+              setRegion(String(next))
+              setSavedAt(null)
+            }}
+          >
+            <SelectTrigger className="h-10 w-full bg-ink">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {regionOptions.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </Field>
+
+        <Field label={t('city')} htmlFor="city" hint={t('cityHint')}>
+          <Input
+            id="city"
+            value={city}
+            maxLength={80}
+            placeholder="Talsi"
+            onChange={(event) => {
+              setCity(event.target.value)
+              setSavedAt(null)
+            }}
+            className="bg-ink"
+          />
+        </Field>
+
+        <div className="rounded-lg border border-hairline bg-ink px-4 py-3">
+          <label className="flex cursor-pointer items-start gap-3">
+            <input
+              type="checkbox"
+              checked={forTourists}
+              onChange={(event) => {
+                setForTourists(event.target.checked)
+                setSavedAt(null)
+              }}
+              className="mt-0.5 size-4 accent-[var(--gold)]"
+            />
+            <span>
+              <span className="block text-sm font-medium">
+                {t('forTourists')}
+              </span>
+              <span className="mt-1 block text-xs leading-relaxed text-mist">
+                {t('forTouristsHint')}
+              </span>
+            </span>
+          </label>
+        </div>
       </Section>
 
       <Section title={t('sectionBooking')}>

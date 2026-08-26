@@ -1,33 +1,34 @@
 {
   "Meta": {
-    "title": "MentorMe.lv — atrodi savu kouču vai mentoru",
-    "description": "Latvijas kouču un mentoru direktorija. Sertificēti profesionāļi, praktiķi un dzīves pieredzes mentori vienuviet. Filtrē pēc jomas, cenas un valodas."
+    "title": "MentorMe.lv — atrodi to, kas zina",
+    "description": "Latvijas zināšanu un prasmju direktorija. Kokle, matemātika, zapte, koučings vai remonts — atrodi cilvēku, kurš to prot un ir gatavs iemācīt. Filtrē pēc nozares, vietas un formāta."
   },
   "Nav": {
-    "find": "Atrast kouču",
+    "find": "Meklēt",
     "howItWorks": "Kā tas darbojas",
-    "forCoaches": "Koučiem",
+    "forCoaches": "Es kaut ko protu",
     "login": "Ienākt",
     "skipToContent": "Pāriet uz saturu"
   },
   "Hero": {
     "greeting": "Sveiki. Tu meklē",
     "rotating": [
+      "skolotāju?",
       "kouču?",
-      "treneri?",
-      "mentoru?",
-      "dzīves gudrību devēju?"
+      "privātskolotāju?",
+      "meistaru?",
+      "to, kas zina?"
     ],
-    "subline": "Atrod cilvēku, kurš ir bijis tur, kur tu gribi nokļūt.",
-    "ctaPrimary": "Atrast kouču",
-    "ctaSecondary": "Esmu koučs — pievienoties",
-    "statCoaches": "kouču un mentoru",
-    "statFields": "dzīves jomas",
+    "subline": "Kokle, matemātika, zapte vai bizness — kāds Latvijā to prot un ir gatavs iemācīt.",
+    "ctaPrimary": "Meklēt zināšanas",
+    "ctaSecondary": "Es kaut ko protu — pievienoties",
+    "statCoaches": "cilvēki, kas māca",
+    "statFields": "nozares",
     "statPrice": "bezmaksas abām pusēm"
   },
   "Filters": {
     "searchLabel": "Meklēt",
-    "searchPlaceholder": "Vārds vai atslēgvārds",
+    "searchPlaceholder": "Ko tu gribi iemācīties?",
     "field": "Joma",
     "fieldAll": "Visas jomas",
     "certification": "Sertifikācija",
@@ -50,18 +51,36 @@
     "langEn": "Angļu",
     "langRu": "Krievu",
     "reset": "Notīrīt",
-    "resultCount": "{count, plural, =0 {Neviens neatbilst} one {# koučs} other {# kouči}}"
+    "resultCount": "{count, plural, =0 {Neviens neatbilst} one {# cilvēks} other {# cilvēki}}",
+    "sphere": "Nozare",
+    "sphereAll": "Visas nozares",
+    "group": "Ko māca",
+    "groupAll": "Viss šajā nozarē",
+    "region": "Vieta",
+    "regionAll": "Visa Latvija",
+    "format": "Kā notiek",
+    "formatAll": "Vienalga",
+    "formatRemote": "Attālināti",
+    "formatInPerson": "Klātienē",
+    "formatHybrid": "Abējādi",
+    "tourists": "Pieredzes tūristiem",
+    "more": "Vairāk filtru",
+    "less": "Mazāk filtru",
+    "remoteNote": "Attālinātie skolotāji rādās neatkarīgi no vietas."
   },
   "Coaches": {
-    "sectionTitle": "Iepazīsties",
-    "sectionLead": "Sertificēti profesionāļi, praktiķi un cilvēki ar dzīves pieredzi. Visi vienā sarakstā, pēc vienas loģikas.",
+    "sectionTitle": "Kas māca",
+    "sectionLead": "Sertificēti profesionāļi, praktiķi, amatnieki un cilvēki ar dzīves pieredzi. Visi vienā sarakstā, pēc vienas loģikas.",
     "verified": "Verificēts",
-    "book": "Pieteikt zvanu",
+    "book": "Skatīt profilu",
     "viewProfile": "Skatīt profilu",
     "reviews": "{count, plural, =0 {nav atsauksmju} one {# atsauksme} other {# atsauksmes}}",
     "yearsExperience": "{years} g. pieredze",
     "empty": "Pēc šiem filtriem neviens neatbilst. Pamēģini paplašināt meklēšanu.",
-    "demoNotice": "Zemāk redzami demonstrācijas profili. Īstie parādīsies, tiklīdz kouči sāks reģistrēties."
+    "emptyAll": "Šeit vēl nav neviena profila. Ja tu kaut ko proti — vari būt pirmais.",
+    "formatRemote": "Attālināti",
+    "formatInPerson": "Klātienē",
+    "formatHybrid": "Attālināti un klātienē"
   },
   "Price": {
     "free": "Bezmaksas",
@@ -75,22 +94,22 @@
     "title": "Kā tas darbojas",
     "lead": "Trīs soļi. Bez maksas, bez starpniekiem.",
     "step1Title": "Filtrē",
-    "step1Body": "Izvēlies jomu, cenu un valodu. Saraksts sašaurinās līdz dažiem cilvēkiem, kas tev tiešām der.",
+    "step1Body": "Izvēlies nozari, vietu un vai gribi mācīties klātienē vai caur ekrānu. Saraksts sašaurinās līdz tiem, kas tev tiešām der.",
     "step2Title": "Iepazīsties",
-    "step2Body": "Izlasi aprakstu, apskati sertifikātus un to, kādas grāmatas un filmas viņam patīk. Sakritība ir svarīga.",
+    "step2Body": "Izlasi aprakstu, apskati bildes un to, ko cilvēks lasa un klausās. Sakritība ir svarīga.",
     "step3Title": "Sāc",
-    "step3Body": "Piesakies uz bezmaksas iepazīšanās zvanu tieši koučā kalendārā. Bez formām un gaidīšanas."
+    "step3Body": "Uzraksti viņam tieši — WhatsApp vai e-pastā. Bez formām un gaidīšanas."
   },
   "ForCoaches": {
-    "eyebrow": "Koučiem un mentoriem",
-    "title": "Esi koučs? Pievienojies bez maksas.",
-    "lead": "Nav nozīmes, vai tev ir ICF MCC ar 2500 stundām, vai tu tikai vāc pirmās praksi stundas. Ja tev ir ko dot, tev ir vieta šeit.",
+    "eyebrow": "Visiem, kas kaut ko prot",
+    "title": "Tu kaut ko proti. Kāds to meklē.",
+    "lead": "Nav svarīgi, vai tev ir diploms, sertifikāts vai piecdesmit gadu pieredze pagrabā ar zaptēm. Ir svarīgi, vai tu proti kaut ko, ko kāds cits grib iemācīties.",
     "point1Title": "Izveido profilu",
-    "point1Body": "Bilde, apraksts, cena, jomas. Piecās minūtēs.",
-    "point2Title": "Pievieno sertifikātus",
-    "point2Body": "Mēs tos pārbaudām ar roku. Verificētā zīme nav nopērkama.",
-    "point3Title": "Saņem klientus",
-    "point3Body": "Cilvēki piesakās tieši tavā kalendārā. Mēs neņemam komisiju.",
+    "point1Body": "Bilde, apraksts, ko māci, kur un par cik. Piecās minūtēs.",
+    "point2Title": "Norādi, kur tevi atrast",
+    "point2Body": "WhatsApp, e-pasts vai kas cits. Ziņa aiziet tur, kur tu jau ikdienā esi.",
+    "point3Title": "Saņem cilvēkus",
+    "point3Body": "Viņi raksta tev tieši. Mēs neņemam komisiju.",
     "cta": "Izveidot profilu"
   },
   "Footer": {
@@ -103,8 +122,8 @@
   },
   "Coach": {
     "metaTitle": "{name} — {tagline}",
-    "metaFallbackTagline": "koučs un mentors Latvijā",
-    "metaDescription": "{name} — {cert}. Pieteikties bezmaksas iepazīšanās zvanam MentorMe.lv.",
+    "metaFallbackTagline": "māca un dalās pieredzē",
+    "metaDescription": "{name} — {cert}. Sazinies MentorMe.lv.",
     "notFoundTitle": "Tāda profila nav",
     "notFoundBody": "Iespējams, koučs profilu noņēmis vai saite ir nepareiza.",
     "backToList": "Atpakaļ uz sarakstu",
@@ -123,7 +142,12 @@
     "priceLabel": "Cena",
     "gallery": "Galerija",
     "galleryAlt": "{name} — galerijas attēls {index}",
-    "views": "{count, plural, one {# skatījums} other {# skatījumi}}"
+    "views": "{count, plural, one {# skatījums} other {# skatījumi}}",
+    "where": "Kur un kā",
+    "formatRemote": "Attālināti",
+    "formatInPerson": "Klātienē",
+    "formatHybrid": "Attālināti un klātienē",
+    "touristBadge": "Piedāvā pieredzes tūristiem"
   },
   "Culture": {
     "title": "Kultūras sakritība",
@@ -270,7 +294,19 @@
     "consentLabel": "Piekrītu, ka šie kontakti tiek rādīti reģistrētiem MentorMe.lv lietotājiem",
     "consentHint": "Bez šīs piekrišanas kontaktus nerādām nevienam. Piekrišanu vari atsaukt jebkurā brīdī, noņemot ķeksi.",
     "consentRequired": "Lai kontakti būtu redzami, jāapstiprina piekrišana.",
-    "needContactToPublish": "Lai publicētu profilu, pievieno vismaz vienu saziņas veidu vai kalendāra saiti — citādi tevi neviens nevarēs uzrunāt."
+    "needContactToPublish": "Lai publicētu profilu, pievieno vismaz vienu saziņas veidu vai kalendāra saiti — citādi tevi neviens nevarēs uzrunāt.",
+    "sectionWhere": "Kur un kā tu māci",
+    "teachingFormat": "Kā notiek nodarbības",
+    "formatRemote": "Attālināti",
+    "formatInPerson": "Klātienē",
+    "formatHybrid": "Gan tā, gan tā",
+    "region": "Reģions",
+    "regionNone": "Nav norādīts",
+    "city": "Pilsēta vai vieta",
+    "cityHint": "Piemēram, Talsi vai Roja. Neobligāti, bet palīdz cilvēkiem tuvumā tevi atrast.",
+    "regionHint": "Ja māci tikai attālināti, reģions nav obligāts.",
+    "forTourists": "Piedāvāju pieredzes tūristiem",
+    "forTouristsHint": "Meistarklases, ko var nopirkt kā piedzīvojumu — kūpināšana, vainagu pīšana, tautas dejas. Parādīsies atsevišķā sadaļā."
   },
   "Contact": {
     "sendMessage": "Sūtīt ziņu",

@@ -1,7 +1,14 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
-import { BadgeCheck, CalendarCheck, Eye, Languages, ShieldCheck } from 'lucide-react'
+import {
+  BadgeCheck,
+  CalendarCheck,
+  Eye,
+  Languages,
+  MapPin,
+  ShieldCheck,
+} from 'lucide-react'
 import { CoachAvatar } from '@/components/coach-avatar'
 import { ContactDialog } from '@/components/contact-dialog'
 import { CultureMatch } from '@/components/culture-match'
@@ -59,6 +66,12 @@ export async function generateMetadata({
   }
 }
 
+const FORMAT_KEYS = {
+  remote: 'formatRemote',
+  in_person: 'formatInPerson',
+  hybrid: 'formatHybrid',
+} as const
+
 const LANGUAGE_LABELS: Record<string, string> = {
   lv: 'Latviešu',
   en: 'Angļu',
@@ -69,6 +82,17 @@ async function loadCategoryNames(): Promise<Record<string, string>> {
   const supabase = createPublicClient()
   const { data } = await supabase.from('categories').select('slug, name_lv')
   return Object.fromEntries((data ?? []).map((c) => [c.slug, c.name_lv]))
+}
+
+async function loadRegionName(slug: string | null): Promise<string | null> {
+  if (!slug) return null
+  const supabase = createPublicClient()
+  const { data } = await supabase
+    .from('regions')
+    .select('name_lv')
+    .eq('slug', slug)
+    .maybeSingle()
+  return data?.name_lv ?? null
 }
 
 export default async function CoachProfilePage({
@@ -82,7 +106,9 @@ export default async function CoachProfilePage({
 
   if (!page) notFound()
 
-  const { coach, reviews, isDemo } = page
+  const regionName = await loadRegionName(page.coach.region_slug)
+
+  const { coach, reviews } = page
   const t = await getTranslations('Coach')
   const tPrice = await getTranslations('Price')
   const tReviews = await getTranslations('Reviews')
@@ -100,7 +126,7 @@ export default async function CoachProfilePage({
 
   return (
     <>
-      {!isDemo && <ProfileViewTracker slug={coach.slug} />}
+      <ProfileViewTracker slug={coach.slug} />
 
       {/* ---------- Hero ---------- */}
       <section className="border-b border-hairline px-6 py-12">
@@ -203,7 +229,7 @@ export default async function CoachProfilePage({
               )}
             </div>
 
-            <ReviewList reviews={reviews} canReport={!isDemo} />
+            <ReviewList reviews={reviews} canReport />
             <ReviewForm coachId={coach.id} coachUserId={coach.user_id} />
           </section>
         </div>
@@ -267,6 +293,21 @@ export default async function CoachProfilePage({
                   </dd>
                 </div>
               )}
+
+              <div>
+                <dt className="flex items-center gap-1.5 text-xs text-mist">
+                  <MapPin className="size-3.5" />
+                  {t('where')}
+                </dt>
+                <dd className="mt-1">
+                  {t(FORMAT_KEYS[coach.teaching_format])}
+                  {(regionName || coach.city) && (
+                    <span className="mt-0.5 block text-xs text-mist">
+                      {[coach.city, regionName].filter(Boolean).join(', ')}
+                    </span>
+                  )}
+                </dd>
+              </div>
 
               <div>
                 <dt className="flex items-center gap-1.5 text-xs text-mist">
