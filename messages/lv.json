@@ -148,7 +148,7 @@
     "formSubmit": "Publicēt atsauksmi",
     "formSubmitting": "Publicē...",
     "loginPrompt": "Atsauksmes var atstāt tikai reģistrēti lietotāji.",
-    "loginCta": "Ienākt ar Google vai LinkedIn",
+    "loginCta": "Ienākt, lai atstātu atsauksmi",
     "ownProfile": "Savam profilam atsauksmi atstāt nevar.",
     "alreadyReviewed": "Tu jau esi novērtējis šo kouču.",
     "success": "Paldies! Atsauksme publicēta.",
@@ -167,7 +167,8 @@
     "errorRetry": "Mēģināt vēlreiz",
     "signOut": "Iziet",
     "myProfile": "Mans profils",
-    "account": "Konts"
+    "account": "Konts",
+    "facebook": "Turpināt ar Facebook"
   },
   "Onboarding": {
     "title": "Kas tu esi?",
