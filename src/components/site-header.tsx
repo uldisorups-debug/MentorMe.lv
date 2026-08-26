@@ -1,6 +1,7 @@
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { HeaderAuth } from '@/components/header-auth'
+import { LocaleSwitcher } from '@/components/locale-switcher'
 import { LinkButton } from '@/components/link-button'
 
 export function SiteHeader() {
@@ -25,24 +26,25 @@ export function SiteHeader() {
           <LinkButton
             href="#ka-tas-darbojas"
             variant="ghost"
-            className="hidden text-mist hover:text-cream sm:inline-flex"
+            className="hidden text-mist hover:text-cream lg:inline-flex"
           >
             {t('howItWorks')}
           </LinkButton>
           <LinkButton
             href="/blog"
             variant="ghost"
-            className="hidden text-mist hover:text-cream sm:inline-flex"
+            className="hidden text-mist hover:text-cream lg:inline-flex"
           >
             {t('blog')}
           </LinkButton>
           <LinkButton
             href="#kouciem"
             variant="ghost"
-            className="hidden text-mist hover:text-cream sm:inline-flex"
+            className="hidden text-mist hover:text-cream lg:inline-flex"
           >
             {t('forCoaches')}
           </LinkButton>
+          <LocaleSwitcher />
           <HeaderAuth />
         </nav>
       </div>

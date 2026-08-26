@@ -3,26 +3,34 @@ import { NextResponse, type NextRequest } from 'next/server'
 import type { Database } from '@/types/database'
 import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from './config'
 
-/** Ceļi, kuros bez sesijas nav ko darīt. */
+/** Ceļi, kuros bez sesijas nav ko darīt (bez valodas prefiksa). */
 const PROTECTED_PREFIXES = ['/dashboard']
 
-/**
- * Atsvaidzina Supabase sesiju katrā pieprasījumā un aizsargā /dashboard.
- *
- * Svarīgi: starp klienta izveidi un `getUser()` izsaukumu nedrīkst likt
- * nekādu citu loģiku — citādi sesija var izkrist neparedzamā veidā.
- */
-export async function updateSession(request: NextRequest) {
-  let response = NextResponse.next({ request })
+/** Nogriež /en vai /ru no ceļa sākuma, lai sargus var rakstīt vienreiz. */
+function stripLocale(pathname: string): string {
+  const match = pathname.match(/^\/(en|ru)(\/.*)?$/)
+  return match ? (match[2] ?? '/') : pathname
+}
 
-  const { pathname } = request.nextUrl
+/**
+ * Atsvaidzina Supabase sesiju un sargā /dashboard.
+ *
+ * Saņem `base` — atbildi, ko jau sagatavojis next-intl middleware —
+ * un uzliek uz tās sesijas sīkdatnes. Tā abi strādā vienā piegājienā,
+ * nevis cīnās par to, kurš atbild.
+ *
+ * Svarīgi: starp klienta izveidi un getUser() nedrīkst likt citu loģiku.
+ */
+export async function updateSession(request: NextRequest, base: NextResponse) {
+  const response = base
+
+  const pathname = stripLocale(request.nextUrl.pathname)
   const needsAuth = PROTECTED_PREFIXES.some(
     (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)
   )
 
-  // Anonīmam apmeklētājam nav ko atsvaidzināt. Bez šīs pārbaudes katrs
-  // publiskās lapas skatījums izsauktu getUser() — lieks tīkla brauciens
-  // uz Supabase pie katra pieprasījuma.
+  // Anonīmam nav ko atsvaidzināt — bez šīs pārbaudes katrs publiskās
+  // lapas skatījums izsauktu getUser() uz Supabase
   const hasAuthCookie = request.cookies
     .getAll()
     .some((cookie) => cookie.name.startsWith('sb-'))
@@ -31,7 +39,7 @@ export async function updateSession(request: NextRequest) {
     if (needsAuth) {
       const loginUrl = request.nextUrl.clone()
       loginUrl.pathname = '/auth/login'
-      loginUrl.searchParams.set('next', pathname)
+      loginUrl.searchParams.set('next', request.nextUrl.pathname)
       return NextResponse.redirect(loginUrl)
     }
     return response
@@ -46,11 +54,8 @@ export async function updateSession(request: NextRequest) {
           return request.cookies.getAll()
         },
         setAll(cookiesToSet) {
-          for (const { name, value } of cookiesToSet) {
-            request.cookies.set(name, value)
-          }
-          response = NextResponse.next({ request })
           for (const { name, value, options } of cookiesToSet) {
+            request.cookies.set(name, value)
             response.cookies.set(name, value, options)
           }
         },
@@ -65,7 +70,7 @@ export async function updateSession(request: NextRequest) {
   if (needsAuth && !user) {
     const loginUrl = request.nextUrl.clone()
     loginUrl.pathname = '/auth/login'
-    loginUrl.searchParams.set('next', pathname)
+    loginUrl.searchParams.set('next', request.nextUrl.pathname)
     return NextResponse.redirect(loginUrl)
   }
 

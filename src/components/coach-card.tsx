@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { BadgeCheck, Star } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'

@@ -1,7 +1,7 @@
 import type { NextConfig } from 'next'
 import createNextIntlPlugin from 'next-intl/plugin'
 
-const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
+const withNextIntl = createNextIntlPlugin()
 
 const nextConfig: NextConfig = {
   // Adrese mainīta no /coach/ uz /profils/. 301 tāpēc, ka Google

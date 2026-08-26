@@ -1,15 +1,15 @@
 import { getRequestConfig } from 'next-intl/server'
+import { hasLocale } from 'next-intl'
+import { routing } from './routing'
 
-/**
- * Pagaidām viena valoda bez URL prefiksa — latviešu dzīvo uz "/".
- *
- * Kad pievienosim en/ru, šeit ienāks locale noteikšana un
- * app/ koks pārceļas zem [locale]. Komponenšu kods nemainās —
- * useTranslations() / getTranslations() API paliek tas pats.
- */
-export const DEFAULT_LOCALE = 'lv' as const
+export default getRequestConfig(async ({ requestLocale }) => {
+  const requested = await requestLocale
+  const locale = hasLocale(routing.locales, requested)
+    ? requested
+    : routing.defaultLocale
 
-export default getRequestConfig(async () => ({
-  locale: DEFAULT_LOCALE,
-  messages: (await import(`../../messages/${DEFAULT_LOCALE}.json`)).default,
-}))
+  return {
+    locale,
+    messages: (await import(`../../messages/${locale}.json`)).default,
+  }
+})

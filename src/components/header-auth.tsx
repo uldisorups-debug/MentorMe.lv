@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -84,12 +84,12 @@ export function HeaderAuth() {
         <LinkButton
           href="/dashboard/profile"
           variant="ghost"
-          className="hidden text-mist hover:text-cream sm:inline-flex"
+          className="hidden text-mist hover:text-cream lg:inline-flex"
         >
           {t('myProfile')}
         </LinkButton>
       )}
-      <span className="hidden max-w-32 truncate text-sm text-mist sm:inline">
+      <span className="hidden max-w-32 truncate text-sm text-mist lg:inline">
         {state.label}
       </span>
       <Button

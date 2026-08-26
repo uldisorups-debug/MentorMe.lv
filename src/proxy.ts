@@ -1,20 +1,28 @@
-import type { NextRequest } from 'next/server'
+import createIntlMiddleware from 'next-intl/middleware'
+import { NextResponse, type NextRequest } from 'next/server'
+import { routing } from '@/i18n/routing'
 import { updateSession } from '@/lib/supabase/middleware'
 
+const handleI18n = createIntlMiddleware(routing)
+
 /**
- * Next 16 pārsauca "middleware" par "proxy" — funkcionalitāte tā pati.
- * Atsvaidzina Supabase sesiju un sargā /dashboard.
+ * Divas lietas vienā: valodas noteikšana un Supabase sesija.
+ *
+ * Vispirms next-intl izlemj, kura valoda un vai vajag pāradresāciju,
+ * tad uz tās pašas atbildes uzliekam sesijas sīkdatnes. Ja to darītu
+ * otrādi, valodas pāradresācija nomestu tikko atjaunotās sīkdatnes.
  */
 export async function proxy(request: NextRequest) {
-  return updateSession(request)
+  const intlResponse = handleI18n(request)
+
+  // next-intl pāradresē (piem. /en/ -> /en) — tad sesiju atstājam mierā
+  if (intlResponse.headers.get('location')) return intlResponse
+
+  return updateSession(request, intlResponse as NextResponse)
 }
 
 export const config = {
   matcher: [
-    /*
-     * Visi ceļi izņemot statiku un attēlus — tiem sesijas
-     * atsvaidzināšana ir lieks datubāzes pieprasījums.
-     */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|txt|xml)$).*)',
   ],
 }
