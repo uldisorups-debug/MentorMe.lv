@@ -83,9 +83,25 @@ console.log('\n--- Skatījumu skaitītājs ---')
 const one = await sb.from('coach_profiles').select('slug, profile_views').limit(1).maybeSingle()
 if (one.data) {
   const before = one.data.profile_views
-  for (let i = 0; i < 5; i++) await sb.rpc('increment_profile_views', { coach_slug: one.data.slug })
-  const after = (await sb.from('coach_profiles').select('profile_views').eq('slug', one.data.slug).single()).data.profile_views
-  note(`5 izsaukumi: ${before} -> ${after}. RPC ir publiska ar nolūku, bet ierobežojuma nav — skaitli var uzpūst.`)
+  for (let i = 0; i < 20; i++) {
+    await sb.rpc('increment_profile_views', { coach_slug: one.data.slug })
+  }
+  const read = await sb.from('coach_profiles').select('profile_views').eq('slug', one.data.slug).single()
+  const grew = (read.data?.profile_views ?? 0) - before
+
+  // Viens apmeklētājs dienā drīkst pieskaitīt ne vairāk par vienu
+  if (grew <= 1) {
+    ok(`20 izsaukumi pieskaitīja ${grew} — uzpūst neizdodas`)
+  } else {
+    hole(`20 izsaukumi pieskaitīja ${grew} — skaitli var uzpūst`)
+  }
+}
+
+const viewLog = await sb.from('profile_view_log').select('*')
+if (viewLog.data?.length ?? 0) {
+  hole('profile_view_log: anonīmais redz jaucējkodus')
+} else {
+  ok('profile_view_log: anonīmais neredz neko')
 }
 
 console.log(`\n  Rezultāts: ${holes} caurumi\n`)
