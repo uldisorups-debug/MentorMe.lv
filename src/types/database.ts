@@ -31,6 +31,7 @@ export type Database = {
           display_name: string | null
           avatar_url: string | null
           onboarded_at: string | null
+          is_admin: boolean
           created_at: string
         }
         Insert: {
@@ -39,6 +40,7 @@ export type Database = {
           display_name?: string | null
           avatar_url?: string | null
           onboarded_at?: string | null
+          is_admin?: boolean
           created_at?: string
         }
         Update: {
@@ -47,6 +49,7 @@ export type Database = {
           display_name?: string | null
           avatar_url?: string | null
           onboarded_at?: string | null
+          is_admin?: boolean
           created_at?: string
         }
         Relationships: []
@@ -115,7 +118,15 @@ export type Database = {
           gallery_urls?: string[]
           is_published?: boolean
         }
-        Update: Partial<Omit<Database['public']['Tables']['coach_profiles']['Insert'], 'user_id'>>
+        /*
+         * is_verified nav Insert tipā, jo trigeris to ievietojot vienmēr
+         * piespiež uz false. Bet mainīt to drīkst administrators, tāpēc
+         * Update tipā tas ir. Parastam lietotājam trigeris klusi atgriež
+         * veco vērtību.
+         */
+        Update: Partial<
+          Omit<Database['public']['Tables']['coach_profiles']['Insert'], 'user_id'>
+        > & { is_verified?: boolean }
         Relationships: [
           {
             foreignKeyName: "coach_profiles_user_id_fkey"
@@ -324,6 +335,32 @@ export type Database = {
         Relationships: []
       }
 
+      admin_actions: {
+        Row: {
+          id: string
+          admin_id: string | null
+          admin_name: string | null
+          action: string
+          target_table: string
+          target_id: string | null
+          target_label: string | null
+          reason: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          admin_id: string | null
+          admin_name?: string | null
+          action: string
+          target_table: string
+          target_id?: string | null
+          target_label?: string | null
+          reason?: string | null
+        }
+        Update: never
+        Relationships: []
+      }
+
       categories: {
         Row: {
           id: string
@@ -374,6 +411,18 @@ export type Database = {
         Args: Record<string, never>
         Returns: undefined
       }
+      is_admin: {
+        Args: Record<string, never>
+        Returns: boolean
+      }
+      admin_delete_user: {
+        Args: {
+          target_id: string
+          target_label?: string | null
+          reason?: string | null
+        }
+        Returns: undefined
+      }
     }
 
     Enums: {
@@ -395,5 +444,6 @@ export type ReviewReport = Database['public']['Tables']['review_reports']['Row']
 export type CoachContacts = Database['public']['Tables']['coach_contacts']['Row']
 export type Post          = Database['public']['Tables']['posts']['Row']
 export type Sphere        = Database['public']['Tables']['spheres']['Row']
+export type AdminAction   = Database['public']['Tables']['admin_actions']['Row']
 export type Region        = Database['public']['Tables']['regions']['Row']
 export type CoachRating  = Database['public']['Views']['coach_ratings']['Row']

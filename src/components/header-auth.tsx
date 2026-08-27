@@ -11,7 +11,7 @@ import { createClient } from '@/lib/supabase/client'
 type State =
   | { kind: 'loading' }
   | { kind: 'anonymous' }
-  | { kind: 'signed-in'; label: string; isCoach: boolean }
+  | { kind: 'signed-in'; label: string; isCoach: boolean; isAdmin: boolean }
 
 /**
  * Galvenes labā puse.
@@ -34,7 +34,7 @@ export function HeaderAuth() {
       }
       const { data: profile } = await supabase
         .from('profiles')
-        .select('display_name, role')
+        .select('display_name, role, is_admin')
         .eq('id', userId)
         .maybeSingle()
 
@@ -42,6 +42,7 @@ export function HeaderAuth() {
         kind: 'signed-in',
         label: profile?.display_name ?? t('account'),
         isCoach: profile?.role === 'coach',
+        isAdmin: profile?.is_admin === true,
       })
     }
 
@@ -80,6 +81,15 @@ export function HeaderAuth() {
 
   return (
     <span className="ml-2 flex items-center gap-1">
+      {state.isAdmin && (
+        <LinkButton
+          href="/admin"
+          variant="ghost"
+          className="hidden text-gold hover:text-gold-soft lg:inline-flex"
+        >
+          Administrācija
+        </LinkButton>
+      )}
       {state.isCoach && (
         <LinkButton
           href="/dashboard/profile"

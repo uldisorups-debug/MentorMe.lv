@@ -61,6 +61,18 @@ await w('mainīt reģionus', () => sb.from('regions').update({ name_lv: 'Uzlauzt
 await w('pievienot kontaktus', () => sb.from('coach_contacts').insert({ coach_id: NIL, email: 'x@y.lv' }).select())
 await w('dzēst kontu (RPC)', () => sb.rpc('delete_own_account'))
 
+console.log('\n--- Administratora aizsargi ---')
+const adminLog = await sb.from('admin_actions').select('*')
+if (adminLog.data?.length ?? 0) { hole('admin_actions: anonīmais redz žurnālu') } else { ok('admin_actions: anonīmais neredz neko') }
+
+await w('uzlikt sev is_admin', () => sb.from('profiles').update({ is_admin: true }).neq('id', NIL).select())
+const del = await sb.rpc('admin_delete_user', { target_id: NIL })
+if (del.error) { ok(`admin_delete_user — bloķēts (${del.error.code})`) } else { hole('admin_delete_user — IZGĀJA CAURI') }
+const isAdm = await sb.rpc('is_admin')
+if (isAdm.data === false || isAdm.error) { ok('is_admin() anonīmam atgriež false') } else { hole('is_admin() anonīmam atgriež true') }
+
+note('Ielogota lietotāja pašpaaugstināšanu no šejienes pārbaudīt nevar — vajag sesiju')
+
 console.log('\n--- Storage ---')
 const up = await sb.storage.from('avatars').upload('sveša-mape/uzbrukums.jpg', new Blob(['x']))
 if (up.error) { ok('augšupielāde svešā mapē — bloķēta') } else { hole('augšupielāde svešā mapē — IZGĀJA CAURI') }
