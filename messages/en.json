@@ -160,7 +160,7 @@
     "masterclass": "Masterclasses and experiences"
   },
   "Culture": {
-    "title": "Culture match",
+    "title": "Sources of inspiration",
     "lead": "What this person reads, watches and listens to. Sometimes that says more than a certificate.",
     "books": "Books I recommend",
     "movies": "Films I recommend",
@@ -289,7 +289,7 @@
     "nichesHint": "Choose up to four fields you actually work in.",
     "calendly": "Calendly or Cal.com link",
     "calendlyHint": "Full https:// link. People will book directly in your calendar.",
-    "galleryHint": "Up to 12 photos. JPG, PNG or WebP, each up to 5 MB.",
+    "galleryHint": "Up to 3 photos. JPG, PNG or WebP, each up to 5 MB.",
     "galleryAdd": "Add photos",
     "galleryRemove": "Remove photo",
     "galleryEmpty": "No photos yet.",
@@ -344,8 +344,7 @@
     "city": "City or place",
     "cityHint": "For example, Talsi or Roja. Optional, but it helps people nearby find you.",
     "regionHint": "If you only teach online, the region is optional.",
-    "forTourists": "I offer experiences for visitors",
-    "forTouristsHint": "Masterclasses that can be bought as an experience — smoking food, weaving wreaths, folk dancing. They appear in a separate section.",
+    "forTourists": "I offer masterclasses / experiences",
     "myPosts": "My articles"
   },
   "Account": {

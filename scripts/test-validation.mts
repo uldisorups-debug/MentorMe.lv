@@ -79,8 +79,9 @@ check(
 )
 
 console.log('Galerijas skaits')
-check('10 + 2 iet cauri', validateCount(10, 2, 'gallery'), null)
-check('11 + 2 par daudz', validateCount(11, 2, 'gallery'), { code: 'too-many', max: 12 })
+check('1 + 2 iet cauri', validateCount(1, 2, 'gallery'), null)
+check('2 + 2 par daudz', validateCount(2, 2, 'gallery'), { code: 'too-many', max: 3 })
+check('3 jau ir — vairāk nedrīkst', validateCount(3, 1, 'gallery'), { code: 'too-many', max: 3 })
 check('avatāram skaita nav', validateCount(99, 99, 'avatar'), null)
 
 console.log('Storage ceļi')

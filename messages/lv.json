@@ -160,7 +160,7 @@
     "masterclass": "Meistarklases un pieredzes"
   },
   "Culture": {
-    "title": "Kultūras sakritība",
+    "title": "Iedvesmas avoti",
     "lead": "Ko šis cilvēks lasa, skatās un klausās. Reizēm tas pasaka vairāk nekā sertifikāts.",
     "books": "Grāmatas, ko iesaku",
     "movies": "Filmas, ko iesaku",
@@ -260,7 +260,7 @@
     "nichesHint": "Izvēlies līdz četrām jomām, kurās tiešām strādā.",
     "calendly": "Calendly vai Cal.com saite",
     "calendlyHint": "Pilna https:// saite. Cilvēki pieteiksies tieši tavā kalendārā.",
-    "galleryHint": "Līdz 12 bildēm. JPG, PNG vai WebP, katra līdz 5 MB.",
+    "galleryHint": "Līdz 3 bildēm. JPG, PNG vai WebP, katra līdz 5 MB.",
     "galleryAdd": "Pievienot bildes",
     "galleryRemove": "Noņemt bildi",
     "galleryEmpty": "Vēl nav nevienas bildes.",
@@ -315,8 +315,7 @@
     "city": "Pilsēta vai vieta",
     "cityHint": "Piemēram, Talsi vai Roja. Neobligāti, bet palīdz cilvēkiem tuvumā tevi atrast.",
     "regionHint": "Ja māci tikai attālināti, reģions nav obligāts.",
-    "forTourists": "Piedāvāju pieredzes tūristiem",
-    "forTouristsHint": "Meistarklases, ko var nopirkt kā piedzīvojumu — kūpināšana, vainagu pīšana, tautas dejas. Parādīsies atsevišķā sadaļā.",
+    "forTourists": "Piedāvāju meistarklases / pieredzes",
     "myPosts": "Mani raksti"
   },
   "Contact": {

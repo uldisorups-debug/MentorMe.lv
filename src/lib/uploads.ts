@@ -30,7 +30,7 @@ export const UPLOAD_RULES: Record<UploadKind, UploadRule> = {
     bucket: 'gallery',
     maxBytes: 5 * MB,
     mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
-    maxCount: 12,
+    maxCount: 3,
   },
   certificate: {
     bucket: 'certificates',

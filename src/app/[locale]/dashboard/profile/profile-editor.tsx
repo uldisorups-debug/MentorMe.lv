@@ -540,7 +540,7 @@ export function ProfileEditor({
         </Field>
 
         <div className="rounded-lg border border-hairline bg-ink px-4 py-3">
-          <label className="flex cursor-pointer items-start gap-3">
+          <label className="flex cursor-pointer items-center gap-3">
             <input
               type="checkbox"
               checked={forTourists}
@@ -548,16 +548,9 @@ export function ProfileEditor({
                 setForTourists(event.target.checked)
                 setSavedAt(null)
               }}
-              className="mt-0.5 size-4 accent-[var(--gold)]"
+              className="size-4 accent-[var(--gold)]"
             />
-            <span>
-              <span className="block text-sm font-medium">
-                {t('forTourists')}
-              </span>
-              <span className="mt-1 block text-xs leading-relaxed text-mist">
-                {t('forTouristsHint')}
-              </span>
-            </span>
+            <span className="text-sm font-medium">{t('forTourists')}</span>
           </label>
         </div>
       </Section>
