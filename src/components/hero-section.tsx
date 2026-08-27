@@ -53,14 +53,18 @@ export function HeroSection({
 
         <dl className="mt-14 flex flex-wrap items-center justify-center gap-x-10 gap-y-4 text-sm">
           <div className="flex items-baseline gap-2">
-            <dt className="sr-only">{t('statCoaches')}</dt>
+            <dt className="sr-only">{t('statCoaches', { count: coachCount })}</dt>
             <dd className="font-display text-2xl text-gold">{coachCount}</dd>
-            <span className="text-mist">{t('statCoaches')}</span>
+            <span className="text-mist">
+              {t('statCoaches', { count: coachCount })}
+            </span>
           </div>
           <div className="flex items-baseline gap-2">
-            <dt className="sr-only">{t('statFields')}</dt>
+            <dt className="sr-only">{t('statFields', { count: sphereCount })}</dt>
             <dd className="font-display text-2xl text-gold">{sphereCount}</dd>
-            <span className="text-mist">{t('statFields')}</span>
+            <span className="text-mist">
+              {t('statFields', { count: sphereCount })}
+            </span>
           </div>
           <div className="flex items-baseline gap-2">
             <dt className="sr-only">{t('statPrice')}</dt>

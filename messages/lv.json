@@ -24,8 +24,8 @@
     "subline": "Spēlēt kokli, atrast integrāli, izvārīt vissaldāko ievārījumu vai uzsākt biznesu — kāds Latvijā to prot un ir gatavs tev to iemācīt",
     "ctaPrimary": "Meklēt zināšanas",
     "ctaSecondary": "Man pieder zināšanas — pievienoties",
-    "statCoaches": "cilvēki, kas māca",
-    "statFields": "nozares",
+    "statCoaches": "{count, plural, =0 {cilvēku, kas māca} one {cilvēks, kas māca} other {cilvēki, kas māca}}",
+    "statFields": "{count, plural, =0 {nozaru} one {nozare} other {nozares}}",
     "statPrice": "bezmaksas abām pusēm"
   },
   "Filters": {

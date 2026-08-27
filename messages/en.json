@@ -24,8 +24,8 @@
     "subline": "Play the kokle, solve an integral, cook the sweetest jam or start a business — someone in Latvia knows how and is ready to teach you",
     "ctaPrimary": "Find knowledge",
     "ctaSecondary": "I have knowledge — join",
-    "statCoaches": "people who teach",
-    "statFields": "fields",
+    "statCoaches": "{count, plural, one {person teaching} other {people teaching}}",
+    "statFields": "{count, plural, one {field} other {fields}}",
     "statPrice": "free for both sides"
   },
   "Filters": {
