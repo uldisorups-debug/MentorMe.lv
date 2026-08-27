@@ -40,7 +40,8 @@ function FilterSelect({
   options: Option[]
   onChange: (value: string) => void
 }) {
-  const isActive = value !== 'all'
+  // 'all' un 'none' abi nozīmē "nav izvēlēts" — poga tad nav izcelta
+  const isActive = value !== 'all' && value !== 'none'
 
   return (
     <Select
@@ -113,9 +114,9 @@ export function FilterBar({
 
   const showCert = filters.sphere === CERT_SPHERE
 
-  const isDirty = (Object.keys(EMPTY_FILTERS) as (keyof CoachFilters)[])
-    .filter((key) => key !== 'sort')
-    .some((key) => filters[key] !== EMPTY_FILTERS[key])
+  const isDirty = (Object.keys(EMPTY_FILTERS) as (keyof CoachFilters)[]).some(
+    (key) => filters[key] !== EMPTY_FILTERS[key]
+  )
 
   return (
     <div className="sticky top-16 z-30 -mx-6 border-y border-hairline bg-ink/80 px-6 py-3 backdrop-blur-lg">
@@ -181,6 +182,7 @@ export function FilterBar({
             value={filters.sort}
             onChange={(value) => set('sort', value as CoachFilters['sort'])}
             options={[
+              { value: 'none', label: t('sortNone') },
               { value: 'popular', label: t('sortPopular') },
               { value: 'rated', label: t('sortRated') },
               { value: 'newest', label: t('sortNewest') },
@@ -207,7 +209,7 @@ export function FilterBar({
                 variant="ghost"
                 size="sm"
                 className="text-mist"
-                onClick={() => onChange({ ...EMPTY_FILTERS, sort: filters.sort })}
+                onClick={() => onChange(EMPTY_FILTERS)}
               >
                 <X className="size-3.5" />
                 {t('reset')}

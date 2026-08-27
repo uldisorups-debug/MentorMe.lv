@@ -30,7 +30,11 @@ export type CoachCardData = Pick<
   review_count: number
 }
 
-export type SortKey = 'popular' | 'rated' | 'newest'
+/**
+ * 'none' nozīmē, ka cilvēks kārtošanu nav izvēlējies. Tas nav tas pats,
+ * kas 'popular' — saraksts tad neizceļ ne skatītākos, ne jaunākos.
+ */
+export type SortKey = 'none' | 'popular' | 'rated' | 'newest'
 
 /** Bezmaksas, par maksu vai vienalga. */
 export type BudgetMode = 'all' | 'free' | 'paid'
@@ -53,7 +57,7 @@ export type CoachFilters = {
 
 export const EMPTY_FILTERS: CoachFilters = {
   query: '',
-  sort: 'popular',
+  sort: 'none',
   sphere: 'all',
   region: 'all',
   format: 'all',
@@ -233,12 +237,45 @@ function isNew(coach: CoachCardData, now: number): boolean {
   return age < NEW_PROFILE_DAYS * 24 * 60 * 60 * 1000
 }
 
+/**
+ * Neitrālā kārtība, kad cilvēks kārtošanu nav izvēlējies.
+ *
+ * Kaut kādā secībā saraksts jāsakārto vienalga, un jebkura pastāvīga
+ * secība kādu pieceļ un kādu apraka uz visiem laikiem. Tāpēc secība
+ * mainās reizi diennaktī: vienas dienas laikā tā ir nemainīga (lapa
+ * pārlādējas — izskatās tāpat), bet nākamajā dienā augšā ir citi.
+ * Neviens neapmetas uz pirmās rindas tāpēc, ka tur reiz iekļuva.
+ */
+function dailyOrderKey(id: string, now: number): number {
+  const day = Math.floor(now / 86_400_000)
+
+  // FNV-1a pār id, tad diena iejaukta un izmaisīta. Diena jāsamaisa,
+  // nevis jāpieskaita: pieskaitīta tā visiem id-iem mainītos vienādi,
+  // un secība paliktu tā pati mūžīgi.
+  let hash = 2166136261
+  for (let i = 0; i < id.length; i += 1) {
+    hash = Math.imul(hash ^ id.charCodeAt(i), 16777619)
+  }
+  hash = Math.imul(hash ^ day, 2246822507)
+  hash ^= hash >>> 13
+
+  return hash >>> 0
+}
+
 export function sortCoaches(
   coaches: CoachCardData[],
   sort: SortKey,
   now: number = Date.now()
 ): CoachCardData[] {
   const list = [...coaches]
+
+  if (sort === 'none') {
+    return list.sort((a, b) => {
+      const diff = dailyOrderKey(a.id, now) - dailyOrderKey(b.id, now)
+      // id kā rezerve, lai vienādas atslēgas nedotu nejaušu secību
+      return diff !== 0 ? diff : a.id.localeCompare(b.id)
+    })
+  }
 
   if (sort === 'newest') {
     return list.sort(

@@ -462,5 +462,32 @@ check(
   ['B', 'A']
 )
 
+/* Neitrālā kārtība — cilvēks kārtošanu nav izvēlējies */
+const neitrali = [
+  coach({ id: 'a', full_name: 'A' }),
+  coach({ id: 'b', full_name: 'B' }),
+  coach({ id: 'c', full_name: 'C' }),
+  coach({ id: 'd', full_name: 'D' }),
+]
+const D0 = Date.UTC(2026, 0, 1)
+const DIENA = 86_400_000
+const kartiba = (n: number) => sortCoaches(neitrali, 'none', n).map((c) => c.full_name)
+
+check('pēc noklusējuma kārtošana nav izvēlēta', EMPTY_FILTERS.sort, 'none')
+check('bez kārtošanas neviens nepazūd', [...kartiba(D0)].sort(), ['A', 'B', 'C', 'D'])
+check('bez kārtošanas dienas laikā secība nemainās', kartiba(D0 + 3 * 3_600_000), kartiba(D0))
+check(
+  'bez kārtošanas nākamajās dienās secība mainās',
+  [1, 2, 3, 4, 5].some(
+    (d) => JSON.stringify(kartiba(D0 + d * DIENA)) !== JSON.stringify(kartiba(D0))
+  ),
+  true
+)
+check(
+  'neitrālā kārtošana neizmaina sākotnējo masīvu',
+  (() => { sortCoaches(neitrali, 'none', D0); return neitrali[0].full_name })(),
+  'A'
+)
+
 console.log(`\n  ${passed} izturēja, ${failed} kritušas\n`)
 process.exit(failed === 0 ? 0 : 1)
