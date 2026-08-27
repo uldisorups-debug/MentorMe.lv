@@ -19,6 +19,10 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: '/coach/:slug', destination: '/profils/:slug', permanent: true },
+      // "Par mums" saplūda ar "Kā tas darbojas" — vecā saite nedrīkst
+      // vienkārši pazust, tā jau var būt kaut kur izsūtīta
+      { source: '/par-mums', destination: '/ka-tas-darbojas', permanent: true },
+      { source: '/:locale(en|ru)/par-mums', destination: '/:locale/ka-tas-darbojas', permanent: true },
     ]
   },
 

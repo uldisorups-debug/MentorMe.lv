@@ -24,7 +24,7 @@ export function SiteHeader() {
 
         <nav className="flex items-center gap-1">
           <LinkButton
-            href="/#ka-tas-darbojas"
+            href="/ka-tas-darbojas"
             variant="ghost"
             className="hidden text-mist hover:text-cream lg:inline-flex"
           >

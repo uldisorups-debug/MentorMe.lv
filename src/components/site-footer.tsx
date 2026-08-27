@@ -3,9 +3,10 @@ import { useTranslations } from 'next-intl'
 
 export function SiteFooter() {
   const t = useTranslations('Footer')
+  const tNav = useTranslations('Nav')
 
   const links = [
-    { href: '/par-mums', label: t('about') },
+    { href: '/ka-tas-darbojas', label: tNav('howItWorks') },
     { href: '/auth/login?next=%2Fdashboard%2Fprofile', label: t('addProfile') },
     { href: '/kontakti', label: t('contact') },
     { href: '/privatums', label: t('privacy') },

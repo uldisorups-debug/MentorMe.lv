@@ -44,7 +44,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     ...entry('/', 'daily', 1),
     ...entry('/blog', 'daily', 0.9),
-    ...entry('/par-mums', 'monthly', 0.6),
+    ...entry('/ka-tas-darbojas', 'monthly', 0.7),
     ...coachSlugs.flatMap((slug) => entry(`/profils/${slug}`, 'weekly', 0.8)),
     ...postSlugs.flatMap((slug) => entry(`/blog/${slug}`, 'monthly', 0.7)),
   ]
