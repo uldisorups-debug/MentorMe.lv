@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { ShieldCheck } from 'lucide-react'
-import { LoginButtons } from './login-buttons'
+import { LoginForm } from './login-form'
 import { safeNext } from '@/lib/safe-next'
 
 export const metadata: Metadata = {
@@ -31,7 +31,7 @@ export default async function LoginPage({
       <p className="mt-3 text-mist">{lead}</p>
 
       <div className="mt-8">
-        <LoginButtons next={next} />
+        <LoginForm next={next} />
       </div>
 
       <div className="mt-8 flex gap-3 rounded-xl border border-hairline bg-surface px-4 py-4">

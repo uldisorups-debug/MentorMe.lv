@@ -68,13 +68,14 @@ export default async function PrivacyPage({
 
         <Section title="Kādus datus vācam">
           <p>
-            <strong className="text-cream">Ienākot ar Google:</strong> vārdu,
-            e-pasta adresi un profila bildi. Šos datus mums nodod Google, kad
-            tu tam atļauj.
+            <strong className="text-cream">Ienākot ar Google, LinkedIn vai Facebook:</strong>{' '}
+            vārdu, e-pasta adresi un profila bildi. Šos datus mums nodod
+            attiecīgais pakalpojums, kad tu tam atļauj.
           </p>
           <p>
-            <strong className="text-cream">Ienākot ar e-pasta saiti:</strong>{' '}
-            tikai pašu adresi. Paroles nav — mēs to neprasām un neglabājam.
+            <strong className="text-cream">Reģistrējoties ar e-pastu:</strong>{' '}
+            adresi un paroli. Paroli glabā Supabase šifrētā veidā — mēs to
+            neredzam un nevaram atgūt, tikai palīdzēt tev uzstādīt jaunu.
           </p>
           <p>
             <strong className="text-cream">Kouča profilā:</strong> to, ko ievadi pats

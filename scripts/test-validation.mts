@@ -28,6 +28,7 @@ import {
   hasErrors,
   type ProfileDraft,
 } from '../src/lib/profile-validation.ts'
+import { authErrorKey, passwordTooShort } from '../src/lib/auth-errors.ts'
 
 let passed = 0
 let failed = 0
@@ -507,6 +508,35 @@ check(
   (() => { sortCoaches(neitrali, 'none', D0); return neitrali[0].full_name })(),
   'A'
 )
+
+console.log('Pieteikšanās kļūdas')
+check(
+  'nepareiza parole',
+  authErrorKey('Invalid login credentials'),
+  'errInvalidCredentials'
+)
+check(
+  'adrese jau reģistrēta',
+  authErrorKey('User already registered'),
+  'errAlreadyRegistered'
+)
+check(
+  'adrese nav apstiprināta',
+  authErrorKey('Email not confirmed'),
+  'errNotConfirmed'
+)
+check(
+  'Supabase bremzē — arī "For security purposes"',
+  authErrorKey('For security purposes, you can only request this after 27 seconds.'),
+  'errRateLimited'
+)
+check('vāja parole', authErrorKey('Password should be at least 6 characters'), 'errWeakPassword')
+check('nepazīstamu kļūdu rādām, kāda tā ir', authErrorKey('Something odd'), null)
+check('lielie burti netraucē', authErrorKey('INVALID LOGIN CREDENTIALS'), 'errInvalidCredentials')
+
+check('septiņas zīmes par īsu', passwordTooShort('1234567'), true)
+check('astoņas zīmes der', passwordTooShort('12345678'), false)
+check('tukša parole par īsu', passwordTooShort(''), true)
 
 console.log(`\n  ${passed} izturēja, ${failed} kritušas\n`)
 process.exit(failed === 0 ? 0 : 1)
