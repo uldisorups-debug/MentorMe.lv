@@ -18,19 +18,19 @@ const NIL = '00000000-0000-0000-0000-000000000000'
 
 console.log('\n--- Ko anonīmais var NOLASĪT ---')
 const contacts = await sb.from('coach_contacts').select('*')
-;(contacts.data?.length ?? 0) ? hole(`coach_contacts: redz ${contacts.data.length} rindas`) : ok('coach_contacts: neredz neko')
+if (contacts.data?.length ?? 0) { hole(`coach_contacts: redz ${contacts.data.length} rindas`) } else { ok('coach_contacts: neredz neko') }
 
 const reports = await sb.from('review_reports').select('*')
-;(reports.data?.length ?? 0) ? hole('review_reports: redz ziņojumus') : ok('review_reports: neredz neko')
+if (reports.data?.length ?? 0) { hole('review_reports: redz ziņojumus') } else { ok('review_reports: neredz neko') }
 
 const drafts = await sb.from('coach_profiles').select('slug').eq('is_published', false)
-;(drafts.data?.length ?? 0) ? hole(`melnraksta profili: redz ${drafts.data.length}`) : ok('nepublicētie profili: neredz')
+if (drafts.data?.length ?? 0) { hole(`melnraksta profili: redz ${drafts.data.length}`) } else { ok('nepublicētie profili: neredz') }
 
 const draftPosts = await sb.from('posts').select('title').eq('status', 'draft')
-;(draftPosts.data?.length ?? 0) ? hole('rakstu melnraksti: redz') : ok('rakstu melnraksti: neredz')
+if (draftPosts.data?.length ?? 0) { hole('rakstu melnraksti: redz') } else { ok('rakstu melnraksti: neredz') }
 
 const certs = await sb.from('coach_profiles').select('cert_proof_url').not('cert_proof_url', 'is', null)
-;(certs.data?.length ?? 0) ? note('cert_proof_url ceļš redzams publiski (fails privāts, bet ceļš atklāj user_id)') : ok('sertifikātu ceļu nav neviena')
+if (certs.data?.length ?? 0) { note('cert_proof_url ceļš redzams publiski (fails privāts, bet ceļš atklāj user_id)') } else { ok('sertifikātu ceļu nav neviena') }
 
 console.log('\n--- Ko anonīmais var IERAKSTĪT ---')
 /*
@@ -43,9 +43,11 @@ const w = async (label, fn) => {
   const { data, error } = await fn()
   if (error) return ok(`${label} — bloķēts (${error.code})`)
   const rows = data?.length ?? 0
-  rows === 0
-    ? ok(`${label} — 0 rindas skartas`)
-    : hole(`${label} — MAINĪJA ${rows} rindas`)
+  if (rows === 0) {
+    ok(`${label} — 0 rindas skartas`)
+  } else {
+    hole(`${label} — MAINĪJA ${rows} rindas`)
+  }
 }
 await w('izveidot kouča profilu', () => sb.from('coach_profiles').insert({ user_id: NIL, full_name: 'Uzbrucējs' }).select())
 await w('mainīt svešu profilu', () => sb.from('coach_profiles').update({ full_name: 'Uzlauzts' }).neq('id', NIL).select())
@@ -61,9 +63,9 @@ await w('dzēst kontu (RPC)', () => sb.rpc('delete_own_account'))
 
 console.log('\n--- Storage ---')
 const up = await sb.storage.from('avatars').upload('sveša-mape/uzbrukums.jpg', new Blob(['x']))
-up.error ? ok('augšupielāde svešā mapē — bloķēta') : hole('augšupielāde svešā mapē — IZGĀJA CAURI')
+if (up.error) { ok('augšupielāde svešā mapē — bloķēta') } else { hole('augšupielāde svešā mapē — IZGĀJA CAURI') }
 const priv = await sb.storage.from('certificates').list('')
-;(priv.data?.length ?? 0) === 0 ? ok('sertifikātu bucket — anonīmam tukšs') : hole('sertifikāti redzami')
+if ((priv.data?.length ?? 0) === 0) { ok('sertifikātu bucket — anonīmam tukšs') } else { hole('sertifikāti redzami') }
 
 console.log('\n--- Skatījumu skaitītājs ---')
 const one = await sb.from('coach_profiles').select('slug, profile_views').limit(1).maybeSingle()
