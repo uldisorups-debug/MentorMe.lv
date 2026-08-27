@@ -5,10 +5,13 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import {
   BadgeCheck,
   CalendarCheck,
+  Compass,
   Eye,
   Languages,
   MapPin,
   ShieldCheck,
+  Sparkles,
+  Video,
 } from 'lucide-react'
 import { CoachAvatar } from '@/components/coach-avatar'
 import { ContactDialog } from '@/components/contact-dialog'
@@ -22,7 +25,7 @@ import { StarRating } from '@/components/star-rating'
 import { Badge } from '@/components/ui/badge'
 import { certLabel } from '@/lib/coaches'
 import { listCoachSlugs, loadCoachPage } from '@/lib/coach-profile'
-import { loadGroupNames, loadRegionName } from '@/lib/taxonomy'
+import { loadGroupNames, loadRegionName, loadSphereNames } from '@/lib/taxonomy'
 
 export const revalidate = 60
 
@@ -95,7 +98,10 @@ export default async function CoachProfilePage({
 
   if (!page) notFound()
 
-  const regionName = await loadRegionName(page.coach.region_slug, locale)
+  const [regionName, spheres] = await Promise.all([
+    loadRegionName(page.coach.region_slug, locale),
+    loadSphereNames(page.coach.niches, locale),
+  ])
 
   const { coach, reviews } = page
   const t = await getTranslations('Coach')
@@ -274,7 +280,8 @@ export default async function CoachProfilePage({
                 </div>
               )}
 
-              {coach.years_experience !== null && (
+              {/* Nulle gadu nav pieredze — tāda rinda profilā tikai kaitē */}
+              {coach.years_experience !== null && coach.years_experience > 0 && (
                 <div>
                   <dt className="text-xs text-mist">{t('experience')}</dt>
                   <dd className="mt-1">
@@ -283,20 +290,44 @@ export default async function CoachProfilePage({
                 </div>
               )}
 
+              {/*
+                No šejienes uz leju — tieši tas, pēc kā cilvēku atlasa
+                filtrā, un tajos pašos vārdos. Ja profilā to nav, meklētājs
+                neredz, kāpēc viņš šo cilvēku atrada.
+              */}
+              {spheres.length > 0 && (
+                <div>
+                  <dt className="flex items-center gap-1.5 text-xs text-mist">
+                    <Compass className="size-3.5" />
+                    {t('sphere')}
+                  </dt>
+                  <dd className="mt-1">
+                    {spheres
+                      .map((s) => (s.icon ? `${s.icon} ${s.label}` : s.label))
+                      .join(', ')}
+                  </dd>
+                </div>
+              )}
+
               <div>
                 <dt className="flex items-center gap-1.5 text-xs text-mist">
-                  <MapPin className="size-3.5" />
-                  {t('where')}
+                  <Video className="size-3.5" />
+                  {t('format')}
                 </dt>
-                <dd className="mt-1">
-                  {t(FORMAT_KEYS[coach.teaching_format])}
-                  {(regionName || coach.city) && (
-                    <span className="mt-0.5 block text-xs text-mist">
-                      {[coach.city, regionName].filter(Boolean).join(', ')}
-                    </span>
-                  )}
-                </dd>
+                <dd className="mt-1">{t(FORMAT_KEYS[coach.teaching_format])}</dd>
               </div>
+
+              {(regionName || coach.city) && (
+                <div>
+                  <dt className="flex items-center gap-1.5 text-xs text-mist">
+                    <MapPin className="size-3.5" />
+                    {t('place')}
+                  </dt>
+                  <dd className="mt-1">
+                    {[coach.city, regionName].filter(Boolean).join(', ')}
+                  </dd>
+                </div>
+              )}
 
               <div>
                 <dt className="flex items-center gap-1.5 text-xs text-mist">
@@ -309,6 +340,16 @@ export default async function CoachProfilePage({
                     .join(', ')}
                 </dd>
               </div>
+
+              {coach.for_tourists && (
+                <div>
+                  <dt className="flex items-center gap-1.5 text-xs text-mist">
+                    <Sparkles className="size-3.5" />
+                    {t('masterclass')}
+                  </dt>
+                  <dd className="mt-1">{t('touristBadge')}</dd>
+                </div>
+              )}
             </dl>
           </div>
         </aside>

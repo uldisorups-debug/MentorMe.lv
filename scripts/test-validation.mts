@@ -369,6 +369,24 @@ check(
   names({ ...EMPTY_FILTERS, region: 'riga' }),
   ['Andris', 'Mareks']
 )
+/* Visa Latvija — kurš brauc uz visurieni, der katram novadam */
+const visurEsosais = coach({
+  full_name: 'Ilze', niches: ['kokle'],
+  teaching_format: 'in_person', region_slug: 'visa-latvija',
+})
+const perNovadu = (r: string, saraksts = [koklePasniedzejs, visurEsosais]) =>
+  filterCoaches(saraksts, { ...EMPTY_FILTERS, region: r }, sphereMap, nicheNames)
+    .map((c) => c.full_name)
+
+check('Kurzeme: "Visa Latvija" arī der', perNovadu('kurzeme'), ['Zaiga', 'Ilze'])
+check('Latgale: paliek tikai "Visa Latvija"', perNovadu('latgale'), ['Ilze'])
+check('meklējot "Visa Latvija", novadnieks nerādās', perNovadu('visa-latvija'), ['Ilze'])
+check(
+  'meklējot "Visa Latvija", attālinātais der',
+  perNovadu('visa-latvija', [matZoom, visurEsosais]),
+  ['Andris', 'Ilze']
+)
+
 check('meistarklases', names({ ...EMPTY_FILTERS, masterclass: true }), ['Zaiga'])
 
 check('budžets: bezmaksas', names({ ...EMPTY_FILTERS, budget: 'free' }), ['Zaiga', 'Andris', 'Mareks'])

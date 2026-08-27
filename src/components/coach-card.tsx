@@ -71,6 +71,12 @@ function Rating({ coach }: { coach: CoachCardData }) {
   )
 }
 
+const FORMAT_KEYS = {
+  remote: 'formatRemote',
+  in_person: 'formatInPerson',
+  hybrid: 'formatHybrid',
+} as const
+
 const NEW_DAYS = 14
 
 function isNewProfile(created: string): boolean {
@@ -80,13 +86,20 @@ function isNewProfile(created: string): boolean {
 export function CoachCard({
   coach,
   nicheNames,
+  regionNames,
 }: {
   coach: CoachCardData
   /** categories.slug -> nosaukums lietotāja valodā */
   nicheNames: Record<string, string>
+  /** regions.slug -> nosaukums lietotāja valodā */
+  regionNames: Record<string, string>
 }) {
   const t = useTranslations('Coaches')
   const cert = certLabel(coach.certification)
+  // Ja cilvēks tikko filtrēja pēc vietas, viņam to vajag redzēt arī kartītē
+  const place = [coach.city, regionNames[coach.region_slug ?? '']]
+    .filter(Boolean)
+    .join(', ')
   const visibleNiches = coach.niches.slice(0, 2)
   const hiddenCount = coach.niches.length - visibleNiches.length
 
@@ -147,7 +160,12 @@ export function CoachCard({
         </p>
       )}
 
-      <div className="mt-4 flex flex-wrap gap-1.5">
+      <p className="mt-3 text-xs text-mist">
+        {t(FORMAT_KEYS[coach.teaching_format])}
+        {place && <span> · {place}</span>}
+      </p>
+
+      <div className="mt-3 flex flex-wrap gap-1.5">
         {visibleNiches.map((niche) => (
           <Badge key={niche} variant="outline" className="text-mist">
             {nicheNames[niche] ?? niche}

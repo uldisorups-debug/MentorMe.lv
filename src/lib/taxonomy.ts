@@ -74,3 +74,43 @@ export async function loadRegionName(
     (data.name_lv as string)
   )
 }
+
+/**
+ * Nozares, kurās ietilpst konkrētās prasmes — profila lapai.
+ *
+ * Nozare ir pirmais filtrs sarakstā, bet profilā tā līdz šim neparādījās:
+ * tur bija tikai tēmas. Cilvēks nevarēja saprast, kāpēc viņu atrada.
+ * Divi vaicājumi, nevis viens ar savienojumu — categories un spheres
+ * saite database.ts nav deklarēta, un PostgREST bez tās krīt.
+ */
+export async function loadSphereNames(
+  niches: string[],
+  locale: string
+): Promise<SphereOption[]> {
+  if (niches.length === 0) return []
+
+  const supabase = createPublicClient()
+  const column = nameColumn(locale)
+
+  const { data: cats } = await supabase
+    .from('categories')
+    .select('sphere_slug')
+    .in('slug', niches)
+
+  const slugs = [...new Set((cats ?? []).map((row) => row.sphere_slug))]
+  if (slugs.length === 0) return []
+
+  const { data } = await supabase
+    .from('spheres')
+    .select(`slug, icon, name_lv, ${column}`)
+    .in('slug', slugs)
+    .order('sort_order')
+
+  return (data ?? []).map((row) => ({
+    value: row.slug as string,
+    label:
+      ((row as Record<string, unknown>)[column] as string | null) ||
+      (row.name_lv as string),
+    icon: (row.icon as string | null) ?? null,
+  }))
+}

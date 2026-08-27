@@ -81,6 +81,9 @@ export function filtersOnNewSearch(query: string): CoachFilters {
   return { ...EMPTY_FILTERS, query }
 }
 
+/** Reģions tiem, kas nav piesieti vienai vietai. */
+export const COUNTRYWIDE_REGION = 'visa-latvija'
+
 /** Sertifikācija ir jēdzīga tikai koučingā — citur to nerādām. */
 export const CERT_SPHERE = 'koucings'
 
@@ -174,11 +177,15 @@ export function filterCoaches(
      * Attālinātais skolotājs der jebkuram reģionam — viņam vienalga, kur
      * students sēž. Tāpēc reģiona filtrs viņu neizmet. Ja meklētājs grib
      * tieši klātienē, viņš uzliek arī formāta filtru, un tas nostrādā.
+     *
+     * Tas pats attiecas uz "Visa Latvija": kurš brauc uz visurieni,
+     * der arī Kurzemei.
      */
     if (filters.region !== 'all') {
       const sameRegion = coach.region_slug === filters.region
+      const countrywide = coach.region_slug === COUNTRYWIDE_REGION
       const worksAnywhere = coach.teaching_format === 'remote'
-      if (!sameRegion && !worksAnywhere) return false
+      if (!sameRegion && !countrywide && !worksAnywhere) return false
     }
 
     if (filters.masterclass && !coach.for_tourists) {

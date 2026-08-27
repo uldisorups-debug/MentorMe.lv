@@ -33,6 +33,11 @@ export function CoachDirectory({
     [taxonomy.groups]
   )
 
+  const regionNames = useMemo(
+    () => Object.fromEntries(taxonomy.regions.map((r) => [r.value, r.label])),
+    [taxonomy.regions]
+  )
+
   const visible = useMemo(
     () =>
       sortCoaches(
@@ -70,6 +75,7 @@ export function CoachDirectory({
                 key={coach.id}
                 coach={coach}
                 nicheNames={nicheNames}
+                regionNames={regionNames}
               />
             ))}
           </div>
