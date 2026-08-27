@@ -68,7 +68,11 @@
     "langEn": "English",
     "langRu": "Russian",
     "reset": "Clear",
-    "resultCount": "{count, plural, =0 {No one matches} one {# person} other {# people}}"
+    "resultCount": "{count, plural, =0 {No one matches} one {# person} other {# people}}",
+    "sort": "Sort",
+    "sortPopular": "Most viewed",
+    "sortRated": "Best rated",
+    "sortNewest": "Newest"
   },
   "Coaches": {
     "sectionTitle": "Who teaches",
@@ -82,7 +86,9 @@
     "emptyAll": "No profiles here yet. If you have knowledge — you could be the first.",
     "formatRemote": "Online",
     "formatInPerson": "In person",
-    "formatHybrid": "Online and in person"
+    "formatHybrid": "Online and in person",
+    "newBadge": "New",
+    "views": "{count, plural, one {# view} other {# views}}"
   },
   "Price": {
     "free": "Free",

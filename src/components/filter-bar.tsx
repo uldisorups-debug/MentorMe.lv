@@ -101,11 +101,11 @@ export function FilterBar({
   // Sertifikācija ir jēdzīga tikai koučingā
   const showCert = filters.sphere === CERT_SPHERE
 
-  const isDirty = Object.keys(EMPTY_FILTERS).some(
-    (key) =>
-      filters[key as keyof CoachFilters] !==
-      EMPTY_FILTERS[key as keyof CoachFilters]
-  )
+  // Kārtošana nav filtrs — tā nekad neslēpj rezultātus, tāpēc
+  // "Notīrīt" to neuzskata par aktīvu izvēli
+  const isDirty = (Object.keys(EMPTY_FILTERS) as (keyof CoachFilters)[])
+    .filter((key) => key !== 'sort')
+    .some((key) => filters[key] !== EMPTY_FILTERS[key])
 
   return (
     <div className="sticky top-16 z-30 -mx-6 border-y border-hairline bg-ink/80 px-6 py-3 backdrop-blur-lg">
@@ -160,6 +160,17 @@ export function FilterBar({
             ]}
           />
 
+          <FilterSelect
+            label={t('sort')}
+            value={filters.sort}
+            onChange={(value) => set('sort', value as CoachFilters['sort'])}
+            options={[
+              { value: 'popular', label: t('sortPopular') },
+              { value: 'rated', label: t('sortRated') },
+              { value: 'newest', label: t('sortNewest') },
+            ]}
+          />
+
           <Button
             variant="ghost"
             size="sm"
@@ -180,7 +191,7 @@ export function FilterBar({
                 variant="ghost"
                 size="sm"
                 className="text-mist"
-                onClick={() => onChange(EMPTY_FILTERS)}
+                onClick={() => onChange({ ...EMPTY_FILTERS, sort: filters.sort })}
               >
                 <X className="size-3.5" />
                 {t('reset')}

@@ -68,7 +68,11 @@
     "tourists": "Pieredzes tūristiem",
     "more": "Vairāk filtru",
     "less": "Mazāk filtru",
-    "remoteNote": "Attālinātie skolotāji rādās neatkarīgi no vietas."
+    "remoteNote": "Attālinātie skolotāji rādās neatkarīgi no vietas.",
+    "sort": "Kārtot",
+    "sortPopular": "Populārākie",
+    "sortRated": "Labāk novērtētie",
+    "sortNewest": "Jaunākie"
   },
   "Coaches": {
     "sectionTitle": "Kas māca",
@@ -82,7 +86,9 @@
     "emptyAll": "Šeit vēl nav neviena profila. Ja tev pieder zināšanas — vari būt pirmais.",
     "formatRemote": "Attālināti",
     "formatInPerson": "Klātienē",
-    "formatHybrid": "Attālināti un klātienē"
+    "formatHybrid": "Attālināti un klātienē",
+    "newBadge": "Jauns",
+    "views": "{count, plural, one {# skatījums} other {# skatījumi}}"
   },
   "Price": {
     "free": "Bezmaksas",

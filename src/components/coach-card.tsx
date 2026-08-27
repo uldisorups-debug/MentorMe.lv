@@ -1,6 +1,6 @@
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
-import { BadgeCheck, Star } from 'lucide-react'
+import { BadgeCheck, Eye, Star } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { LinkButton } from '@/components/link-button'
 import { CoachAvatar } from '@/components/coach-avatar'
@@ -45,25 +45,36 @@ function PriceTag({ coach }: { coach: CoachCardData }) {
 function Rating({ coach }: { coach: CoachCardData }) {
   const t = useTranslations('Coaches')
 
-  if (coach.avg_rating === null) {
-    return (
-      <span className="text-xs text-mist">
-        {t('reviews', { count: 0 })}
-      </span>
-    )
-  }
-
   return (
-    <span className="flex items-center gap-1.5 text-xs">
-      <Star className="size-3.5 fill-gold text-gold" />
-      <span className="font-medium text-cream">
-        {coach.avg_rating.toFixed(1)}
-      </span>
-      <span className="text-mist">
-        {t('reviews', { count: coach.review_count })}
-      </span>
+    <span className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+      {coach.avg_rating === null ? (
+        <span className="text-mist">{t('reviews', { count: 0 })}</span>
+      ) : (
+        <span className="flex items-center gap-1.5">
+          <Star className="size-3.5 fill-gold text-gold" />
+          <span className="font-medium text-cream">
+            {coach.avg_rating.toFixed(1)}
+          </span>
+          <span className="text-mist">
+            {t('reviews', { count: coach.review_count })}
+          </span>
+        </span>
+      )}
+
+      {coach.profile_views > 0 && (
+        <span className="flex items-center gap-1 text-mist">
+          <Eye className="size-3" />
+          {coach.profile_views}
+        </span>
+      )}
     </span>
   )
+}
+
+const NEW_DAYS = 14
+
+function isNewProfile(created: string): boolean {
+  return Date.now() - new Date(created).getTime() < NEW_DAYS * 86400000
 }
 
 export function CoachCard({
@@ -109,6 +120,11 @@ export function CoachCard({
                 className="size-4 shrink-0 text-gold"
                 aria-label={t('verified')}
               />
+            )}
+            {isNewProfile(coach.created_at) && (
+              <Badge variant="ghost" className="shrink-0 text-coral">
+                {t('newBadge')}
+              </Badge>
             )}
           </h3>
 

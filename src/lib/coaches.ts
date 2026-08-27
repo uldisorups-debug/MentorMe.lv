@@ -23,13 +23,18 @@ export type CoachCardData = Pick<
   | 'region_slug'
   | 'city'
   | 'for_tourists'
+  | 'profile_views'
+  | 'created_at'
 > & {
   avg_rating: number | null
   review_count: number
 }
 
+export type SortKey = 'popular' | 'rated' | 'newest'
+
 export type CoachFilters = {
   query: string
+  sort: SortKey
   sphere: string
   niche: string
   region: string
@@ -43,6 +48,7 @@ export type CoachFilters = {
 
 export const EMPTY_FILTERS: CoachFilters = {
   query: '',
+  sort: 'popular',
   sphere: 'all',
   niche: 'all',
   region: 'all',
@@ -149,5 +155,56 @@ export function filterCoaches(
     }
 
     return true
+  })
+}
+
+/**
+ * Saraksta kārtošana.
+ *
+ * "Populārākie" pēc skatījumiem, bet ar vienu izņēmumu: profili, kas
+ * jaunāki par divām nedēļām, tiek pacelti augšā neatkarīgi no skatījumu
+ * skaita. Bez tā sanāktu slazds — jauns cilvēks nekad neparādās augšā,
+ * tāpēc viņu neviens neredz, tāpēc viņam nav skatījumu, tāpēc viņš nekad
+ * neparādās augšā. Divas nedēļas ir logs, kurā viņu vispār var pamanīt.
+ */
+const NEW_PROFILE_DAYS = 14
+
+function isNew(coach: CoachCardData, now: number): boolean {
+  const age = now - new Date(coach.created_at).getTime()
+  return age < NEW_PROFILE_DAYS * 24 * 60 * 60 * 1000
+}
+
+export function sortCoaches(
+  coaches: CoachCardData[],
+  sort: SortKey,
+  now: number = Date.now()
+): CoachCardData[] {
+  const list = [...coaches]
+
+  if (sort === 'newest') {
+    return list.sort(
+      (a, b) =>
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    )
+  }
+
+  if (sort === 'rated') {
+    return list.sort((a, b) => {
+      // Bez atsauksmēm reitinga nav — tie iet uz beigām, nevis uz augšu
+      const scoreA = a.avg_rating === null ? -1 : a.avg_rating
+      const scoreB = b.avg_rating === null ? -1 : b.avg_rating
+      if (scoreB !== scoreA) return scoreB - scoreA
+      return b.review_count - a.review_count
+    })
+  }
+
+  return list.sort((a, b) => {
+    const newA = isNew(a, now)
+    const newB = isNew(b, now)
+    if (newA !== newB) return newA ? -1 : 1
+    if (b.profile_views !== a.profile_views) {
+      return b.profile_views - a.profile_views
+    }
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
   })
 }

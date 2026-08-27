@@ -60,7 +60,7 @@ export async function loadCoachPage(slug: string): Promise<CoachPage | null> {
   const { data: coach, error } = await supabase
     .from('coach_profiles')
     .select(
-      'id, user_id, slug, full_name, tagline, bio, avatar_url, certification, cert_other_label, cert_proof_url, is_verified, years_experience, session_languages, price_tier, price_from, price_to, niches, teaching_format, region_slug, city, for_tourists, calendly_url, books_top, movies_top, music_top, gallery_urls, profile_views'
+      'id, user_id, slug, full_name, tagline, bio, avatar_url, certification, cert_other_label, cert_proof_url, is_verified, years_experience, session_languages, price_tier, price_from, price_to, niches, teaching_format, region_slug, city, for_tourists, calendly_url, books_top, movies_top, music_top, gallery_urls, profile_views, created_at'
     )
     .eq('slug', slug)
     .eq('is_published', true)

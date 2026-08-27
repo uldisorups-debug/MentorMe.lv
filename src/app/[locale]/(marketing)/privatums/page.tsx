@@ -122,6 +122,13 @@ export default async function PrivacyPage({
             ienāci, neredz ne kouči, ne citi lietotāji. Datus nepārdodam un
             nenododam reklāmdevējiem.
           </p>
+          <p>
+            <strong className="text-cream">Skatījumu skaitīšana.</strong> Lai viens
+            cilvēks neuzpūstu skaitli, atverot lapu simt reižu, mēs saglabājam
+            neatgriezenisku jaucējkodu, kas veidots no adreses, profila un
+            datuma. Pati adrese netiek glabāta, un ieraksti tiek dzēsti pēc
+            divām dienām — pēc tam tie tāpat vairs neko nenozīmē.
+          </p>
         </Section>
 
         <Section title="Kur dati glabājas">

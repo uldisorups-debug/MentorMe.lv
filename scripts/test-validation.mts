@@ -10,6 +10,7 @@ import {
 } from '../src/lib/uploads.ts'
 import {
   filterCoaches,
+  sortCoaches,
   EMPTY_FILTERS,
   type CoachCardData,
 } from '../src/lib/coaches.ts'
@@ -320,6 +321,7 @@ const coach = (over: Partial<CoachCardData>): CoachCardData => ({
   years_experience: null, session_languages: ['lv'], price_tier: 'free',
   price_from: null, price_to: null, niches: [], teaching_format: 'remote',
   region_slug: null, city: null, for_tourists: false,
+  profile_views: 0, created_at: '2026-01-01T00:00:00Z',
   avg_rating: null, review_count: 0, ...over,
 })
 
@@ -370,6 +372,49 @@ check(
   ['Mareks']
 )
 check('meklēšana pēc vārda', names({ ...EMPTY_FILTERS, query: 'zaig' }), ['Zaiga'])
+
+console.log('Kārtošana')
+
+const NOW = new Date('2026-08-27T12:00:00Z').getTime()
+const days = (n: number) => new Date(NOW - n * 86400000).toISOString()
+
+const vecsPopulars = coach({ full_name: 'Vecs populārs', profile_views: 500, created_at: days(200), avg_rating: 4.2, review_count: 30 })
+const vecsKluss    = coach({ full_name: 'Vecs kluss',    profile_views: 10,  created_at: days(200), avg_rating: 5, review_count: 2 })
+const jauns        = coach({ full_name: 'Jauns',         profile_views: 0,   created_at: days(3) })
+const bezAtsauksmem= coach({ full_name: 'Bez atsauksmēm',profile_views: 300, created_at: days(100), avg_rating: null, review_count: 0 })
+const visiK = [vecsKluss, vecsPopulars, jauns, bezAtsauksmem]
+const kartots = (k: 'popular' | 'rated' | 'newest') =>
+  sortCoaches(visiK, k, NOW).map((c) => c.full_name)
+
+check(
+  'populārākie: jaunais paceļas augšā, tad pēc skatījumiem',
+  kartots('popular'),
+  ['Jauns', 'Vecs populārs', 'Bez atsauksmēm', 'Vecs kluss']
+)
+check(
+  'labāk novērtētie: bez atsauksmēm iet uz beigām',
+  kartots('rated'),
+  ['Vecs kluss', 'Vecs populārs', 'Jauns', 'Bez atsauksmēm']
+)
+check(
+  'jaunākie: tikai pēc datuma',
+  kartots('newest'),
+  ['Jauns', 'Bez atsauksmēm', 'Vecs kluss', 'Vecs populārs']
+)
+check(
+  'kārtošana neizmaina sākotnējo masīvu',
+  (() => { sortCoaches(visiK, 'newest', NOW); return visiK[0].full_name })(),
+  'Vecs kluss'
+)
+check(
+  'divi jauni savā starpā pēc skatījumiem',
+  sortCoaches(
+    [coach({ full_name: 'A', profile_views: 1, created_at: days(2) }),
+     coach({ full_name: 'B', profile_views: 9, created_at: days(1) })],
+    'popular', NOW
+  ).map((c) => c.full_name),
+  ['B', 'A']
+)
 
 console.log(`\n  ${passed} izturēja, ${failed} kritušas\n`)
 process.exit(failed === 0 ? 0 : 1)

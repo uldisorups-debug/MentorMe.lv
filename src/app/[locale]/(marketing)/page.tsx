@@ -19,7 +19,7 @@ async function loadDirectory(locale: string) {
       .from('coach_profiles')
       // Viena virkne bez salīmēšanas — citādi PostgREST tipi neizvelk kolonnas
       .select(
-        'id, slug, full_name, tagline, avatar_url, certification, is_verified, years_experience, session_languages, price_tier, price_from, price_to, niches, teaching_format, region_slug, city, for_tourists'
+        'id, slug, full_name, tagline, avatar_url, certification, is_verified, years_experience, session_languages, price_tier, price_from, price_to, niches, teaching_format, region_slug, city, for_tourists, profile_views, created_at'
       )
       .eq('is_published', true)
       .order('created_at', { ascending: false }),

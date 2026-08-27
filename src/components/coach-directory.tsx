@@ -7,6 +7,7 @@ import { FilterBar, type FilterTaxonomy } from '@/components/filter-bar'
 import {
   EMPTY_FILTERS,
   filterCoaches,
+  sortCoaches,
   type CoachCardData,
   type CoachFilters,
 } from '@/lib/coaches'
@@ -28,7 +29,7 @@ export function CoachDirectory({
   )
 
   const visible = useMemo(
-    () => filterCoaches(coaches, filters, nicheToSphere),
+    () => sortCoaches(filterCoaches(coaches, filters, nicheToSphere), filters.sort),
     [coaches, filters, nicheToSphere]
   )
 

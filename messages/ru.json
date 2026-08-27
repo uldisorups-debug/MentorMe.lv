@@ -68,7 +68,11 @@
     "langEn": "Английский",
     "langRu": "Русский",
     "reset": "Сбросить",
-    "resultCount": "{count, plural, =0 {Никто не подходит} one {# человек} few {# человека} many {# человек} other {# человека}}"
+    "resultCount": "{count, plural, =0 {Никто не подходит} one {# человек} few {# человека} many {# человек} other {# человека}}",
+    "sort": "Сортировка",
+    "sortPopular": "Популярные",
+    "sortRated": "С лучшими отзывами",
+    "sortNewest": "Новые"
   },
   "Coaches": {
     "sectionTitle": "Кто учит",
@@ -82,7 +86,9 @@
     "emptyAll": "Здесь пока нет ни одного профиля. Если у вас есть знания — можете стать первым.",
     "formatRemote": "Онлайн",
     "formatInPerson": "Очно",
-    "formatHybrid": "Онлайн и очно"
+    "formatHybrid": "Онлайн и очно",
+    "newBadge": "Новый",
+    "views": "{count, plural, one {# просмотр} few {# просмотра} many {# просмотров} other {# просмотра}}"
   },
   "Price": {
     "free": "Бесплатно",
