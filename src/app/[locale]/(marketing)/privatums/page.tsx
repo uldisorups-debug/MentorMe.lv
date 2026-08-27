@@ -143,9 +143,23 @@ export default async function PrivacyPage({
 
         <Section title="Sīkdatnes">
           <p>
-            Lietojam tikai tās sīkdatnes, kas nepieciešamas pieteikšanās
-            saglabāšanai. Tām piekrišana nav jāprasa, un izsekošanas vai
-            reklāmas sīkdatņu mums nav.
+            Lietojam divas sīkdatnes, un abas ir tehniski nepieciešamas:
+          </p>
+          <ul className="flex list-disc flex-col gap-2 pl-5">
+            <li>
+              <strong className="text-cream">NEXT_LOCALE</strong> — atceras
+              izvēlēto valodu, lai nākamreiz nebūtu jāizvēlas no jauna.
+            </li>
+            <li>
+              <strong className="text-cream">sb-…</strong> — Supabase
+              pieteikšanās sīkdatnes. Tās parādās tikai tad, kad esi ienācis
+              savā kontā.
+            </li>
+          </ul>
+          <p>
+            Abām piekrišana nav jāprasa, jo bez tām lapa nedarbotos tā, kā tu
+            to lūdzi. Izsekošanas, analītikas un reklāmas sīkdatņu mums nav
+            nevienas — arī Google Analytics.
           </p>
         </Section>
 

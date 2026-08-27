@@ -10,7 +10,8 @@
     "check:supabase": "node scripts/check-supabase.mjs",
     "test:validation": "node scripts/test-validation.mts",
     "test:markdown": "node scripts/test-markdown.mts",
-    "test": "npm run test:validation && npm run test:markdown"
+    "test": "npm run test:validation && npm run test:markdown",
+    "audit:security": "node scripts/audit-security.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
