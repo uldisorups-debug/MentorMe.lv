@@ -21,5 +21,26 @@ export const SUPABASE_PUBLISHABLE_KEY = required(
   process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
 )
 
-export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
+/**
+ * Publiskais lapas URL — no tā veidojas sitemap, robots.txt un OG bildes.
+ *
+ * Ja NEXT_PUBLIC_SITE_URL nav uzstādīts, uz Vercel paņemam projekta
+ * domēnu no tā paša dotajiem mainīgajiem. Bez šī produkcijā sitemap
+ * norādītu uz localhost, un Google to vienkārši ignorētu.
+ *
+ * Šo lieto tikai servera pusē (layout, sitemap, robots), tāpēc VERCEL_*
+ * mainīgie bez NEXT_PUBLIC_ prefiksa te ir pieejami.
+ */
+function resolveSiteUrl(): string {
+  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL
+
+  // Pastāvīgais produkcijas domēns, nevis konkrētā izvietojuma adrese
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  }
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`
+
+  return 'http://localhost:3000'
+}
+
+export const SITE_URL = resolveSiteUrl()
