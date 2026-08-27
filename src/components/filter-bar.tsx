@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Search, SlidersHorizontal, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -12,14 +12,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { CERT_SPHERE, EMPTY_FILTERS, type CoachFilters } from '@/lib/coaches'
+import {
+  CERT_SPHERE,
+  EMPTY_FILTERS,
+  filtersOnNewSearch,
+  type BudgetMode,
+  type CoachFilters,
+} from '@/lib/coaches'
 import { cn } from '@/lib/utils'
 
 type Option = { value: string; label: string }
 
 export type FilterTaxonomy = {
   spheres: (Option & { icon: string | null })[]
-  /** Visas grupas ar norādi, kurai sfērai pieder */
   groups: (Option & { sphere: string })[]
   regions: Option[]
 }
@@ -29,13 +34,11 @@ function FilterSelect({
   value,
   options,
   onChange,
-  className,
 }: {
   label: string
   value: string
   options: Option[]
   onChange: (value: string) => void
-  className?: string
 }) {
   const isActive = value !== 'all'
 
@@ -45,22 +48,26 @@ function FilterSelect({
       value={value}
       onValueChange={(next) => onChange(String(next))}
     >
+      {/*
+        max-w un truncate uz izvēlnes pogas, nevis uz saraksta: garš
+        nosaukums nedrīkst izstiept joslu, bet atvērtajā sarakstā tam
+        jābūt redzamam pilnībā. Tāpēc SelectContent ir platāks.
+      */}
       <SelectTrigger
         aria-label={label}
         className={cn(
-          'h-10',
+          'h-10 max-w-52',
           isActive
             ? 'border-gold/50 bg-gold/10 text-cream'
-            : 'bg-surface text-mist hover:text-cream',
-          className
+            : 'bg-surface text-mist hover:text-cream'
         )}
       >
         <SelectValue />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className="max-h-96 min-w-64">
         {options.map((option) => (
           <SelectItem key={option.value} value={option.value}>
-            {option.label}
+            <span className="whitespace-nowrap">{option.label}</span>
           </SelectItem>
         ))}
       </SelectContent>
@@ -81,28 +88,31 @@ export function FilterBar({
 }) {
   const t = useTranslations('Filters')
   const [showMore, setShowMore] = useState(false)
+  const [justSearched, setJustSearched] = useState(false)
 
   const set = <K extends keyof CoachFilters>(key: K, value: CoachFilters[K]) =>
     onChange({ ...filters, [key]: value })
 
-  /** Izvēloties sfēru, grupa jāatiestata — citādi paliktu neatbilstoša. */
-  const setSphere = (sphere: string) =>
-    onChange({ ...filters, sphere, niche: 'all' })
+  /**
+   * Meklēšana ir jauna doma, ne esošās sašaurināšana. Sākot rakstīt,
+   * pārējie filtri tiek notīrīti — citādi cilvēks meklē "kokle" un
+   * neko neatrod, jo pirms piecām minūtēm bija uzlicis "Rīga".
+   */
+  function onSearch(value: string) {
+    const wasEmpty = filters.query.trim() === ''
+    const nowHas = value.trim() !== ''
 
-  // Grupu saraksts seko izvēlētajai sfērai
-  const groupOptions = useMemo(() => {
-    const inSphere =
-      filters.sphere === 'all'
-        ? taxonomy.groups
-        : taxonomy.groups.filter((g) => g.sphere === filters.sphere)
-    return [{ value: 'all', label: t('groupAll') }, ...inSphere]
-  }, [filters.sphere, taxonomy.groups, t])
+    if (wasEmpty && nowHas) {
+      onChange({ ...filtersOnNewSearch(value), sort: filters.sort })
+      setJustSearched(true)
+    } else {
+      set('query', value)
+      if (!nowHas) setJustSearched(false)
+    }
+  }
 
-  // Sertifikācija ir jēdzīga tikai koučingā
   const showCert = filters.sphere === CERT_SPHERE
 
-  // Kārtošana nav filtrs — tā nekad neslēpj rezultātus, tāpēc
-  // "Notīrīt" to neuzskata par aktīvu izvēli
   const isDirty = (Object.keys(EMPTY_FILTERS) as (keyof CoachFilters)[])
     .filter((key) => key !== 'sort')
     .some((key) => filters[key] !== EMPTY_FILTERS[key])
@@ -117,17 +127,20 @@ export function FilterBar({
             aria-label={t('searchLabel')}
             placeholder={t('searchPlaceholder')}
             value={filters.query}
-            onChange={(event) => set('query', event.target.value)}
+            onChange={(event) => onSearch(event.target.value)}
             className="h-11 bg-surface pl-9"
           />
         </div>
 
-        {/* Galvenā rinda: nozare, ko māca, vieta, kā notiek */}
+        {justSearched && filters.query.trim() !== '' && (
+          <p className="text-xs text-mist">{t('searchResets')}</p>
+        )}
+
         <div className="-mx-6 flex items-center gap-2 overflow-x-auto px-6 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <FilterSelect
             label={t('sphere')}
             value={filters.sphere}
-            onChange={setSphere}
+            onChange={(value) => set('sphere', value)}
             options={[
               { value: 'all', label: t('sphereAll') },
               ...taxonomy.spheres.map((s) => ({
@@ -137,10 +150,15 @@ export function FilterBar({
             ]}
           />
           <FilterSelect
-            label={t('group')}
-            value={filters.niche}
-            onChange={(value) => set('niche', value)}
-            options={groupOptions}
+            label={t('format')}
+            value={filters.format}
+            onChange={(value) => set('format', value)}
+            options={[
+              { value: 'all', label: t('formatAll') },
+              { value: 'in_person', label: t('formatInPerson') },
+              { value: 'remote', label: t('formatRemote') },
+              { value: 'hybrid', label: t('formatHybrid') },
+            ]}
           />
           <FilterSelect
             label={t('region')}
@@ -149,17 +167,15 @@ export function FilterBar({
             options={[{ value: 'all', label: t('regionAll') }, ...taxonomy.regions]}
           />
           <FilterSelect
-            label={t('format')}
-            value={filters.format}
-            onChange={(value) => set('format', value)}
+            label={t('budget')}
+            value={filters.budget}
+            onChange={(value) => set('budget', value as BudgetMode)}
             options={[
-              { value: 'all', label: t('formatAll') },
-              { value: 'remote', label: t('formatRemote') },
-              { value: 'in_person', label: t('formatInPerson') },
-              { value: 'hybrid', label: t('formatHybrid') },
+              { value: 'all', label: t('budgetAll') },
+              { value: 'free', label: t('budgetFree') },
+              { value: 'paid', label: t('budgetPaid') },
             ]}
           />
-
           <FilterSelect
             label={t('sort')}
             value={filters.sort}
@@ -200,21 +216,35 @@ export function FilterBar({
           </span>
         </div>
 
-        {/* Otrā rinda: retāk vajadzīgie */}
         {showMore && (
-          <div className="-mx-6 flex flex-wrap items-center gap-2 border-t border-hairline px-6 pt-3">
-            <FilterSelect
-              label={t('price')}
-              value={filters.priceTier}
-              onChange={(value) => set('priceTier', value)}
-              options={[
-                { value: 'all', label: t('priceAll') },
-                { value: 'free', label: t('priceFree') },
-                { value: 'affordable', label: t('priceAffordable') },
-                { value: 'mid', label: t('priceMid') },
-                { value: 'premium', label: t('pricePremium') },
-              ]}
-            />
+          <div className="-mx-6 flex flex-wrap items-center gap-3 border-t border-hairline px-6 pt-3">
+            {/* Cik cilvēks pats ir gatavs maksāt */}
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-mist">{t('budgetFrom')}</span>
+              <Input
+                type="number"
+                min={0}
+                inputMode="numeric"
+                aria-label={`${t('budget')} ${t('budgetFrom')}`}
+                value={filters.budgetFrom}
+                onChange={(event) => set('budgetFrom', event.target.value)}
+                className="h-10 w-20 bg-surface"
+              />
+              <span className="text-sm text-mist">{t('budgetTo')}</span>
+              <Input
+                type="number"
+                min={0}
+                inputMode="numeric"
+                aria-label={`${t('budget')} ${t('budgetTo')}`}
+                value={filters.budgetTo}
+                onChange={(event) => set('budgetTo', event.target.value)}
+                className="h-10 w-20 bg-surface"
+              />
+              <span className="text-sm whitespace-nowrap text-mist">
+                {t('budgetCurrency')}
+              </span>
+            </div>
+
             <FilterSelect
               label={t('language')}
               value={filters.language}
@@ -226,6 +256,7 @@ export function FilterBar({
                 { value: 'ru', label: t('langRu') },
               ]}
             />
+
             {showCert && (
               <FilterSelect
                 label={t('certification')}
@@ -246,15 +277,15 @@ export function FilterBar({
             <label className="flex cursor-pointer items-center gap-2 rounded-full border border-hairline bg-surface px-3 py-2 text-sm text-mist">
               <input
                 type="checkbox"
-                checked={filters.tourists}
-                onChange={(event) => set('tourists', event.target.checked)}
+                checked={filters.masterclass}
+                onChange={(event) => set('masterclass', event.target.checked)}
                 className="size-4 accent-[var(--gold)]"
               />
-              {t('tourists')}
+              {t('masterclass')}
             </label>
 
-            {filters.region !== 'all' && (
-              <p className="w-full text-xs text-mist">{t('remoteNote')}</p>
+            {(filters.budgetFrom || filters.budgetTo) && (
+              <p className="w-full text-xs text-mist">{t('budgetHint')}</p>
             )}
           </div>
         )}

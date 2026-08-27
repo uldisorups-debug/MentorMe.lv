@@ -32,31 +32,49 @@ export type CoachCardData = Pick<
 
 export type SortKey = 'popular' | 'rated' | 'newest'
 
+/** Bezmaksas, par maksu vai vienalga. */
+export type BudgetMode = 'all' | 'free' | 'paid'
+
 export type CoachFilters = {
   query: string
   sort: SortKey
   sphere: string
-  niche: string
   region: string
   format: string
   certification: string
-  priceTier: string
   language: string
-  /** Tikai tie, kas piedāvā pieredzes tūristiem */
-  tourists: boolean
+  budget: BudgetMode
+  /** Meklētāja budžets eiro. Tukša virkne = nav norādīts. */
+  budgetFrom: string
+  budgetTo: string
+  /** Tikai tie, kas piedāvā meistarklases un pieredzes */
+  masterclass: boolean
 }
 
 export const EMPTY_FILTERS: CoachFilters = {
   query: '',
   sort: 'popular',
   sphere: 'all',
-  niche: 'all',
   region: 'all',
   format: 'all',
   certification: 'all',
-  priceTier: 'all',
   language: 'all',
-  tourists: false,
+  budget: 'all',
+  budgetFrom: '',
+  budgetTo: '',
+  masterclass: false,
+}
+
+/**
+ * Filtri, ko notīra, kad cilvēks sāk rakstīt meklēšanā.
+ *
+ * Meklēšana ir jauna doma, ne esošās sašaurināšana: ja kāds meklē
+ * "kokle", viņam nav jāatceras, ka pirms piecām minūtēm bija uzlicis
+ * "Kurzeme, klātienē". Pēc meklēšanas rezultātus var filtrēt no jauna.
+ * Kārtošana paliek — tā neko neslēpj.
+ */
+export function filtersOnNewSearch(query: string): CoachFilters {
+  return { ...EMPTY_FILTERS, query }
 }
 
 /** Sertifikācija ir jēdzīga tikai koučingā — citur to nerādām. */
@@ -94,18 +112,47 @@ export function certLabel(cert: CertLevel | null): string | null {
  * Kad kouču skaits pāraugs pāris simtus, šī loģika jāpārceļ uz Supabase
  * pusi (GIN indeksi nišām un valodām jau ir uzlikti migrācijā).
  */
+/**
+ * Viss, kas par cilvēku ir zināms saraksta lapā, vienā virknē.
+ *
+ * Meklējot "kokle", cilvēks negrib, lai sakristu tikai vārds vai
+ * viena rindiņa — viņš grib, lai sakrīt jebkas: prasme, pilsēta, joma.
+ */
+function searchHaystack(
+  coach: CoachCardData,
+  nicheNames: Record<string, string>
+): string {
+  return [
+    coach.full_name,
+    coach.tagline ?? '',
+    coach.city ?? '',
+    coach.region_slug ?? '',
+    ...coach.niches.map((n) => nicheNames[n] ?? n),
+    ...coach.niches,
+  ]
+    .join(' ')
+    .toLowerCase()
+}
+
 export function filterCoaches(
   coaches: CoachCardData[],
   filters: CoachFilters,
-  /** grupas slug -> sfēras slug; vajadzīgs filtram pēc sfēras */
-  nicheToSphere: Record<string, string> = {}
+  /** grupas slug -> sfēras slug; vajadzīgs filtram pēc nozares */
+  nicheToSphere: Record<string, string> = {},
+  /** grupas slug -> nosaukums; vajadzīgs meklēšanai pa tekstu */
+  nicheNames: Record<string, string> = {}
 ): CoachCardData[] {
   const query = filters.query.trim().toLowerCase()
+  // Katrs vārds jāatrod atsevišķi, lai "kokle Kurzeme" strādā
+  const words = query ? query.split(/\s+/) : []
+
+  const budgetFrom = filters.budgetFrom.trim() === '' ? null : Number(filters.budgetFrom)
+  const budgetTo = filters.budgetTo.trim() === '' ? null : Number(filters.budgetTo)
 
   return coaches.filter((coach) => {
-    if (query) {
-      const haystack = `${coach.full_name} ${coach.tagline ?? ''}`.toLowerCase()
-      if (!haystack.includes(query)) return false
+    if (words.length > 0) {
+      const haystack = searchHaystack(coach, nicheNames)
+      if (!words.every((word) => haystack.includes(word))) return false
     }
 
     if (filters.sphere !== 'all') {
@@ -113,10 +160,6 @@ export function filterCoaches(
         (niche) => nicheToSphere[niche] === filters.sphere
       )
       if (!inSphere) return false
-    }
-
-    if (filters.niche !== 'all' && !coach.niches.includes(filters.niche)) {
-      return false
     }
 
     if (filters.format !== 'all' && coach.teaching_format !== filters.format) {
@@ -134,7 +177,7 @@ export function filterCoaches(
       if (!sameRegion && !worksAnywhere) return false
     }
 
-    if (filters.tourists && !coach.for_tourists) {
+    if (filters.masterclass && !coach.for_tourists) {
       return false
     }
 
@@ -143,8 +186,24 @@ export function filterCoaches(
       if (cert !== filters.certification) return false
     }
 
-    if (filters.priceTier !== 'all' && coach.price_tier !== filters.priceTier) {
-      return false
+    if (filters.budget === 'free' && coach.price_tier !== 'free') return false
+    if (filters.budget === 'paid' && coach.price_tier === 'free') return false
+
+    /*
+     * Budžeta diapazons. Cilvēks, kurš neko nav norādījis par cenu,
+     * netiek izmests — viņa cena nav zināma, nevis par augstu, un
+     * izmešana sodītu par nepabeigtu profilu, ne par dārgumu.
+     * Bezmaksas der vienmēr.
+     */
+    if ((budgetFrom !== null || budgetTo !== null) && coach.price_tier !== 'free') {
+      const askFrom = coach.price_from
+      const askTo = coach.price_to ?? coach.price_from
+
+      if (askFrom !== null && askTo !== null) {
+        const tooExpensive = budgetTo !== null && askFrom > budgetTo
+        const tooCheap = budgetFrom !== null && askTo < budgetFrom
+        if (tooExpensive || tooCheap) return false
+      }
     }
 
     if (

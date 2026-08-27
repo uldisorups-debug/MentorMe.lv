@@ -11,6 +11,7 @@ import {
 import {
   filterCoaches,
   sortCoaches,
+  filtersOnNewSearch,
   EMPTY_FILTERS,
   type CoachCardData,
 } from '../src/lib/coaches.ts'
@@ -343,12 +344,15 @@ const bungas = coach({
   teaching_format: 'hybrid', region_slug: 'riga',
 })
 const visi = [koklePasniedzejs, matZoom, bungas]
+const nicheNames = { kokle: 'Kokle', bungas: 'Bungas', matematika: 'Matemātika' }
 const names = (f: typeof EMPTY_FILTERS) =>
-  filterCoaches(visi, f, sphereMap).map((c) => c.full_name)
+  filterCoaches(visi, f, sphereMap, nicheNames).map((c) => c.full_name)
 
 check('bez filtriem visi', names(EMPTY_FILTERS), ['Zaiga', 'Andris', 'Mareks'])
 check('sfēra mūzika', names({ ...EMPTY_FILTERS, sphere: 'muzika' }), ['Zaiga', 'Mareks'])
-check('grupa kokle', names({ ...EMPTY_FILTERS, niche: 'kokle' }), ['Zaiga'])
+check('meklē pēc prasmes nosaukuma', names({ ...EMPTY_FILTERS, query: 'kokle' }), ['Zaiga'])
+check('meklē pēc pilsētas', names({ ...EMPTY_FILTERS, query: 'kurzeme' }), ['Zaiga'])
+check('divi vārdi — abiem jāsakrīt', names({ ...EMPTY_FILTERS, query: 'kokle rīga' }), [])
 check('formāts klātienē', names({ ...EMPTY_FILTERS, format: 'in_person' }), ['Zaiga'])
 check(
   'reģions Kurzeme — attālinātais Andris arī der',
@@ -365,13 +369,55 @@ check(
   names({ ...EMPTY_FILTERS, region: 'riga' }),
   ['Andris', 'Mareks']
 )
-check('tūristiem', names({ ...EMPTY_FILTERS, tourists: true }), ['Zaiga'])
+check('meistarklases', names({ ...EMPTY_FILTERS, masterclass: true }), ['Zaiga'])
+
+check('budžets: bezmaksas', names({ ...EMPTY_FILTERS, budget: 'free' }), ['Zaiga', 'Andris', 'Mareks'])
 check(
   'sfēra + reģions kopā',
   names({ ...EMPTY_FILTERS, sphere: 'muzika', region: 'riga' }),
   ['Mareks']
 )
 check('meklēšana pēc vārda', names({ ...EMPTY_FILTERS, query: 'zaig' }), ['Zaiga'])
+
+console.log('Budžets')
+
+const dargs  = coach({ full_name: 'Dārgs',  price_tier: 'premium', price_from: 100, price_to: 150 })
+const lets   = coach({ full_name: 'Lēts',   price_tier: 'affordable', price_from: 20, price_to: 30 })
+const bezmaksas = coach({ full_name: 'Bezmaksas', price_tier: 'free' })
+const nezinams  = coach({ full_name: 'Nezināms', price_tier: 'mid', price_from: null, price_to: null })
+const cenas = [dargs, lets, bezmaksas, nezinams]
+const perCenu = (f: Partial<typeof EMPTY_FILTERS>) =>
+  filterCoaches(cenas, { ...EMPTY_FILTERS, ...f }, {}, {}).map((c) => c.full_name)
+
+check('tikai bezmaksas', perCenu({ budget: 'free' }), ['Bezmaksas'])
+check('tikai par maksu', perCenu({ budget: 'paid' }), ['Dārgs', 'Lēts', 'Nezināms'])
+check(
+  'budžets līdz 50 — dārgais izkrīt',
+  perCenu({ budgetTo: '50' }),
+  ['Lēts', 'Bezmaksas', 'Nezināms']
+)
+check(
+  'budžets no 80 — lētais izkrīt',
+  perCenu({ budgetFrom: '80' }),
+  ['Dārgs', 'Bezmaksas', 'Nezināms']
+)
+check(
+  'diapazons 25-40 ķer to, kas pārklājas',
+  perCenu({ budgetFrom: '25', budgetTo: '40' }),
+  ['Lēts', 'Bezmaksas', 'Nezināms']
+)
+check(
+  'bez budžeta visi paliek',
+  perCenu({}),
+  ['Dārgs', 'Lēts', 'Bezmaksas', 'Nezināms']
+)
+
+console.log('Meklēšana notīra filtrus')
+check(
+  'filtri notīrīti, meklējamais paliek',
+  filtersOnNewSearch('kokle'),
+  { ...EMPTY_FILTERS, query: 'kokle' }
+)
 
 console.log('Kārtošana')
 

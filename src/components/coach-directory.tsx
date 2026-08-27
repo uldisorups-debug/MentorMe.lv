@@ -28,14 +28,18 @@ export function CoachDirectory({
     [taxonomy.groups]
   )
 
-  const visible = useMemo(
-    () => sortCoaches(filterCoaches(coaches, filters, nicheToSphere), filters.sort),
-    [coaches, filters, nicheToSphere]
-  )
-
   const nicheNames = useMemo(
     () => Object.fromEntries(taxonomy.groups.map((g) => [g.value, g.label])),
     [taxonomy.groups]
+  )
+
+  const visible = useMemo(
+    () =>
+      sortCoaches(
+        filterCoaches(coaches, filters, nicheToSphere, nicheNames),
+        filters.sort
+      ),
+    [coaches, filters, nicheToSphere, nicheNames]
   )
 
   return (
