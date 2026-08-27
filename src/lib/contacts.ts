@@ -60,7 +60,7 @@ export function validateContact(kind: ContactKind, raw: string): ContactError {
     case 'whatsapp': {
       const digits = normalizePhone(value)
       if (digits.length < 8 || digits.length > 15) {
-        return 'Numuram jābūt starptautiskā formā, piem. +371 28 348 301.'
+        return 'Numuram jābūt starptautiskā formā, piem. +371 20 123 456.'
       }
       return null
     }

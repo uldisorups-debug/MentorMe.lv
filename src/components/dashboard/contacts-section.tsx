@@ -32,7 +32,7 @@ const FIELDS: {
   placeholder: string
 }[] = [
   { key: 'email', kind: 'email', labelKey: 'contactEmail', placeholder: 'vards@uznemums.lv' },
-  { key: 'whatsapp', kind: 'whatsapp', labelKey: 'contactWhatsapp', placeholder: '+371 28 348 301' },
+  { key: 'whatsapp', kind: 'whatsapp', labelKey: 'contactWhatsapp', placeholder: '+371 20 123 456' },
   { key: 'telegram', kind: 'telegram', labelKey: 'contactTelegram', placeholder: 'lietotajvards' },
   { key: 'messenger_url', kind: 'messenger', labelKey: 'contactMessenger', placeholder: 'https://m.me/tavs.profils' },
   { key: 'linkedin_url', kind: 'linkedin', labelKey: 'contactLinkedin', placeholder: 'https://linkedin.com/in/tavs-profils' },

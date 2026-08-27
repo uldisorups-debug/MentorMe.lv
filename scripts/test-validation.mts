@@ -261,11 +261,11 @@ const noContacts: ContactValues = {
 check('tukšs lauks ir atļauts', validateContact('email', ''), null)
 check('derīgs e-pasts', validateContact('email', 'uldis@forgecore.lv'), null)
 check('e-pasts bez @', validateContact('email', 'uldis.lv'), 'Nederīga e-pasta adrese.')
-check('derīgs numurs ar atstarpēm', validateContact('whatsapp', '+371 28 348 301'), null)
+check('derīgs numurs ar atstarpēm', validateContact('whatsapp', '+371 20 123 456'), null)
 check(
   'numurs par īsu',
   validateContact('whatsapp', '2834'),
-  'Numuram jābūt starptautiskā formā, piem. +371 28 348 301.'
+  'Numuram jābūt starptautiskā formā, piem. +371 20 123 456.'
 )
 check('telegram ar @', validateContact('telegram', '@uldisorups'), null)
 check('telegram kā saite', validateContact('telegram', 'https://t.me/uldisorups'), null)
@@ -277,7 +277,7 @@ check(
 check('http messenger nederīgs', validateContact('messenger', 'http://m.me/x'), 'Jābūt pilnai https:// saitei.')
 check('https messenger derīgs', validateContact('messenger', 'https://m.me/x'), null)
 
-check('numura tīrīšana', normalizePhone('+371 28 348 301'), '37128348301')
+check('numura tīrīšana', normalizePhone('+371 20 123 456'), '37120123456')
 check('telegram tīrīšana no saites', normalizeTelegram('https://t.me/uldis'), 'uldis')
 check('telegram tīrīšana no @', normalizeTelegram('@uldis'), 'uldis')
 
@@ -286,8 +286,8 @@ check('bez kontaktiem hasAnyContact', hasAnyContact(noContacts), false)
 
 check(
   'WhatsApp saite',
-  buildContactLinks({ ...noContacts, whatsapp: '+371 28 348 301' })[0].href,
-  'https://wa.me/37128348301'
+  buildContactLinks({ ...noContacts, whatsapp: '+371 20 123 456' })[0].href,
+  'https://wa.me/37120123456'
 )
 check(
   'e-pasta saite',
@@ -311,7 +311,7 @@ check(
 )
 check(
   'divi kanāli, WhatsApp pirmais',
-  buildContactLinks({ ...noContacts, email: 'a@b.lv', whatsapp: '+37128348301' }).map((l) => l.kind),
+  buildContactLinks({ ...noContacts, email: 'a@b.lv', whatsapp: '+37120123456' }).map((l) => l.kind),
   ['whatsapp', 'email']
 )
 

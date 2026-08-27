@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { setRequestLocale } from 'next-intl/server'
-import { AlertTriangle, Mail, Phone } from 'lucide-react'
+import { AlertTriangle, Mail } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { CONTACT_PAGE } from '@/content/contact'
 import { routing } from '@/i18n/routing'
@@ -12,8 +12,6 @@ const COMPANY = {
   vat: 'LV40203671821',
   address: '"Klapēni", Roja, Rojas pagasts, Talsu novads, LV-3264, Latvija',
   email: 'info@forgecore.lv',
-  phone: '+371 28 348 301',
-  phoneHref: '+37128348301',
 }
 
 function content(locale: string) {
@@ -49,25 +47,15 @@ export default async function ContactPage({
       <h1 className="rule-gold font-display text-4xl sm:text-5xl">{c.title}</h1>
       <p className="mt-5 max-w-xl leading-relaxed text-mist">{c.lead}</p>
 
-      <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+      <div className="mt-10">
         <a
           href={`mailto:${COMPANY.email}`}
-          className="flex flex-1 items-center gap-3 rounded-xl border border-hairline bg-surface px-5 py-4 transition-colors hover:border-gold/40"
+          className="flex items-center gap-3 rounded-xl border border-hairline bg-surface px-5 py-4 transition-colors hover:border-gold/40"
         >
           <Mail className="size-5 shrink-0 text-gold" />
           <span>
             <span className="block text-xs text-mist">{c.email}</span>
             <span className="block text-sm">{COMPANY.email}</span>
-          </span>
-        </a>
-        <a
-          href={`tel:${COMPANY.phoneHref}`}
-          className="flex flex-1 items-center gap-3 rounded-xl border border-hairline bg-surface px-5 py-4 transition-colors hover:border-gold/40"
-        >
-          <Phone className="size-5 shrink-0 text-gold" />
-          <span>
-            <span className="block text-xs text-mist">{c.phone}</span>
-            <span className="block text-sm">{COMPANY.phone}</span>
           </span>
         </a>
       </div>

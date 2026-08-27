@@ -61,10 +61,6 @@ export default async function PrivacyPage({
             Jautājumos par datiem raksti uz{' '}
             <a href="mailto:info@forgecore.lv" className="text-gold hover:underline">
               info@forgecore.lv
-            </a>{' '}
-            vai zvani{' '}
-            <a href="tel:+37128348301" className="text-gold hover:underline">
-              +371 28 348 301
             </a>
             .
           </p>
