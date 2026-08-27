@@ -3,6 +3,7 @@ import { Link } from '@/i18n/navigation'
 import { setRequestLocale, getTranslations } from 'next-intl/server'
 import { CoachAvatar } from '@/components/coach-avatar'
 import { LinkButton } from '@/components/link-button'
+import { WritePostCta } from '@/components/write-post-cta'
 import { listPublishedPosts } from '@/lib/posts'
 
 export const revalidate = 60
@@ -33,10 +34,15 @@ export default async function BlogPage({
 
   return (
     <div className="mx-auto max-w-4xl px-6 py-16">
-      <h1 className="rule-gold font-display text-4xl sm:text-5xl">
-        {t('title')}
-      </h1>
-      <p className="mt-5 max-w-xl text-mist">{t('lead')}</p>
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h1 className="rule-gold font-display text-4xl sm:text-5xl">
+            {t('title')}
+          </h1>
+          <p className="mt-5 max-w-xl text-mist">{t('lead')}</p>
+        </div>
+        <WritePostCta />
+      </div>
 
       {posts.length === 0 ? (
         <div className="mt-12 rounded-2xl border border-dashed border-hairline px-6 py-16 text-center">

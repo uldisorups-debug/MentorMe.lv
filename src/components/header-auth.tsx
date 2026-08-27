@@ -1,10 +1,17 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
-import { LogOut } from 'lucide-react'
+import { ChevronDown, LogOut, ShieldCheck, PenLine, User } from 'lucide-react'
+import { Link, useRouter } from '@/i18n/navigation'
 import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { LinkButton } from '@/components/link-button'
 import { createClient } from '@/lib/supabase/client'
 
@@ -16,11 +23,15 @@ type State =
 /**
  * Galvenes labā puse.
  *
- * Auth pārbaude notiek pārlūkā, nevis serverī — tā visas publiskās lapas
- * paliek statiskas un ISR turpina strādāt.
+ * Viss, kas pieder kontam, ir zem viena izvēlnes — citādi galvenē
+ * sanāk seši nosaukumi blakus, un vajadzīgo starp tiem neatrod.
+ *
+ * Auth pārbaude notiek pārlūkā, nevis serverī, lai publiskās lapas
+ * paliktu statiskas.
  */
 export function HeaderAuth() {
   const t = useTranslations('Auth')
+  const tNav = useTranslations('Nav')
   const router = useRouter()
   const [state, setState] = useState<State>({ kind: 'loading' })
 
@@ -62,12 +73,10 @@ export function HeaderAuth() {
   }
 
   if (state.kind === 'loading') {
-    return <span className="h-9 w-20 animate-pulse rounded-lg bg-surface" />
+    return <span className="ml-2 h-9 w-24 animate-pulse rounded-lg bg-surface" />
   }
 
   if (state.kind === 'anonymous') {
-    // Galvenē pieteikšanās nozīmē tikai vienu: gribu izlikt savu profilu.
-    // Atsauksmju rakstītājs pieteiksies no profila lapas, kad tas vajadzīgs.
     return (
       <LinkButton
         href="/auth/login?next=%2Fdashboard%2Fprofile"
@@ -80,37 +89,44 @@ export function HeaderAuth() {
   }
 
   return (
-    <span className="ml-2 flex items-center gap-1">
-      {state.isAdmin && (
-        <LinkButton
-          href="/admin"
-          variant="ghost"
-          className="hidden text-gold hover:text-gold-soft lg:inline-flex"
-        >
-          Administrācija
-        </LinkButton>
-      )}
-      {state.isCoach && (
-        <LinkButton
-          href="/dashboard/profile"
-          variant="ghost"
-          className="hidden text-mist hover:text-cream lg:inline-flex"
-        >
-          {t('myProfile')}
-        </LinkButton>
-      )}
-      <span className="hidden max-w-32 truncate text-sm text-mist lg:inline">
-        {state.label}
-      </span>
-      <Button
-        variant="ghost"
-        size="icon-sm"
-        aria-label={t('signOut')}
-        className="text-mist hover:text-cream"
-        onClick={signOut}
-      >
-        <LogOut className="size-4" />
-      </Button>
-    </span>
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        render={
+          <Button variant="ghost" className="ml-2 h-9 gap-1.5 text-mist hover:text-cream">
+            <span className="max-w-32 truncate">{state.label}</span>
+            <ChevronDown className="size-3.5" />
+          </Button>
+        }
+      />
+
+      <DropdownMenuContent align="end" className="min-w-52">
+        {state.isCoach && (
+          <>
+            <DropdownMenuItem render={<Link href="/dashboard/profile" />}>
+              <User className="size-4" />
+              {t('myProfile')}
+            </DropdownMenuItem>
+            <DropdownMenuItem render={<Link href="/dashboard/raksti" />}>
+              <PenLine className="size-4" />
+              {tNav('myPosts')}
+            </DropdownMenuItem>
+          </>
+        )}
+
+        {state.isAdmin && (
+          <DropdownMenuItem render={<Link href="/admin" />}>
+            <ShieldCheck className="size-4 text-gold" />
+            Administrācija
+          </DropdownMenuItem>
+        )}
+
+        {(state.isCoach || state.isAdmin) && <DropdownMenuSeparator />}
+
+        <DropdownMenuItem onClick={signOut}>
+          <LogOut className="size-4" />
+          {t('signOut')}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }
