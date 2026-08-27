@@ -28,7 +28,7 @@ export function HeroSection({
           </span>
         </h1>
 
-        <p className="mx-auto mt-6 max-w-xl text-lg text-mist text-balance sm:text-xl">
+        <p className="mx-auto mt-6 max-w-2xl text-lg text-mist text-balance sm:text-xl">
           {t('subline')}
         </p>
 
