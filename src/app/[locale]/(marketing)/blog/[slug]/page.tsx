@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { routing } from '@/i18n/routing'
-import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { ArrowLeft, Eye } from 'lucide-react'
@@ -39,7 +38,6 @@ export async function generateMetadata({
       description: post.excerpt,
       publishedTime: post.published_at ?? undefined,
       authors: post.author ? [post.author.full_name] : undefined,
-      images: post.cover_image_url ? [post.cover_image_url] : undefined,
     },
   }
 }
@@ -70,7 +68,6 @@ export default async function PostPage({ params }: PageProps<'/[locale]/blog/[sl
     author: post.author
       ? { '@type': 'Person', name: post.author.full_name }
       : undefined,
-    image: post.cover_image_url ?? undefined,
   }
 
   return (
@@ -124,19 +121,6 @@ export default async function PostPage({ params }: PageProps<'/[locale]/blog/[sl
             </span>
           )}
         </div>
-
-        {post.cover_image_url && (
-          <div className="relative mt-8 aspect-16/9 overflow-hidden rounded-2xl border border-hairline bg-surface">
-            <Image
-              src={post.cover_image_url}
-              alt=""
-              fill
-              sizes="(max-width: 768px) 100vw, 42rem"
-              className="object-cover"
-              priority
-            />
-          </div>
-        )}
 
         {/*
           Saturs nāk no lietotāja, tāpēc tas ir izgājis cauri DOMPurify

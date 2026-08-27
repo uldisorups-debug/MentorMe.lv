@@ -13,7 +13,6 @@ export type PostSummary = {
   slug: string
   title: string
   excerpt: string
-  cover_image_url: string | null
   published_at: string | null
   view_count: number
   author: PostAuthor | null
@@ -45,7 +44,7 @@ export async function listPublishedPosts(): Promise<PostSummary[]> {
   const { data, error } = await supabase
     .from('posts')
     .select(
-      `id, slug, title, excerpt, content, cover_image_url, published_at, view_count, ${AUTHOR_SELECT}`
+      `id, slug, title, excerpt, content, published_at, view_count, ${AUTHOR_SELECT}`
     )
     .eq('status', 'published')
     .order('published_at', { ascending: false })
@@ -62,7 +61,6 @@ export async function listPublishedPosts(): Promise<PostSummary[]> {
     // Ja autors kopsavilkumu nav uzrakstījis, ņemam no teksta sākuma —
     // meta description nedrīkst palikt tukšs
     excerpt: row.excerpt?.trim() || autoExcerpt(row.content),
-    cover_image_url: row.cover_image_url,
     published_at: row.published_at,
     view_count: row.view_count,
     author: firstAuthor(row.coach_profiles),
@@ -74,7 +72,7 @@ export async function loadPost(slug: string): Promise<PostDetail | null> {
   const { data, error } = await supabase
     .from('posts')
     .select(
-      `id, slug, title, excerpt, content, cover_image_url, published_at, view_count, status, ${AUTHOR_SELECT}`
+      `id, slug, title, excerpt, content, published_at, view_count, status, ${AUTHOR_SELECT}`
     )
     .eq('slug', slug)
     .eq('status', 'published')
@@ -89,7 +87,6 @@ export async function loadPost(slug: string): Promise<PostDetail | null> {
     title: data.title,
     excerpt: data.excerpt?.trim() || autoExcerpt(data.content),
     content: data.content,
-    cover_image_url: data.cover_image_url,
     published_at: data.published_at,
     view_count: data.view_count,
     status: data.status,

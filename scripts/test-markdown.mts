@@ -1,6 +1,7 @@
 // Markdown drošības testi. Palaišana: npm run test:markdown
 import { renderMarkdown, readingMinutes, autoExcerpt } from '../src/lib/markdown.ts'
 import { validatePost, hasPostErrors } from '../src/lib/post-validation.ts'
+import { slugify } from '../src/lib/slugify.ts'
 
 let passed = 0
 let failed = 0
@@ -108,6 +109,14 @@ check(
   'Kopsavilkums nedrīkst pārsniegt 300 rakstzīmes.'
 )
 check('hasPostErrors uz tukša', hasPostErrors({}), false)
+
+console.log('Adreses no virsraksta')
+check('latviešu diakritika', slugify('Ātrākais ceļš uz nākamo līmeni'), 'atrakais-cels-uz-nakamo-limeni')
+check('domuzīme un atstarpes', slugify('Kā kūpināt gaļu — vecmāmiņas veidā'), 'ka-kupinat-galu-vecmaminas-veida')
+check('atstarpes malās', slugify('   Atstarpes   malās   '), 'atstarpes-malas')
+check('pieturzīmes izkrīt', slugify('Kas, kā un kāpēc?!'), 'kas-ka-un-kapec')
+check('cipari paliek', slugify('9. klases eksāmens'), '9-klases-eksamens')
+check('tikai simboli', slugify('!!!'), '')
 
 console.log(`\n  ${passed} izturēja, ${failed} kritušas\n`)
 process.exit(failed === 0 ? 0 : 1)

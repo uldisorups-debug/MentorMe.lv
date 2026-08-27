@@ -14,7 +14,7 @@ export const CONTACT_PAGE: Record<string, ContactContent> = {
     "phone": "Tālrunis",
     "email": "E-pasts",
     "reportTitle": "Pamanīji kaut ko nepareizu?",
-    "reportBody": "Ja kāds profils izliekas par to, kas viņš nav, vai atsauksme šķiet izdomāta — pastāsti. Mēs pārbaudām ar roku.",
+    "reportBody": "Ja kāds profils izliekas par to, kas viņš nav, vai atsauksme šķiet izdomāta — pastāsti. Mēs pārbaudām manuāli.",
     "privacyNote": "Kā apstrādājam tavus datus — skaties",
     "privacyLink": "privātuma politikā"
   },
@@ -29,7 +29,7 @@ export const CONTACT_PAGE: Record<string, ContactContent> = {
     "phone": "Phone",
     "email": "Email",
     "reportTitle": "Spotted something wrong?",
-    "reportBody": "If a profile pretends to be something it isn't, or a review looks made up — tell us. We check by hand.",
+    "reportBody": "If a profile pretends to be something it isn't, or a review looks made up — tell us. We check manually.",
     "privacyNote": "How we handle your data — see the",
     "privacyLink": "privacy policy"
   },

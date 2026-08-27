@@ -15,11 +15,11 @@
   "Hero": {
     "greeting": "Sveiki. Tu meklē",
     "rotating": [
-      "skolotāju?",
-      "kouču?",
-      "privātskolotāju?",
-      "meistaru?",
-      "to, kas zina?"
+      "Skolotāju?",
+      "Kouču?",
+      "Privātskolotāju?",
+      "Meistaru?",
+      "To, kas zina?"
     ],
     "subline": "Kokle, matemātika, zapte vai bizness — kāds Latvijā to prot un ir gatavs iemācīt.",
     "ctaPrimary": "Meklēt zināšanas",
@@ -115,7 +115,7 @@
     "point1Title": "Izveido profilu",
     "point1Body": "Bilde, apraksts, ko māci, kur un par cik. Piecās minūtēs.",
     "point2Title": "Norādi, kur tevi atrast",
-    "point2Body": "WhatsApp, e-pasts vai kas cits. Ziņa aiziet tur, kur tu jau ikdienā esi.",
+    "point2Body": "Mēs tos pārbaudām manuāli. Verificētā zīme nav nopērkama.",
     "point3Title": "Saņem cilvēkus",
     "point3Body": "Viņi raksta tev tieši. Mēs neņemam komisiju.",
     "cta": "Izveidot profilu"
@@ -142,7 +142,7 @@
     "details": "Īsumā",
     "certification": "Sertifikācija",
     "certUnverified": "Nav pārbaudīts",
-    "certVerified": "Pārbaudīts ar roku",
+    "certVerified": "Pārbaudīts manuāli",
     "languages": "Sarunu valodas",
     "experience": "Pieredze",
     "experienceValue": "{years, plural, one {# gads} other {# gadi}}",
@@ -171,7 +171,7 @@
     "showingCount": "Rādīti {shown} no {total}",
     "averageOf": "{rating} no 5",
     "report": "Ziņot",
-    "reported": "Paziņots. Pārbaudīsim.",
+    "reported": "Paziņots. Pārbaudīsim manuāli.",
     "formTitle": "Atstāj atsauksmi",
     "formRating": "Novērtējums",
     "formRatingHint": "Izvēlies no 1 līdz 5 zvaigznēm",
@@ -377,8 +377,6 @@
     "excerptHint": "Šo redz Google un raksta kartīte. Ja atstāsi tukšu, paņemsim pirmās rindas.",
     "content": "Teksts",
     "contentHint": "Markdown: ## virsraksts, **treknraksts**, - saraksts, [saite](https://…). Saites uz savu lapu drīkst.",
-    "cover": "Vāka bilde",
-    "coverHint": "Neobligāti. JPG, PNG vai WebP, līdz 5 MB.",
     "preview": "Priekšskatījums",
     "write": "Rakstīt",
     "publish": "Publicēt",
@@ -392,6 +390,8 @@
     "deleteConfirm": "Dzēst šo rakstu neatgriezeniski?",
     "errTitle": "Virsrakstam jābūt no 5 līdz 140 rakstzīmēm.",
     "errContent": "Teksts nedrīkst būt tukšs.",
-    "errSlug": "Atļauti tikai mazie burti bez garumzīmēm, cipari un defises."
+    "errSlug": "Atļauti tikai mazie burti bez garumzīmēm, cipari un defises.",
+    "dailyLimit": "Viens raksts dienā. Nākamo varēsi publicēt rīt.",
+    "writeAnother": "Rakstīt nākamo"
   }
 }

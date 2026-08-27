@@ -43,7 +43,7 @@ export default async function EditPostPage({
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-12">
-      <PostEditor post={post} userId={user.id} />
+      <PostEditor post={post} />
     </div>
   )
 }

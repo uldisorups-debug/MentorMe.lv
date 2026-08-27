@@ -4,7 +4,6 @@ import { useMemo, useState } from 'react'
 import { useRouter } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { ArrowLeft, Eye, Pencil, Save, Trash2 } from 'lucide-react'
-import { AvatarUpload } from '@/components/dashboard/avatar-upload'
 import { Field, Section } from '@/components/dashboard/field'
 import { LinkButton } from '@/components/link-button'
 import { Badge } from '@/components/ui/badge'
@@ -12,6 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { createClient } from '@/lib/supabase/client'
+import { slugify } from '@/lib/slugify'
 import { renderMarkdown, readingMinutes } from '@/lib/markdown'
 import {
   hasPostErrors,
@@ -22,7 +22,7 @@ import {
 import { cn } from '@/lib/utils'
 import type { Post } from '@/types/database'
 
-export function PostEditor({ post, userId }: { post: Post; userId: string }) {
+export function PostEditor({ post }: { post: Post }) {
   const t = useTranslations('PostEditor')
   const router = useRouter()
 
@@ -32,9 +32,18 @@ export function PostEditor({ post, userId }: { post: Post; userId: string }) {
     excerpt: post.excerpt ?? '',
     content: post.content,
   })
-  const [cover, setCover] = useState<string | null>(post.cover_image_url)
   const [published, setPublished] = useState(post.status === 'published')
   const [tab, setTab] = useState<'write' | 'preview'>('write')
+
+  /*
+   * Melnraksts tiek izveidots ar vietturvārdu, un slug rodas no tā.
+   * Ja slug netiktu atjaunots, publicētā raksta adrese paliktu
+   * /blog/raksta-melnraksts. Tāpēc, kamēr autors slug lauku nav
+   * aiztikris pats, tas seko virsrakstam.
+   */
+  const [slugTouched, setSlugTouched] = useState(
+    post.slug !== slugify(post.title)
+  )
 
   const [errors, setErrors] = useState<PostErrors>({})
   const [saving, setSaving] = useState(false)
@@ -42,7 +51,13 @@ export function PostEditor({ post, userId }: { post: Post; userId: string }) {
   const [savedAt, setSavedAt] = useState<number | null>(null)
 
   const set = <K extends keyof PostDraft>(key: K, value: PostDraft[K]) => {
-    setDraft((current) => ({ ...current, [key]: value }))
+    setDraft((current) => {
+      const next = { ...current, [key]: value }
+      if (key === 'title' && !slugTouched) {
+        next.slug = slugify(String(value))
+      }
+      return next
+    })
     setSavedAt(null)
   }
 
@@ -69,7 +84,6 @@ export function PostEditor({ post, userId }: { post: Post; userId: string }) {
         slug: draft.slug.trim(),
         excerpt: draft.excerpt.trim() || null,
         content: draft.content,
-        cover_image_url: cover,
         status: nextPublished ? 'published' : 'draft',
       })
       .eq('id', post.id)
@@ -79,6 +93,7 @@ export function PostEditor({ post, userId }: { post: Post; userId: string }) {
     if (error) {
       console.error('Raksta saglabāšana neizdevās:', error.message)
       if (error.code === '23505') setErrors({ slug: t('slugTaken') })
+      else if (error.code === 'P0002') setSaveError(t('dailyLimit'))
       else setSaveError(t('saveError'))
       return
     }
@@ -137,9 +152,10 @@ export function PostEditor({ post, userId }: { post: Post; userId: string }) {
             <Input
               id="post-slug"
               value={draft.slug}
-              onChange={(event) =>
-                set('slug', event.target.value.toLowerCase().replace(/\s+/g, '-'))
-              }
+              onChange={(event) => {
+                setSlugTouched(true)
+                set('slug', slugify(event.target.value))
+              }}
               className="h-10 border-0 bg-transparent px-0 focus-visible:ring-0"
             />
           </div>
@@ -161,17 +177,6 @@ export function PostEditor({ post, userId }: { post: Post; userId: string }) {
           />
         </Field>
 
-        <Field label={t('cover')} hint={t('coverHint')}>
-          <AvatarUpload
-            userId={userId}
-            value={cover}
-            fallback="🖼"
-            onChange={(url) => {
-              setCover(url)
-              setSavedAt(null)
-            }}
-          />
-        </Field>
       </Section>
 
       <Section title={t('content')}>
@@ -237,6 +242,16 @@ export function PostEditor({ post, userId }: { post: Post; userId: string }) {
             className="h-11 text-mist hover:text-cream"
           >
             {t('view')}
+          </LinkButton>
+        )}
+
+        {published && savedAt && (
+          <LinkButton
+            href="/dashboard/raksti"
+            variant="secondary"
+            className="h-11"
+          >
+            {t('writeAnother')}
           </LinkButton>
         )}
 

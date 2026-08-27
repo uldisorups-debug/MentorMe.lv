@@ -15,11 +15,11 @@
   "Hero": {
     "greeting": "Hello. Are you looking for",
     "rotating": [
-      "a teacher?",
-      "a coach?",
-      "a tutor?",
-      "a master?",
-      "someone who knows?"
+      "A teacher?",
+      "A coach?",
+      "A tutor?",
+      "A master?",
+      "Someone who knows?"
     ],
     "subline": "Kokle, mathematics, jam or business — someone in Latvia knows it and is ready to teach you.",
     "ctaPrimary": "Find knowledge",
@@ -115,7 +115,7 @@
     "point1Title": "Create a profile",
     "point1Body": "Photo, description, what you teach, where and for how much. Five minutes.",
     "point2Title": "Say where to find you",
-    "point2Body": "WhatsApp, email or anything else. The message goes where you already are every day.",
+    "point2Body": "We check them manually. The verified badge can't be bought.",
     "point3Title": "Get people",
     "point3Body": "They write to you directly. We take no commission.",
     "cta": "Create a profile"
@@ -142,7 +142,7 @@
     "details": "In short",
     "certification": "Certification",
     "certUnverified": "Not verified",
-    "certVerified": "Checked by hand",
+    "certVerified": "Checked manually",
     "languages": "Languages",
     "experience": "Experience",
     "experienceValue": "{years, plural, one {# year} other {# years}}",
@@ -171,7 +171,7 @@
     "showingCount": "Showing {shown} of {total}",
     "averageOf": "{rating} out of 5",
     "report": "Report",
-    "reported": "Reported. We'll look into it.",
+    "reported": "Reported. We'll check it manually.",
     "formTitle": "Leave a review",
     "formRating": "Rating",
     "formRatingHint": "Choose from 1 to 5 stars",
@@ -377,8 +377,6 @@
     "excerptHint": "Google and the article card show this. Leave it empty and we'll take the first lines.",
     "content": "Text",
     "contentHint": "Markdown: ## heading, **bold**, - list, [link](https://…). Links to your own site are fine.",
-    "cover": "Cover image",
-    "coverHint": "Optional. JPG, PNG or WebP, up to 5 MB.",
     "preview": "Preview",
     "write": "Write",
     "publish": "Publish",
@@ -392,6 +390,8 @@
     "deleteConfirm": "Delete this article permanently?",
     "errTitle": "The title must be 5 to 140 characters.",
     "errContent": "The text can't be empty.",
-    "errSlug": "Only lowercase letters without diacritics, digits and hyphens."
+    "errSlug": "Only lowercase letters without diacritics, digits and hyphens.",
+    "dailyLimit": "One article per day. You can publish the next one tomorrow.",
+    "writeAnother": "Write another"
   }
 }

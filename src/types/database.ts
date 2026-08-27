@@ -266,7 +266,6 @@ export type Database = {
           slug: string
           excerpt: string | null
           content: string
-          cover_image_url: string | null
           status: PostStatus
           published_at: string | null
           view_count: number
@@ -280,7 +279,6 @@ export type Database = {
           slug?: string
           excerpt?: string | null
           content: string
-          cover_image_url?: string | null
           status?: PostStatus
         }
         Update: Partial<Omit<Database['public']['Tables']['posts']['Insert'], 'author_id'>>

@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { Link } from '@/i18n/navigation'
-import Image from 'next/image'
 import { setRequestLocale, getTranslations } from 'next-intl/server'
 import { CoachAvatar } from '@/components/coach-avatar'
 import { LinkButton } from '@/components/link-button'
@@ -55,17 +54,6 @@ export default async function BlogPage({
           {posts.map((post) => (
             <li key={post.id}>
               <article className="group relative flex gap-5 rounded-2xl border border-hairline bg-surface p-5 transition-colors hover:border-gold/40">
-                {post.cover_image_url && (
-                  <div className="relative hidden h-28 w-40 shrink-0 overflow-hidden rounded-xl bg-ink sm:block">
-                    <Image
-                      src={post.cover_image_url}
-                      alt=""
-                      fill
-                      sizes="160px"
-                      className="object-cover"
-                    />
-                  </div>
-                )}
 
                 <div className="min-w-0 flex-1">
                   <h2 className="font-display text-xl leading-snug">
