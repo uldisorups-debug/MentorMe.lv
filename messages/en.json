@@ -6,7 +6,7 @@
   "Nav": {
     "find": "Search",
     "howItWorks": "How it works",
-    "forCoaches": "I know something",
+    "forCoaches": "I have knowledge",
     "blog": "Articles",
     "login": "Sign in",
     "myPosts": "My articles",
@@ -23,7 +23,7 @@
     ],
     "subline": "Kokle, mathematics, jam or business — someone in Latvia knows it and is ready to teach you.",
     "ctaPrimary": "Find knowledge",
-    "ctaSecondary": "I know something — join",
+    "ctaSecondary": "I have knowledge — join",
     "statCoaches": "people who teach",
     "statFields": "fields",
     "statPrice": "free for both sides"
@@ -79,7 +79,7 @@
     "reviews": "{count, plural, =0 {no reviews} one {# review} other {# reviews}}",
     "yearsExperience": "{years} yrs experience",
     "empty": "Nothing matches these filters. Try widening your search.",
-    "emptyAll": "No profiles here yet. If you know something — you could be the first.",
+    "emptyAll": "No profiles here yet. If you have knowledge — you could be the first.",
     "formatRemote": "Online",
     "formatInPerson": "In person",
     "formatHybrid": "Online and in person"
@@ -103,9 +103,9 @@
     "step3Body": "Write to them directly — WhatsApp or email. No forms, no waiting."
   },
   "ForCoaches": {
-    "eyebrow": "For everyone who knows something",
-    "title": "You know something. Someone is looking for it.",
-    "lead": "It doesn't matter whether you have a diploma, a certificate or fifty years of experience in a cellar full of preserves. What matters is whether you know something someone else wants to learn.",
+    "eyebrow": "For everyone who has knowledge",
+    "title": "You have knowledge. Someone is looking for it.",
+    "lead": "It doesn't matter whether you have a diploma, a certificate or fifty years of experience in a cellar full of preserves. What matters is whether you have knowledge someone else wants.",
     "point1Title": "Create a profile",
     "point1Body": "Photo, description, what you teach, where and for how much. Five minutes.",
     "point2Title": "Say where to find you",
@@ -194,7 +194,7 @@
     "facebook": "Continue with Facebook",
     "redirecting": "Redirecting...",
     "why": "Why sign in?",
-    "whyBody": "An account is needed for only two things: people who publish a profile, and people who leave a review. Searching and reading is free, no account needed.",
+    "whyBody": "An account is needed for only two things: people with knowledge who publish a profile, and people who leave a review. Searching and reading is free, no account needed.",
     "errorTitle": "Sign-in failed",
     "errorBody": "The link had expired or sign-in was cancelled. Please try again.",
     "errorRetry": "Try again",

@@ -34,7 +34,7 @@ export function HeroSection({
 
         <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <LinkButton
-            href="#kouci"
+            href="/#kouci"
             size="lg"
             className="h-12 w-full gap-2 px-6 text-base shadow-[0_0_40px_-12px_var(--gold)] sm:w-auto"
           >

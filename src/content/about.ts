@@ -73,7 +73,7 @@ export const ABOUT: Record<string, AboutContent> = {
       "Bez maksas abām pusēm. Mēs neņemam komisiju no tā, par ko jūs vienojaties. Mēs neuzglabājam jūsu saraksti. Mēs tikai palīdzam satikties.",
       "Nav svarīgi, vai tev ir diploms. Ir svarīgi, vai tu proti kaut ko, ko kāds cits grib iemācīties."
     ],
-    "closing": "Ja tu kaut ko proti — kāds tevi meklē. Viņš vienkārši vēl nezina, kur tu esi.",
+    "closing": "Ja tev pieder zināšanas — kāds tevi meklē. Viņš vienkārši vēl nezina, kur tu esi.",
     "ctaAdd": "Pievienot savu profilu",
     "ctaFind": "Meklēt to, kas zina"
   },
@@ -128,9 +128,9 @@ export const ABOUT: Record<string, AboutContent> = {
     "how": [
       "One page where you can find a person by what they know, where they live and whether they teach in person or online. Because some things can be learned through a screen, and some cannot — the kokle, clay and a smokehouse cannot.",
       "Free for both sides. We take no commission on whatever you agree between you. We don't store your conversations. We only help you meet.",
-      "It doesn't matter whether you have a diploma. What matters is whether you know something someone else wants to learn."
+      "It doesn't matter whether you have a diploma. What matters is whether you have knowledge someone else wants."
     ],
-    "closing": "If you know something — someone is looking for you. They just don't know where you are yet.",
+    "closing": "If you have knowledge — someone is looking for you. They just don't know where you are yet.",
     "ctaAdd": "Add your profile",
     "ctaFind": "Find someone who knows"
   },
@@ -187,7 +187,7 @@ export const ABOUT: Record<string, AboutContent> = {
       "Бесплатно для обеих сторон. Мы не берём комиссию с того, о чём вы договоритесь. Мы не храним вашу переписку. Мы только помогаем встретиться.",
       "Неважно, есть ли у вас диплом. Важно, умеете ли вы то, чему кто-то хочет научиться."
     ],
-    "closing": "Если вы что-то умеете — кто-то вас ищет. Он просто пока не знает, где вы.",
+    "closing": "Если у вас есть знания — кто-то вас ищет. Он просто пока не знает, где вы.",
     "ctaAdd": "Добавить профиль",
     "ctaFind": "Найти того, кто знает"
   }

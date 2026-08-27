@@ -6,7 +6,7 @@
   "Nav": {
     "find": "Meklēt",
     "howItWorks": "Kā tas darbojas",
-    "forCoaches": "Es kaut ko protu",
+    "forCoaches": "Man pieder zināšanas",
     "login": "Ienākt",
     "skipToContent": "Pāriet uz saturu",
     "blog": "Raksti",
@@ -23,7 +23,7 @@
     ],
     "subline": "Kokle, matemātika, zapte vai bizness — kāds Latvijā to prot un ir gatavs iemācīt.",
     "ctaPrimary": "Meklēt zināšanas",
-    "ctaSecondary": "Es kaut ko protu — pievienoties",
+    "ctaSecondary": "Man pieder zināšanas — pievienoties",
     "statCoaches": "cilvēki, kas māca",
     "statFields": "nozares",
     "statPrice": "bezmaksas abām pusēm"
@@ -79,7 +79,7 @@
     "reviews": "{count, plural, =0 {nav atsauksmju} one {# atsauksme} other {# atsauksmes}}",
     "yearsExperience": "{years} g. pieredze",
     "empty": "Pēc šiem filtriem neviens neatbilst. Pamēģini paplašināt meklēšanu.",
-    "emptyAll": "Šeit vēl nav neviena profila. Ja tu kaut ko proti — vari būt pirmais.",
+    "emptyAll": "Šeit vēl nav neviena profila. Ja tev pieder zināšanas — vari būt pirmais.",
     "formatRemote": "Attālināti",
     "formatInPerson": "Klātienē",
     "formatHybrid": "Attālināti un klātienē"
@@ -103,9 +103,9 @@
     "step3Body": "Uzraksti viņam tieši — WhatsApp vai e-pastā. Bez formām un gaidīšanas."
   },
   "ForCoaches": {
-    "eyebrow": "Visiem, kas kaut ko prot",
-    "title": "Tu kaut ko proti. Kāds to meklē.",
-    "lead": "Nav svarīgi, vai tev ir diploms, sertifikāts vai piecdesmit gadu pieredze pagrabā ar zaptēm. Ir svarīgi, vai tu proti kaut ko, ko kāds cits grib iemācīties.",
+    "eyebrow": "Visiem, kam pieder zināšanas",
+    "title": "Tev pieder zināšanas. Kāds tās meklē.",
+    "lead": "Nav svarīgi, vai tev ir diploms, sertifikāts vai piecdesmit gadu pieredze pagrabā ar zaptēm. Ir svarīgi, vai tev pieder zināšanas, ko kāds cits grib iegūt.",
     "point1Title": "Izveido profilu",
     "point1Body": "Bilde, apraksts, ko māci, kur un par cik. Piecās minūtēs.",
     "point2Title": "Norādi, kur tevi atrast",
@@ -191,7 +191,7 @@
     "linkedin": "Turpināt ar LinkedIn",
     "redirecting": "Novirza...",
     "why": "Kāpēc jāienāk?",
-    "whyBody": "Konts vajadzīgs tikai diviem: koučiem, kas izliek savu profilu, un tiem, kas atstāj atsauksmi. Meklēt un lasīt var brīvi, bez konta.",
+    "whyBody": "Konts vajadzīgs tikai diviem: tiem, kam pieder zināšanas un kas izliek savu profilu, un tiem, kas atstāj atsauksmi. Meklēt un lasīt var brīvi, bez konta.",
     "errorTitle": "Pieteikšanās neizdevās",
     "errorBody": "Saite bija novecojusi vai pieteikšanās tika atcelta. Pamēģini vēlreiz.",
     "errorRetry": "Mēģināt vēlreiz",
