@@ -28,7 +28,7 @@ export type HowContent = {
 export const HOW_IT_WORKS: Record<string, HowContent> = {
   "lv": {
     "eyebrow": "Kā tas darbojas",
-    "headline": "Viens atrod. Otrs nopelna. Abiem bez maksas.",
+    "headline": "Skolnieks atrod Skolotāju. Abiem bez maksas.",
     "lead": "Šī lapa dara vienu lietu: saved kopā cilvēku, kurš kaut ko grib iemācīties, ar cilvēku, kuram tās zināšanas pieder. Viss pārējais notiek starp jums.",
     "seekerTitle": "Ja tu meklē zināšanas",
     "seekerSteps": [
@@ -90,7 +90,7 @@ export const HOW_IT_WORKS: Record<string, HowContent> = {
   },
   "en": {
     "eyebrow": "How it works",
-    "headline": "One finds. The other earns. Free for both.",
+    "headline": "A student finds a Teacher. Free for both.",
     "lead": "This site does one thing: it brings together a person who wants to learn something and a person who has that knowledge. Everything else happens between the two of you.",
     "seekerTitle": "If you're looking for knowledge",
     "seekerSteps": [
@@ -152,7 +152,7 @@ export const HOW_IT_WORKS: Record<string, HowContent> = {
   },
   "ru": {
     "eyebrow": "Как это работает",
-    "headline": "Один находит. Другой зарабатывает. Обоим бесплатно.",
+    "headline": "Ученик находит Учителя. Обоим бесплатно.",
     "lead": "Этот сайт делает одно: сводит человека, который хочет чему-то научиться, с человеком, у которого эти знания есть. Всё остальное происходит между вами.",
     "seekerTitle": "Если вы ищете знания",
     "seekerSteps": [
