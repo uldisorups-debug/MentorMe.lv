@@ -1,7 +1,6 @@
 import { CoachDirectory } from '@/components/coach-directory'
 import { ForCoaches } from '@/components/for-coaches'
 import { HeroSection } from '@/components/hero-section'
-import { HowItWorks } from '@/components/how-it-works'
 import type { CoachCardData } from '@/lib/coaches'
 import { setRequestLocale } from 'next-intl/server'
 import { loadTaxonomy } from '@/lib/taxonomy'
@@ -59,7 +58,6 @@ export default async function HomePage({ params }: PageProps<'/[locale]'>) {
         sphereCount={taxonomy.spheres.length}
       />
       <CoachDirectory coaches={coaches} taxonomy={taxonomy} />
-      <HowItWorks />
       <ForCoaches />
     </>
   )
