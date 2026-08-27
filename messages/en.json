@@ -194,12 +194,10 @@
   },
   "Auth": {
     "loginTitle": "Sign in with your account",
-    "loginLead": "No password. Choose an account to sign in with.",
+    "loginLead": "No password. Choose how to sign in.",
     "loginLeadReview": "You need an account to leave a review. You can stay anonymous — you'll choose that afterwards.",
     "loginLeadCoach": "One more step and you can start filling in your profile.",
     "google": "Continue with Google",
-    "linkedin": "Continue with LinkedIn",
-    "facebook": "Continue with Facebook",
     "redirecting": "Redirecting...",
     "why": "Why sign in?",
     "whyBody": "An account is needed for only two things: people with knowledge who publish a profile, and people who leave a review. Searching and reading is free, no account needed.",
@@ -209,7 +207,16 @@
     "signOut": "Sign out",
     "myProfile": "My profile",
     "account": "Account",
-    "addProfile": "Add your profile"
+    "addProfile": "Add your profile",
+    "or": "or",
+    "emailLabel": "Email address",
+    "emailPlaceholder": "name@example.com",
+    "emailButton": "Sign in with email",
+    "emailSending": "Sending...",
+    "emailInvalid": "That doesn't look like an email address.",
+    "emailSentTitle": "Check your inbox",
+    "emailSentBody": "We sent a link to {email}. Open it in this same browser and you are in. The link is valid for one hour.",
+    "emailOther": "Use a different address"
   },
   "Contact": {
     "sendMessage": "Send a message",

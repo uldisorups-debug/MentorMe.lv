@@ -68,9 +68,13 @@ export default async function PrivacyPage({
 
         <Section title="Kādus datus vācam">
           <p>
-            <strong className="text-cream">Ienākot ar Google, LinkedIn vai Facebook:</strong>{' '}
-            vārdu, e-pasta adresi un profila bildi. Šos datus mums nodod
-            attiecīgais pakalpojums, kad tu tam atļauj.
+            <strong className="text-cream">Ienākot ar Google:</strong> vārdu,
+            e-pasta adresi un profila bildi. Šos datus mums nodod Google, kad
+            tu tam atļauj.
+          </p>
+          <p>
+            <strong className="text-cream">Ienākot ar e-pasta saiti:</strong>{' '}
+            tikai pašu adresi. Paroles nav — mēs to neprasām un neglabājam.
           </p>
           <p>
             <strong className="text-cream">Kouča profilā:</strong> to, ko ievadi pats

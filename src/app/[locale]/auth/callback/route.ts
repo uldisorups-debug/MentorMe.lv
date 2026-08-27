@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server'
+import type { EmailOtpType } from '@supabase/supabase-js'
 import { safeNext } from '@/lib/safe-next'
 import { createClient } from '@/lib/supabase/server'
 
 /**
- * Supabase OAuth atgriešanās punkts.
+ * Supabase atgriešanās punkts — gan Google, gan e-pasta saitei.
  *
  * Apmaina kodu pret sesiju un ved atpakaļ turp, kur cilvēks bija.
  * Lomu neprasām: kas ienāk, lai izliktu profilu, kļūst par kouču tajā
@@ -12,17 +13,22 @@ import { createClient } from '@/lib/supabase/server'
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
+  // E-pasta saite atkarībā no vēstules veidnes atnāk vai nu ar kodu,
+  // vai ar token_hash. Pieņemam abus, lai veidnes maiņa neko nesalauž.
+  const tokenHash = searchParams.get('token_hash')
+  const type = searchParams.get('type') as EmailOtpType | null
   const next = safeNext(searchParams.get('next'))
 
-  if (!code) {
-    return NextResponse.redirect(`${origin}/auth/auth-code-error`)
-  }
-
   const supabase = await createClient()
-  const { data, error } = await supabase.auth.exchangeCodeForSession(code)
+
+  const { data, error } = code
+    ? await supabase.auth.exchangeCodeForSession(code)
+    : tokenHash && type
+      ? await supabase.auth.verifyOtp({ token_hash: tokenHash, type })
+      : { data: { user: null }, error: null }
 
   if (error || !data.user) {
-    console.error('Koda apmaiņa neizdevās:', error?.message)
+    console.error('Pieteikšanās neizdevās:', error?.message)
     return NextResponse.redirect(`${origin}/auth/auth-code-error`)
   }
 

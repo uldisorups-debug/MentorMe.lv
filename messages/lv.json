@@ -194,9 +194,8 @@
   },
   "Auth": {
     "loginTitle": "Ienāc ar savu kontu",
-    "loginLead": "Bez paroles. Izvēlies kontu, ar kuru ienākt.",
+    "loginLead": "Bez paroles. Izvēlies, kā ienākt.",
     "google": "Turpināt ar Google",
-    "linkedin": "Turpināt ar LinkedIn",
     "redirecting": "Novirza...",
     "why": "Kāpēc jāienāk?",
     "whyBody": "Konts vajadzīgs tikai diviem: tiem, kam pieder zināšanas un kas izliek savu profilu, un tiem, kas atstāj atsauksmi. Meklēt un lasīt var brīvi, bez konta.",
@@ -206,10 +205,18 @@
     "signOut": "Iziet",
     "myProfile": "Mans profils",
     "account": "Konts",
-    "facebook": "Turpināt ar Facebook",
     "loginLeadReview": "Lai atstātu atsauksmi, vajag kontu. Vārdu vari neatklāt — to izvēlēsies pēc tam.",
     "loginLeadCoach": "Vēl viens solis, un vari sākt aizpildīt savu profilu.",
-    "addProfile": "Pievienot savu profilu"
+    "addProfile": "Pievienot savu profilu",
+    "or": "vai",
+    "emailLabel": "E-pasta adrese",
+    "emailPlaceholder": "vards@piemers.lv",
+    "emailButton": "Pieslēgties ar e-pastu",
+    "emailSending": "Sūta...",
+    "emailInvalid": "Šī neizskatās pēc e-pasta adreses.",
+    "emailSentTitle": "Pārbaudi savu pastu",
+    "emailSentBody": "Nosūtījām saiti uz {email}. Atver to šajā pašā pārlūkā, un tu būsi iekšā. Saite der vienu stundu.",
+    "emailOther": "Ievadīt citu adresi"
   },
   "Dashboard": {
     "title": "Mans profils",
