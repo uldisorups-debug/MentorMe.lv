@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { LinkButton } from '@/components/link-button'
 import { Textarea } from '@/components/ui/textarea'
 import { createClient } from '@/lib/supabase/client'
+import { refreshAfterReview } from '@/app/revalidate-coach'
 import { cn } from '@/lib/utils'
 
 type Status =
@@ -151,6 +152,10 @@ export function ReviewForm({
     }
 
     setStatus({ kind: 'done' })
+
+    // Vispirms serverim jāpārbūvē lapa, tikai tad ir vērts to pārlādēt.
+    // Otrādi sanāktu pārlādēt tieši to pašu veco versiju.
+    await refreshAfterReview()
     router.refresh()
   }
 
