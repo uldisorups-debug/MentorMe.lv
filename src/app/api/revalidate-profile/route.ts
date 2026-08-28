@@ -1,6 +1,6 @@
-import { revalidatePath } from 'next/cache'
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { revalidateProfilePages } from '@/lib/revalidate'
 
 /**
  * Publisko lapu atsvaidzināšana pēc profila saglabāšanas.
@@ -10,9 +10,6 @@ import { createClient } from '@/lib/supabase/server'
  * uzreiz atvēra savu publisko profilu, redzētu veco versiju un domātu,
  * ka saglabāšana neizdevās.
  *
- * Atsvaidzinām maršrutu, ne konkrētu adresi: ar next-intl viena lapa
- * dzīvo trijās adresēs (/profils/..., /en/profils/..., /ru/...), un
- * uzminēt tās visas ir vairāk vietu, kur kļūdīties.
  */
 export async function POST() {
   const supabase = await createClient()
@@ -36,8 +33,7 @@ export async function POST() {
     return NextResponse.json({ ok: false }, { status: 404 })
   }
 
-  revalidatePath('/[locale]/profils/[slug]', 'page')
-  revalidatePath('/[locale]', 'page')
+  revalidateProfilePages()
 
   return NextResponse.json({ ok: true, slug: coach.slug })
 }

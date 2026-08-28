@@ -200,11 +200,13 @@ export function ReviewForm({
     >
       <h3 className="font-display text-lg">{t('formTitle')}</h3>
 
+      {/*
+        Redzamā uzraksta "Novērtējums" te vairs nav — virsraksts virs tā
+        jau pasaka to pašu. Zvaigznēm pieejamības nosaukums paliek
+        aria-label veidā, tāpēc ekrāna lasītājam nekas nepazūd.
+      */}
       <div className="mt-4">
-        <span className="block text-sm font-medium">{t('formRating')}</span>
-        <span className="mt-1 block text-xs text-mist">
-          {t('formRatingHint')}
-        </span>
+        <span className="block text-xs text-mist">{t('formRatingHint')}</span>
         <div className="mt-2">
           <StarPicker value={rating} onChange={setRating} />
         </div>
