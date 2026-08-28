@@ -34,7 +34,9 @@ export const UPLOAD_RULES: Record<UploadKind, UploadRule> = {
   },
   certificate: {
     bucket: 'certificates',
-    maxBytes: 10 * MB,
+    // Sertifikāta fotografēšanai 5 MB ir ar uzviju, un krātuve
+    // bezmaksas plānā ir viens gigabaits kopā visiem
+    maxBytes: 5 * MB,
     mimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'],
   },
 }

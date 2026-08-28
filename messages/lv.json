@@ -259,7 +259,7 @@
     "certification": "Sertifikācija",
     "certOtherLabel": "Kāda tieši?",
     "certProof": "Sertifikāta apliecinājums",
-    "certProofHint": "JPG, PNG, WebP vai PDF. Līdz 10 MB. Šo redz tikai administrators — publiskajā profilā tas neparādās.",
+    "certProofHint": "JPG, PNG, WebP vai PDF. Līdz 5 MB. Šo redz tikai administrators — publiskajā profilā tas neparādās.",
     "certProofUploaded": "Augšupielādēts. Gaida pārbaudi.",
     "verifiedNote": "Profils ir verificēts.",
     "yearsExperience": "Pieredze gados",

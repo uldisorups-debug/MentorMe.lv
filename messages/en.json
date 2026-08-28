@@ -285,7 +285,7 @@
     "certification": "Certification",
     "certOtherLabel": "Which one exactly?",
     "certProof": "Certificate proof",
-    "certProofHint": "JPG, PNG, WebP or PDF. Up to 10 MB. Only an administrator sees this — it never appears on your public profile.",
+    "certProofHint": "JPG, PNG, WebP or PDF. Up to 5 MB. Only the administrator sees this — it never appears on your public profile.",
     "certProofUploaded": "Uploaded. Awaiting review.",
     "verifiedNote": "This profile is verified.",
     "yearsExperience": "Years of experience",
