@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { createClient } from '@/lib/supabase/client'
 import { slugify } from '@/lib/slugify'
-import { renderMarkdown, readingMinutes } from '@/lib/markdown'
+import { renderMarkdown, readingMinutes, autoExcerpt } from '@/lib/markdown'
 import {
   hasPostErrors,
   validatePost,
@@ -82,7 +82,12 @@ export function PostEditor({ post }: { post: Post }) {
       .update({
         title: draft.title.trim(),
         slug: draft.slug.trim(),
-        excerpt: draft.excerpt.trim() || null,
+        /*
+         * Ja autors kopsavilkumu nav uzrakstījis, uzrakstām to šeit un
+         * saglabājam. Agrāk to ģenerēja bloga saraksts, tāpēc tam bija
+         * jālejupielādē visu rakstu pilnie teksti.
+         */
+        excerpt: draft.excerpt.trim() || autoExcerpt(draft.content) || null,
         content: draft.content,
         status: nextPublished ? 'published' : 'draft',
       })

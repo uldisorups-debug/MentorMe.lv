@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
-import { localePath } from '@/i18n/routing'
+import { localePath, nameColumn } from '@/i18n/routing'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { DeleteAccount } from '@/components/dashboard/delete-account'
 import { LinkButton } from '@/components/link-button'
@@ -46,6 +46,9 @@ export default async function DashboardProfilePage() {
   // Lomas jautājuma vairs nav: kas atnāk uz šo lapu, tas grib izlikt
   // profilu. Ja tā vēl nav, izveidojam tukšu melnrakstu — tas nav
   // publicēts, tāpēc neviens to neredz, kamēr pats to neieslēdz.
+  //
+  // profiles.role šeit vairs netiek mainīta. Lapas atvēršana nav
+  // izvēle kļūt par meistaru; to nosaka publicēšana redaktorā.
   if (!coach) {
     const fallbackName =
       profile?.display_name ?? user.email?.split('@')[0] ?? 'Koučs'
@@ -61,8 +64,6 @@ export default async function DashboardProfilePage() {
       redirect(localePath(locale, '/'))
     }
 
-    // Loma seko darbībai, nevis anketai
-    await supabase.from('profiles').update({ role: 'coach' }).eq('id', user.id)
     coach = created
   }
 
@@ -72,25 +73,36 @@ export default async function DashboardProfilePage() {
     .eq('coach_id', coach.id)
     .maybeSingle()
 
+  /*
+   * Redaktors līdz šim vienmēr rādīja latviskos nosaukumus, arī angļu
+   * un krievu versijā. Tas pats nameColumn, ko lieto visa pārējā lapa.
+   */
   const publicClient = createPublicClient()
-  const { data: categoryRows } = await publicClient
-    .from('categories')
-    .select('slug, name_lv')
-    .order('sort_order')
+  const column = nameColumn(locale)
 
-  const { data: regionRows } = await publicClient
-    .from('regions')
-    .select('slug, name_lv')
-    .order('sort_order')
+  const [categoryResult, regionResult] = await Promise.all([
+    publicClient.from('categories').select(`slug, name_lv, ${column}`).order('sort_order'),
+    publicClient.from('regions').select(`slug, name_lv, ${column}`).order('sort_order'),
+  ])
 
-  const categories = (categoryRows ?? []).map((row) => ({
+  if (categoryResult.error) {
+    console.error('Neizdevās ielādēt tēmas:', categoryResult.error.message)
+  }
+  if (regionResult.error) {
+    console.error('Neizdevās ielādēt reģionus:', regionResult.error.message)
+  }
+
+  const localName = (row: Record<string, unknown>) =>
+    (row[column] as string | null) || (row.name_lv as string)
+
+  const categories = (categoryResult.data ?? []).map((row) => ({
     value: row.slug,
-    label: row.name_lv,
+    label: localName(row),
   }))
 
-  const regions = (regionRows ?? []).map((row) => ({
+  const regions = (regionResult.data ?? []).map((row) => ({
     value: row.slug,
-    label: row.name_lv,
+    label: localName(row),
   }))
 
   return (

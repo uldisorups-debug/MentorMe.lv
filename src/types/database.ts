@@ -269,6 +269,7 @@ export type Database = {
           status: PostStatus
           published_at: string | null
           view_count: number
+          hidden_by_admin: boolean
           created_at: string
           updated_at: string
         }
@@ -281,7 +282,13 @@ export type Database = {
           content: string
           status?: PostStatus
         }
-        Update: Partial<Omit<Database['public']['Tables']['posts']['Insert'], 'author_id'>>
+        /*
+         * hidden_by_admin nav Insert tipā — trigeris to ievietojot vienmēr
+         * piespiež uz false. Mainīt to drīkst tikai administrators.
+         */
+        Update: Partial<
+          Omit<Database['public']['Tables']['posts']['Insert'], 'author_id'>
+        > & { hidden_by_admin?: boolean }
         Relationships: [
           {
             foreignKeyName: "posts_author_id_fkey"
@@ -386,6 +393,23 @@ export type Database = {
     }
 
     Views: {
+      /*
+       * Publiskā atsauksmju puse. client_id te nav vispār, un anonīmajiem
+       * autora vārds ir null jau pašā vaicājumā — anonimitāti tur datubāze,
+       * nevis mūsu kods.
+       */
+      reviews_public: {
+        Row: {
+          id: string
+          coach_id: string
+          rating: number
+          body: string | null
+          created_at: string
+          author_name: string | null
+        }
+        Relationships: []
+      }
+
       coach_ratings: {
         Row: {
           coach_id: string | null
@@ -444,4 +468,5 @@ export type Post          = Database['public']['Tables']['posts']['Row']
 export type Sphere        = Database['public']['Tables']['spheres']['Row']
 export type AdminAction   = Database['public']['Tables']['admin_actions']['Row']
 export type Region        = Database['public']['Tables']['regions']['Row']
-export type CoachRating  = Database['public']['Views']['coach_ratings']['Row']
+export type CoachRating   = Database['public']['Views']['coach_ratings']['Row']
+export type PublicReview  = Database['public']['Views']['reviews_public']['Row']

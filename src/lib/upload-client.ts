@@ -68,3 +68,38 @@ export async function removeStoredFile(
     console.error(`Neizdevās izdzēst ${bucket}/${path}:`, error.message)
   }
 }
+
+/** Bucket'i, kuros glabājas lietotāja faili. Mape = user_id. */
+const USER_BUCKETS = ['avatars', 'gallery', 'certificates'] as const
+
+/**
+ * Izdzēš visus viena lietotāja failus no krātuves.
+ *
+ * SQL to izdarīt nevar. Dzēšot rindu no storage.objects, pats fails
+ * krātuvē paliek, un avatāri ar galeriju ir publiskā bucket'ā — pēc
+ * tiešās saites tie joprojām atvērtos. Tāpēc failus noņemam caur
+ * Storage API, pirms konts pazūd.
+ */
+export async function removeAllUserFiles(userId: string): Promise<void> {
+  const supabase = createClient()
+
+  for (const bucket of USER_BUCKETS) {
+    const { data, error } = await supabase.storage.from(bucket).list(userId)
+
+    if (error) {
+      console.error(`Neizdevās nolasīt ${bucket}/${userId}:`, error.message)
+      continue
+    }
+
+    const paths = (data ?? []).map((file) => `${userId}/${file.name}`)
+    if (paths.length === 0) continue
+
+    const { error: removeError } = await supabase.storage
+      .from(bucket)
+      .remove(paths)
+
+    if (removeError) {
+      console.error(`Neizdevās izdzēst ${bucket}/${userId}:`, removeError.message)
+    }
+  }
+}

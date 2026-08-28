@@ -21,14 +21,35 @@ export default async function AdminProfilesPage() {
   const admin = { adminId: user!.id, adminName: me.data?.display_name ?? null }
   const waiting = (coaches ?? []).filter((c) => c.cert_proof_url && !c.is_verified)
 
+  /*
+   * Bucket ir privāts, tāpēc failam vajag parakstītu saiti. Līdz šim
+   * panelī bija tikai ceļš kā teksts un norāde iet uz Supabase — proti,
+   * sertifikātu no lapas pārbaudīt nevarēja vispār.
+   *
+   * Piecas minūtes: pietiekami, lai atvērtu, par īsu, lai saite kaut kur
+   * paliktu karājoties.
+   */
+  const certLinks = new Map<string, string>()
+  await Promise.all(
+    waiting.map(async (c) => {
+      const { data, error } = await supabase.storage
+        .from('certificates')
+        .createSignedUrl(c.cert_proof_url!, 300)
+      if (error) {
+        console.error(`Sertifikāta saite ${c.slug}:`, error.message)
+        return
+      }
+      if (data) certLinks.set(c.id, data.signedUrl)
+    })
+  )
+
   return (
     <div className="flex flex-col gap-8">
       {waiting.length > 0 && (
         <section>
           <h2 className="font-display text-xl">Gaida sertifikāta pārbaudi</h2>
           <p className="mt-1 text-sm text-mist">
-            Failu atver Supabase panelī: Storage → certificates → mape ar
-            lietotāja ID. Publiskajā profilā tas neparādās.
+            Sertifikāts publiskajā profilā neparādās. Saite der piecas minūtes.
           </p>
           <ul className="mt-4 flex flex-col gap-2">
             {waiting.map((c) => (
@@ -36,7 +57,25 @@ export default async function AdminProfilesPage() {
                 key={c.id}
                 danger
                 title={c.full_name}
-                subtitle={<>Norādīts: {c.certification ?? 'nav'} · fails: <code className="text-mist">{c.cert_proof_url}</code></>}
+                subtitle={
+                  <>
+                    Norādīts: {c.certification ?? 'nav'} ·{' '}
+                    {certLinks.has(c.id) ? (
+                      <a
+                        href={certLinks.get(c.id)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gold hover:underline"
+                      >
+                        Atvērt sertifikātu
+                      </a>
+                    ) : (
+                      <span className="text-mist">
+                        failu neizdevās atvērt — skaties Supabase Storage
+                      </span>
+                    )}
+                  </>
+                }
                 actions={
                   <ProfileActions
                     id={c.id}

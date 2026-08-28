@@ -22,6 +22,21 @@ export async function loadTaxonomy(locale: string) {
     supabase.from('regions').select(`slug, name_lv, ${column}`).order('sort_order'),
   ])
 
+  /*
+   * Bez šī tukši filtri izskatītos tieši tāpat kā nesekmīgs vaicājums:
+   * lapa uzrādītos ar nulli nozarēm, un neviena pazīme neliecinātu,
+   * ka kaut kas nogāja greizi.
+   */
+  for (const [name, result] of [
+    ['nozares', spheres],
+    ['tēmas', groups],
+    ['reģioni', regions],
+  ] as const) {
+    if (result.error) {
+      console.error(`Taksonomija — neizdevās ielādēt ${name}:`, result.error.message)
+    }
+  }
+
   const pick = (row: Record<string, unknown>) =>
     (row[column] as string | null) || (row.name_lv as string)
 
@@ -47,7 +62,10 @@ export async function loadTaxonomy(locale: string) {
 export async function loadGroupNames(locale: string): Promise<Record<string, string>> {
   const supabase = createPublicClient()
   const column = nameColumn(locale)
-  const { data } = await supabase.from('categories').select(`slug, name_lv, ${column}`)
+  const { data, error } = await supabase
+    .from('categories')
+    .select(`slug, name_lv, ${column}`)
+  if (error) console.error('Neizdevās ielādēt tēmu nosaukumus:', error.message)
   return Object.fromEntries(
     (data ?? []).map((row) => [
       row.slug as string,
@@ -63,11 +81,12 @@ export async function loadRegionName(
   if (!slug) return null
   const supabase = createPublicClient()
   const column = nameColumn(locale)
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('regions')
     .select(`name_lv, ${column}`)
     .eq('slug', slug)
     .maybeSingle()
+  if (error) console.error('Neizdevās ielādēt reģiona nosaukumu:', error.message)
   if (!data) return null
   return (
     ((data as Record<string, unknown>)[column] as string | null) ||
@@ -92,19 +111,26 @@ export async function loadSphereNames(
   const supabase = createPublicClient()
   const column = nameColumn(locale)
 
-  const { data: cats } = await supabase
+  const { data: cats, error: catsError } = await supabase
     .from('categories')
     .select('sphere_slug')
     .in('slug', niches)
 
+  if (catsError) {
+    console.error('Neizdevās noteikt nozares:', catsError.message)
+    return []
+  }
+
   const slugs = [...new Set((cats ?? []).map((row) => row.sphere_slug))]
   if (slugs.length === 0) return []
 
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('spheres')
     .select(`slug, icon, name_lv, ${column}`)
     .in('slug', slugs)
     .order('sort_order')
+
+  if (error) console.error('Neizdevās ielādēt nozaru nosaukumus:', error.message)
 
   return (data ?? []).map((row) => ({
     value: row.slug as string,

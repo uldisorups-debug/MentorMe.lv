@@ -78,11 +78,15 @@ export async function loadCoachPage(slug: string): Promise<CoachPage | null> {
       .select('avg_rating, review_count')
       .eq('coach_id', coach.id)
       .maybeSingle(),
+    /*
+     * Skats, ne pamattabula. Tajā client_id nav vispār, un anonīmajiem
+     * vārds ir null jau datubāzē. Agrāk vārdu paņēma un izmeta Reactā —
+     * tas nozīmēja, ka jebkurš to varēja izvilkt no Supabase tieši.
+     */
     supabase
-      .from('reviews')
-      .select('id, rating, body, created_at, is_anonymous, client_id, profiles(display_name)')
+      .from('reviews_public')
+      .select('id, rating, body, created_at, author_name')
       .eq('coach_id', coach.id)
-      .eq('is_visible', true)
       .order('created_at', { ascending: false }),
   ])
 
@@ -91,11 +95,7 @@ export async function loadCoachPage(slug: string): Promise<CoachPage | null> {
     rating: row.rating,
     body: row.body,
     created_at: row.created_at,
-    // Anonīmajiem vārdu neizvelkam vispār — tas nedrīkst nonākt HTML'ā
-    author_name: row.is_anonymous
-      ? null
-      : ((row.profiles as { display_name: string | null } | null)
-          ?.display_name ?? null),
+    author_name: row.author_name,
   }))
 
   return {

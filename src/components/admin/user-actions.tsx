@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { ConfirmButton } from '@/components/admin/confirm-button'
 import { logAdminAction } from '@/lib/admin'
 import { createClient } from '@/lib/supabase/client'
+import { removeAllUserFiles } from '@/lib/upload-client'
 
 export function UserActions({
   userId,
@@ -63,6 +64,9 @@ export function UserActions({
   }
 
   async function remove(reason: string | null) {
+    // Faili pirmie — SQL tos izdzēst nevar, tikai storage.objects rindu
+    await removeAllUserFiles(userId)
+
     const { error } = await supabase.rpc('admin_delete_user', {
       target_id: userId,
       target_label: userName,

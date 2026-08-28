@@ -29,6 +29,22 @@ if (drafts.data?.length ?? 0) { hole(`melnraksta profili: redz ${drafts.data.len
 const draftPosts = await sb.from('posts').select('title').eq('status', 'draft')
 if (draftPosts.data?.length ?? 0) { hole('rakstu melnraksti: redz') } else { ok('rakstu melnraksti: neredz') }
 
+// Audita labojums: is_admin atklāja, kuru kontu mērķēt
+const admins = await sb.from('profiles').select('id, is_admin')
+if (admins.data?.length ?? 0) { hole(`profiles: redz ${admins.data.length} rindas ar is_admin`) } else { ok('profiles: neredz svešus profilus') }
+
+// Audita labojums: anonīmās atsauksmes autoru varēja izvilkt caur savienojumu
+const unmask = await sb.from('reviews').select('id, client_id, profiles(display_name)')
+if (unmask.error) { ok('reviews: pamattabula publiski nav lasāma') }
+else if (unmask.data?.length ?? 0) { hole('reviews: var izvilkt client_id un autora vārdu') }
+else { ok('reviews: pamattabula neatdod rindas') }
+
+// Publiskajā skatā client_id nedrīkst būt vispār
+const pub = await sb.from('reviews_public').select('*').limit(1)
+if (pub.error) { note(`reviews_public nav pieejams: ${pub.error.message}`) }
+else if (pub.data?.[0] && 'client_id' in pub.data[0]) { hole('reviews_public atdod client_id') }
+else { ok('reviews_public: client_id nav') }
+
 const certs = await sb.from('coach_profiles').select('cert_proof_url').not('cert_proof_url', 'is', null)
 if (certs.data?.length ?? 0) { note('cert_proof_url ceļš redzams publiski (fails privāts, bet ceļš atklāj user_id)') } else { ok('sertifikātu ceļu nav neviena') }
 

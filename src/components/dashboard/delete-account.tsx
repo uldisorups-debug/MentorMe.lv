@@ -7,13 +7,17 @@ import { Trash2, TriangleAlert } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { createClient } from '@/lib/supabase/client'
+import { removeAllUserFiles } from '@/lib/upload-client'
 
 /**
  * Konta un visu datu dzēšana (VDAR tiesības uz dzēšanu).
  *
- * Datubāzes funkcija delete_own_account() noņem Storage failus un
- * auth.users rindu; pārējais aiziet kaskādē. Atsaukt nevar, tāpēc
- * prasām ierakstīt vārdu — poga vien būtu par vieglu nejauši nospiest.
+ * Vispirms failus, tad kontu. SQL failus izdzēst nevar — tas noņem
+ * tikai storage.objects rindu, bet pats fails krātuvē paliek un
+ * publiskajā bucket'ā pēc tiešās saites joprojām atveras.
+ *
+ * Atsaukt nevar, tāpēc prasām ierakstīt vārdu — poga vien būtu par
+ * vieglu nejauši nospiest.
  */
 export function DeleteAccount() {
   const t = useTranslations('Account')
@@ -33,6 +37,14 @@ export function DeleteAccount() {
     setError(null)
 
     const supabase = createClient()
+
+    // Faili pirmie: pēc konta dzēšanas sesijas vairs nav un
+    // krātuvei mēs klāt netiekam
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+    if (user) await removeAllUserFiles(user.id)
+
     const { error: rpcError } = await supabase.rpc('delete_own_account')
 
     if (rpcError) {

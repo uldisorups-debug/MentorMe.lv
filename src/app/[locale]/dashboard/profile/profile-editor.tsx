@@ -252,6 +252,20 @@ export function ProfileEditor({
       return
     }
 
+    /*
+     * Loma seko publicēšanai, ne lapas atvēršanai. Agrāk to uzlika
+     * jau tad, kad kāds vienkārši atvēra redaktoru — arī aiz ziņkāres.
+     */
+    if (draft.is_published) {
+      const { error: roleError } = await supabase
+        .from('profiles')
+        .update({ role: 'coach' })
+        .eq('id', userId)
+      if (roleError) {
+        console.error('Lomas maiņa neizdevās:', roleError.message)
+      }
+    }
+
     // Kontakti dzīvo atsevišķā tabulā, tāpēc atsevišķs upsert.
     // consent_at glabā datumu, nevis boolean — lai vēlāk var pierādīt,
     // kad tieši cilvēks piekrita.

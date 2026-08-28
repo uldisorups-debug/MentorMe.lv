@@ -143,23 +143,46 @@ export function ReviewActions({
   )
 }
 
-/** Raksts: noņemt no publikācijas vai dzēst. */
+/** Raksts: noņemt no publikācijas, atdot atpakaļ vai dzēst. */
 export function PostActions({
-  id, label, isPublished, admin,
+  id, label, isPublished, hiddenByAdmin, admin,
 }: {
   id: string
   label: string
   isPublished: boolean
+  /** Vai rakstu noņēma administrators, nevis pats autors */
+  hiddenByAdmin: boolean
   admin: Admin
 }) {
   const router = useRouter()
   const supabase = createClient()
 
+  /*
+   * hidden_by_admin atšķir, kurš rakstu noņēma. Bez tā autors savu
+   * rakstu vienkārši publicēja no jauna, un administratora lēmums
+   * neko nenozīmēja.
+   */
   async function unpublish() {
-    const { error } = await supabase.from('posts').update({ status: 'draft' }).eq('id', id)
+    const { error } = await supabase
+      .from('posts')
+      .update({ status: 'draft', hidden_by_admin: true })
+      .eq('id', id)
     if (error) return alert(error.message)
     await logAdminAction({
       ...admin, action: 'unpublish_post', table: 'posts', targetId: id, targetLabel: label,
+    })
+    router.refresh()
+  }
+
+  /** Kļūdas gadījumā — raksts atgriežas autora rokās */
+  async function release() {
+    const { error } = await supabase
+      .from('posts')
+      .update({ hidden_by_admin: false })
+      .eq('id', id)
+    if (error) return alert(error.message)
+    await logAdminAction({
+      ...admin, action: 'release_post', table: 'posts', targetId: id, targetLabel: label,
     })
     router.refresh()
   }
@@ -184,6 +207,17 @@ export function PostActions({
         >
           <EyeOff className="size-3.5" />
           Uz melnrakstu
+        </Button>
+      )}
+
+      {hiddenByAdmin && (
+        <Button
+          variant="ghost" size="sm"
+          className="h-9 gap-1.5 text-mist hover:text-cream"
+          onClick={release}
+        >
+          <Eye className="size-3.5" />
+          Atdot autoram
         </Button>
       )}
 

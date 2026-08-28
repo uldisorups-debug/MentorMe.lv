@@ -43,8 +43,14 @@ export async function listPublishedPosts(): Promise<PostSummary[]> {
   const supabase = createPublicClient()
   const { data, error } = await supabase
     .from('posts')
+    /*
+     * content šeit vairs nav. Agrāk to vilka tikai tāpēc, ka kopsavilkums
+     * varēja izrādīties tukšs — tas nozīmēja lejupielādēt visus rakstus
+     * pilnībā, lai parādītu divas rindiņas. Tagad kopsavilkumu aizpilda
+     * redaktors saglabāšanas brīdī.
+     */
     .select(
-      `id, slug, title, excerpt, content, published_at, view_count, ${AUTHOR_SELECT}`
+      `id, slug, title, excerpt, published_at, view_count, ${AUTHOR_SELECT}`
     )
     .eq('status', 'published')
     .order('published_at', { ascending: false })
@@ -58,9 +64,7 @@ export async function listPublishedPosts(): Promise<PostSummary[]> {
     id: row.id,
     slug: row.slug,
     title: row.title,
-    // Ja autors kopsavilkumu nav uzrakstījis, ņemam no teksta sākuma —
-    // meta description nedrīkst palikt tukšs
-    excerpt: row.excerpt?.trim() || autoExcerpt(row.content),
+    excerpt: row.excerpt?.trim() ?? '',
     published_at: row.published_at,
     view_count: row.view_count,
     author: firstAuthor(row.coach_profiles),

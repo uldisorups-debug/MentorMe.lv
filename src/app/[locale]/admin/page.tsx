@@ -10,14 +10,32 @@ const dateTime = new Intl.DateTimeFormat('lv-LV', {
   timeStyle: 'short',
 })
 
-function Stat({ label, value, hint }: { label: string; value: number; hint?: string }) {
+/**
+ * null nozīmē, ka vaicājums nesekmējās.
+ *
+ * Agrāk tas tika parādīts kā nulle, tāpēc kritis pieprasījums izskatījās
+ * tieši tāpat kā tukša tabula: panelis rādīja "0 lietotāji" arī tad,
+ * kad datubāze vienkārši neatbildēja.
+ */
+function Stat({
+  label, value, hint,
+}: { label: string; value: number | null; hint?: string }) {
   return (
     <div className="rounded-xl border border-hairline bg-surface p-5">
-      <p className="font-display text-3xl text-gold">{value}</p>
+      {value === null ? (
+        <p className="font-display text-3xl text-coral" title="Neizdevās nolasīt">—</p>
+      ) : (
+        <p className="font-display text-3xl text-gold">{value}</p>
+      )}
       <p className="mt-1 text-sm">{label}</p>
       {hint && <p className="mt-1 text-xs text-mist">{hint}</p>}
     </div>
   )
+}
+
+/** Palīgs mājienam: ja skaits nav zināms, mājiena nav vispār. */
+function hint(count: number | null, suffix: string): string | undefined {
+  return count === null ? undefined : `${count} ${suffix}`
 }
 
 export default async function AdminOverviewPage() {
@@ -36,13 +54,17 @@ export default async function AdminOverviewPage() {
       supabase.from('posts').select('*', HEAD),
       supabase.from('posts').select('*', HEAD).eq('status', 'draft'),
       supabase.from('review_reports').select('*', HEAD).eq('handled', false),
-    ]).then((results) => results.map((r) => r.count ?? 0))
+    ]).then((results) =>
+      results.map((r) => (r.error ? null : (r.count ?? 0)))
+    )
 
-  const { data: log } = await supabase
+  const { data: log, error: logError } = await supabase
     .from('admin_actions')
     .select('*')
     .order('created_at', { ascending: false })
     .limit(20)
+
+  if (logError) console.error('Neizdevās ielādēt žurnālu:', logError.message)
 
   return (
     <div className="flex flex-col gap-10">
@@ -50,12 +72,12 @@ export default async function AdminOverviewPage() {
         <h2 className="font-display text-xl">Skaitļi</h2>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <Stat label="Lietotāji" value={users} />
-          <Stat label="Profili" value={coaches} hint={`${published} publicēti`} />
-          <Stat label="Atsauksmes" value={reviews} hint={`${hidden} paslēptas`} />
-          <Stat label="Raksti" value={posts} hint={`${drafts} melnraksti`} />
+          <Stat label="Profili" value={coaches} hint={hint(published, 'publicēti')} />
+          <Stat label="Atsauksmes" value={reviews} hint={hint(hidden, 'paslēptas')} />
+          <Stat label="Raksti" value={posts} hint={hint(drafts, 'melnraksti')} />
         </div>
 
-        {reports > 0 && (
+        {reports !== null && reports > 0 && (
           <p className="mt-4 rounded-xl border border-coral/30 bg-coral/10 px-4 py-3 text-sm text-coral-soft">
             {reports} neapstrādāts ziņojums par atsauksmēm — skaties sadaļā Atsauksmes.
           </p>

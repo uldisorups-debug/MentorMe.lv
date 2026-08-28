@@ -15,7 +15,7 @@ export default async function AdminPostsPage() {
   const [{ data: posts }, me] = await Promise.all([
     supabase
       .from('posts')
-      .select('id, slug, title, status, view_count, created_at, coach_profiles(full_name)')
+      .select('id, slug, title, status, hidden_by_admin, view_count, created_at, coach_profiles(full_name)')
       .order('created_at', { ascending: false }),
     supabase.from('profiles').select('display_name').eq('id', user!.id).maybeSingle(),
   ])
@@ -49,15 +49,24 @@ export default async function AdminPostsPage() {
                 </>
               }
               badges={
-                <Badge variant={p.status === 'published' ? 'default' : 'outline'}>
-                  {p.status === 'published' ? 'Publicēts' : 'Melnraksts'}
-                </Badge>
+                <>
+                  <Badge variant={p.status === 'published' ? 'default' : 'outline'}>
+                    {p.status === 'published' ? 'Publicēts' : 'Melnraksts'}
+                  </Badge>
+                  {/* Autors šo pats atpakaļ publicēt nevar */}
+                  {p.hidden_by_admin && (
+                    <Badge variant="ghost" className="text-coral">
+                      Noņēmis administrators
+                    </Badge>
+                  )}
+                </>
               }
               actions={
                 <PostActions
                   id={p.id}
                   label={p.title}
                   isPublished={p.status === 'published'}
+                  hiddenByAdmin={p.hidden_by_admin}
                   admin={admin}
                 />
               }
