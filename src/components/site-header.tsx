@@ -3,6 +3,7 @@ import { useTranslations } from 'next-intl'
 import { HeaderAuth } from '@/components/header-auth'
 import { LocaleSwitcher } from '@/components/locale-switcher'
 import { LinkButton } from '@/components/link-button'
+import { MobileNav } from '@/components/mobile-nav'
 
 export function SiteHeader() {
   const t = useTranslations('Nav')
@@ -46,6 +47,7 @@ export function SiteHeader() {
           </LinkButton>
           <LocaleSwitcher />
           <HeaderAuth />
+          <MobileNav />
         </nav>
       </div>
     </header>

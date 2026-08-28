@@ -100,17 +100,23 @@ export function HeaderAuth() {
       />
 
       <DropdownMenuContent align="end" className="min-w-52">
+        {/*
+          Savs profils ir pieejams ikvienam, kas ir ienācis — tas ir
+          vienīgais iemesls, kāpēc lapā vispār ir konts. Agrāk šī rinda
+          bija atkarīga no profiles.role, un tas nozīmēja, ka tikko
+          reģistrējies cilvēks izvēlnē redzēja tikai "Iziet".
+        */}
+        <DropdownMenuItem render={<Link href="/dashboard/profile" />}>
+          <User className="size-4" />
+          {t('myProfile')}
+        </DropdownMenuItem>
+
+        {/* Rakstīt var tikai tas, kam profils jau ir — raksts iet kāda vārdā */}
         {state.isCoach && (
-          <>
-            <DropdownMenuItem render={<Link href="/dashboard/profile" />}>
-              <User className="size-4" />
-              {t('myProfile')}
-            </DropdownMenuItem>
-            <DropdownMenuItem render={<Link href="/dashboard/raksti" />}>
-              <PenLine className="size-4" />
-              {tNav('myPosts')}
-            </DropdownMenuItem>
-          </>
+          <DropdownMenuItem render={<Link href="/dashboard/raksti" />}>
+            <PenLine className="size-4" />
+            {tNav('myPosts')}
+          </DropdownMenuItem>
         )}
 
         {state.isAdmin && (
@@ -120,7 +126,7 @@ export function HeaderAuth() {
           </DropdownMenuItem>
         )}
 
-        {(state.isCoach || state.isAdmin) && <DropdownMenuSeparator />}
+        <DropdownMenuSeparator />
 
         <DropdownMenuItem onClick={signOut}>
           <LogOut className="size-4" />
