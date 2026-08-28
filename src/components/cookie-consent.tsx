@@ -87,11 +87,17 @@ export function CookieConsent() {
             src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
             strategy="afterInteractive"
           />
+          {/*
+            anonymize_ip te nav ar nolūku: GA4 to dara vienmēr un
+            parametru klusi ignorē. Rakstīts kods, kas neko nedara, ir
+            sliktāks par nerakstītu — nākamais lasītājs domātu, ka tas
+            kaut ko sargā.
+          */}
           <Script id="ga-init" strategy="afterInteractive">
             {`window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-gtag('config', '${GA_ID}', { anonymize_ip: true });`}
+gtag('config', '${GA_ID}');`}
           </Script>
         </>
       )}
