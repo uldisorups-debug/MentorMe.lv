@@ -6,11 +6,20 @@ import { defineRouting } from 'next-intl/routing'
  * localePrefix 'as-needed' nozīmē, ka latviešu paliek uz "/" bez prefiksa —
  * mentorme.lv/profils/uldis-orups, nevis mentorme.lv/lv/profils/...
  * Tā vecās saites nesalūzt un galvenā valoda paliek īsākā adresē.
+ *
+ * localeDetection izslēgts ar nolūku. Pēc noklusējuma next-intl klausa
+ * pārlūka Accept-Language galveni, un Latvijā ļoti daudziem tā ir angļu
+ * — arī tad, kad cilvēks lasa latviski. Rezultātā mentorme.lv atvērās
+ * angliski cilvēkam, kurš tur ienāca pēc latviešu meistara.
+ *
+ * Tagad valodu izvēlas cilvēks, ne viņa pārlūks: noklusējums ir
+ * latviešu, un galvenē esošais slēdzis aizved uz /en vai /ru.
  */
 export const routing = defineRouting({
   locales: ['lv', 'en', 'ru'],
   defaultLocale: 'lv',
   localePrefix: 'as-needed',
+  localeDetection: false,
 })
 
 export type Locale = (typeof routing.locales)[number]
