@@ -16,7 +16,6 @@ import {
 import { CoachAvatar } from '@/components/coach-avatar'
 import { ContactDialog } from '@/components/contact-dialog'
 import { CultureMatch } from '@/components/culture-match'
-import { GalleryGrid } from '@/components/gallery-grid'
 import { LinkButton } from '@/components/link-button'
 import { ProfileViewTracker } from '@/components/profile-view-tracker'
 import { ReviewForm } from '@/components/review-form'
@@ -206,7 +205,6 @@ export default async function CoachProfilePage({
             </section>
           )}
 
-          <GalleryGrid urls={coach.gallery_urls} coachName={coach.full_name} />
 
           <CultureMatch
             books={coach.books_top}

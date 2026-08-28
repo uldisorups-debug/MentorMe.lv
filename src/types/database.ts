@@ -59,6 +59,7 @@ export type Database = {
           certification: CertLevel | null
           cert_other_label: string | null
           cert_proof_url: string | null
+          cert_note: string | null
           is_verified: boolean
           years_experience: number | null
           session_languages: string[]
@@ -93,6 +94,7 @@ export type Database = {
           certification?: CertLevel | null
           cert_other_label?: string | null
           cert_proof_url?: string | null
+          cert_note?: string | null
           years_experience?: number | null
           session_languages?: string[]
           price_tier?: PriceTier

@@ -13,35 +13,14 @@ export default async function AdminProfilesPage() {
   const [{ data: coaches }, me] = await Promise.all([
     supabase
       .from('coach_profiles')
-      .select('id, slug, full_name, tagline, is_published, is_verified, cert_proof_url, certification, created_at')
+      .select('id, slug, full_name, tagline, is_published, is_verified, cert_note, certification, created_at')
       .order('created_at', { ascending: false }),
     supabase.from('profiles').select('display_name').eq('id', user!.id).maybeSingle(),
   ])
 
   const admin = { adminId: user!.id, adminName: me.data?.display_name ?? null }
-  const waiting = (coaches ?? []).filter((c) => c.cert_proof_url && !c.is_verified)
+  const waiting = (coaches ?? []).filter((c) => c.cert_note && !c.is_verified)
 
-  /*
-   * Bucket ir privāts, tāpēc failam vajag parakstītu saiti. Līdz šim
-   * panelī bija tikai ceļš kā teksts un norāde iet uz Supabase — proti,
-   * sertifikātu no lapas pārbaudīt nevarēja vispār.
-   *
-   * Piecas minūtes: pietiekami, lai atvērtu, par īsu, lai saite kaut kur
-   * paliktu karājoties.
-   */
-  const certLinks = new Map<string, string>()
-  await Promise.all(
-    waiting.map(async (c) => {
-      const { data, error } = await supabase.storage
-        .from('certificates')
-        .createSignedUrl(c.cert_proof_url!, 300)
-      if (error) {
-        console.error(`Sertifikāta saite ${c.slug}:`, error.message)
-        return
-      }
-      if (data) certLinks.set(c.id, data.signedUrl)
-    })
-  )
 
   return (
     <div className="flex flex-col gap-8">
@@ -49,7 +28,8 @@ export default async function AdminProfilesPage() {
         <section>
           <h2 className="font-display text-xl">Gaida sertifikāta pārbaudi</h2>
           <p className="mt-1 text-sm text-mist">
-            Sertifikāts publiskajā profilā neparādās. Saite der piecas minūtes.
+            Failu vairs neaugšupielādē — cilvēks apraksta, kas viņam ir.
+            Pārbaudi sarakstoties, tad uzliec zīmi.
           </p>
           <ul className="mt-4 flex flex-col gap-2">
             {waiting.map((c) => (
@@ -59,20 +39,9 @@ export default async function AdminProfilesPage() {
                 title={c.full_name}
                 subtitle={
                   <>
-                    Norādīts: {c.certification ?? 'nav'} ·{' '}
-                    {certLinks.has(c.id) ? (
-                      <a
-                        href={certLinks.get(c.id)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-gold hover:underline"
-                      >
-                        Atvērt sertifikātu
-                      </a>
-                    ) : (
-                      <span className="text-mist">
-                        failu neizdevās atvērt — skaties Supabase Storage
-                      </span>
+                    Norādīts: {c.certification ?? 'nav'}
+                    {c.cert_note && (
+                      <span className="mt-1 block text-mist">{c.cert_note}</span>
                     )}
                   </>
                 }

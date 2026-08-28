@@ -39,10 +39,6 @@ export async function uploadFile(
     return { ok: false, error: { code: 'failed' } }
   }
 
-  if (kind === 'certificate') {
-    return { ok: true, url: path, path }
-  }
-
   const { data } = supabase.storage.from(rule.bucket).getPublicUrl(path)
   return { ok: true, url: data.publicUrl, path }
 }
@@ -58,8 +54,7 @@ export async function removeStoredFile(
   urlOrPath: string
 ): Promise<void> {
   const bucket = UPLOAD_RULES[kind].bucket
-  const path =
-    kind === 'certificate' ? urlOrPath : pathFromPublicUrl(urlOrPath, bucket)
+  const path = pathFromPublicUrl(urlOrPath, bucket)
 
   if (!path) return
 

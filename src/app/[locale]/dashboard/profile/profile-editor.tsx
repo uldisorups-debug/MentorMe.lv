@@ -5,7 +5,6 @@ import { useRouter } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { ExternalLink, Save } from 'lucide-react'
 import { AvatarUpload } from '@/components/dashboard/avatar-upload'
-import { CertificateUpload } from '@/components/dashboard/certificate-upload'
 import { ChipPicker } from '@/components/dashboard/chip-picker'
 import {
   ContactsSection,
@@ -14,7 +13,6 @@ import {
 import { CultureEditor } from '@/components/dashboard/culture-editor'
 import { Field, Section } from '@/components/dashboard/field'
 import { initials } from '@/components/coach-avatar'
-import { GalleryUpload } from '@/components/dashboard/gallery-upload'
 import { LinkButton } from '@/components/link-button'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -94,10 +92,9 @@ export function ProfileEditor({
     coach.certification ?? 'none'
   )
   const [certOtherLabel, setCertOtherLabel] = useState(coach.cert_other_label ?? '')
-  const [certProof, setCertProof] = useState<string | null>(coach.cert_proof_url)
+  const [certNote, setCertNote] = useState(coach.cert_note ?? '')
   const [priceTier, setPriceTier] = useState<PriceTier>(coach.price_tier)
   const [avatarUrl, setAvatarUrl] = useState<string | null>(coach.avatar_url)
-  const [gallery, setGallery] = useState<string[]>(coach.gallery_urls)
   const [books, setBooks] = useState<BookEntry[]>(coach.books_top)
   const [movies, setMovies] = useState<MovieEntry[]>(coach.movies_top)
   const [music, setMusic] = useState<MusicEntry[]>(coach.music_top)
@@ -214,7 +211,7 @@ export function ProfileEditor({
         certification,
         cert_other_label:
           certification === 'other' ? certOtherLabel.trim() || null : null,
-        cert_proof_url: certProof,
+        cert_note: certNote.trim() || null,
         years_experience:
           draft.years_experience.trim() === ''
             ? null
@@ -233,7 +230,6 @@ export function ProfileEditor({
         books_top: cleanBooks,
         movies_top: cleanMovies,
         music_top: cleanMusic,
-        gallery_urls: gallery,
         is_published: draft.is_published,
       })
       .eq('user_id', userId)
@@ -423,15 +419,24 @@ export function ProfileEditor({
           </Field>
         )}
 
-        <CertificateUpload
-          userId={userId}
-          value={certProof}
-          isVerified={coach.is_verified}
-          onChange={(path) => {
-            setCertProof(path)
-            setSavedAt(null)
-          }}
-        />
+        {/*
+          Faila augšupielādes vietā apraksts. Pārbaudīt sertifikātu
+          administrators tik un tā varēja tikai sarakstoties — fails to
+          neatviegloja, bet aizņēma līdz 5 MB no viena cilvēka.
+        */}
+        <Field label={t('certNote')} hint={t('certNoteHint')} htmlFor="cert_note">
+          <Textarea
+            id="cert_note"
+            rows={3}
+            maxLength={400}
+            value={certNote}
+            onChange={(event) => {
+              setCertNote(event.target.value)
+              setSavedAt(null)
+            }}
+            className="bg-ink"
+          />
+        </Field>
 
         <Field
           label={t('yearsExperience')}
@@ -627,17 +632,6 @@ export function ProfileEditor({
             setSavedAt(null)
           }}
           consentError={errors.consent_given}
-        />
-      </Section>
-
-      <Section title={t('sectionGallery')}>
-        <GalleryUpload
-          userId={userId}
-          urls={gallery}
-          onChange={(next) => {
-            setGallery(next)
-            setSavedAt(null)
-          }}
         />
       </Section>
 

@@ -8,7 +8,8 @@
  * Šis fails ar nolūku ir bez importiem, lai to var testēt atsevišķi.
  */
 
-export type UploadKind = 'avatar' | 'gallery' | 'certificate'
+/** Vienīgais fails, ko lietotājs augšupielādē. */
+export type UploadKind = 'avatar'
 
 export type UploadRule = {
   bucket: string
@@ -25,19 +26,6 @@ export const UPLOAD_RULES: Record<UploadKind, UploadRule> = {
     bucket: 'avatars',
     maxBytes: 2 * MB,
     mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
-  },
-  gallery: {
-    bucket: 'gallery',
-    maxBytes: 5 * MB,
-    mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
-    maxCount: 3,
-  },
-  certificate: {
-    bucket: 'certificates',
-    // Sertifikāta fotografēšanai 5 MB ir ar uzviju, un krātuve
-    // bezmaksas plānā ir viens gigabaits kopā visiem
-    maxBytes: 5 * MB,
-    mimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'],
   },
 }
 

@@ -53,24 +53,15 @@ check('avatārs 3MB par lielu', validateFile(jpg(3 * MB), 'avatar'), {
   code: 'too-large',
   limitMb: 2,
 })
-check('galerija 3MB iet cauri', validateFile(jpg(3 * MB), 'gallery'), null)
-check('galerija 6MB par liela', validateFile(jpg(6 * MB), 'gallery'), {
-  code: 'too-large',
-  limitMb: 5,
-})
+check('avatārs 1MB iet cauri', validateFile(jpg(1 * MB), 'avatar'), null)
 check(
   'PDF avatāram nedrīkst',
   validateFile({ name: 'a.pdf', size: 1000, type: 'application/pdf' }, 'avatar'),
   { code: 'wrong-type', allowed: 'jpeg, png, webp' }
 )
 check(
-  'PDF sertifikātam drīkst',
-  validateFile({ name: 'a.pdf', size: 1000, type: 'application/pdf' }, 'certificate'),
-  null
-)
-check(
   'SVG nedrīkst nekur (XSS risks)',
-  validateFile({ name: 'a.svg', size: 100, type: 'image/svg+xml' }, 'gallery'),
+  validateFile({ name: 'a.svg', size: 100, type: 'image/svg+xml' }, 'avatar'),
   { code: 'wrong-type', allowed: 'jpeg, png, webp' }
 )
 check(
@@ -79,11 +70,7 @@ check(
   { code: 'wrong-type', allowed: 'jpeg, png, webp' }
 )
 
-console.log('Galerijas skaits')
-check('1 + 2 iet cauri', validateCount(1, 2, 'gallery'), null)
-check('2 + 2 par daudz', validateCount(2, 2, 'gallery'), { code: 'too-many', max: 3 })
-check('3 jau ir — vairāk nedrīkst', validateCount(3, 1, 'gallery'), { code: 'too-many', max: 3 })
-check('avatāram skaita nav', validateCount(99, 99, 'avatar'), null)
+check('avatāram skaita ierobežojuma nav', validateCount(99, 99, 'avatar'), null)
 
 console.log('Storage ceļi')
 check(
@@ -100,16 +87,16 @@ check('nezināms tips -> bin', extensionFor('application/zip'), 'bin')
 check(
   'ceļš no publiskā URL',
   pathFromPublicUrl(
-    'https://x.supabase.co/storage/v1/object/public/gallery/user-1/pic.jpg',
-    'gallery'
+    'https://x.supabase.co/storage/v1/object/public/avatars/user-1/pic.jpg',
+    'avatars'
   ),
   'user-1/pic.jpg'
 )
 check(
   'sveša bucket URL -> null',
   pathFromPublicUrl(
-    'https://x.supabase.co/storage/v1/object/public/avatars/user-1/pic.jpg',
-    'gallery'
+    'https://x.supabase.co/storage/v1/object/public/gallery/user-1/pic.jpg',
+    'avatars'
   ),
   null
 )
