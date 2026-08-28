@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { setRequestLocale } from 'next-intl/server'
+import { Link } from '@/i18n/navigation'
 
 export const metadata: Metadata = {
   title: 'Privātuma politika',
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
  * politikā tiem nav ko darīt.
  */
 
-const UPDATED = '2026. gada 27. augusts'
+const UPDATED = '2026. gada 28. augusts'
 
 function Section({
   title,
@@ -98,6 +99,8 @@ export default async function PrivacyPage({
           <p>
             Lai platforma darbotos: lai tu vari izveidot profilu, lai citi tevi
             atrod, un lai atsauksmes nāktu no īstiem cilvēkiem, nevis robotiem.
+            Juridiskais pamats tam ir līguma izpilde — bez šiem datiem lapa
+            nevar sniegt to, ko tu no tās gaidi.
           </p>
           <p>
             Kouča saziņas kanālus apstrādājam, pamatojoties uz{' '}
@@ -149,25 +152,26 @@ export default async function PrivacyPage({
           </p>
         </Section>
 
-        <Section title="Sīkdatnes">
+        <Section title="Sīkdatnes un statistika">
           <p>
-            Lietojam divas sīkdatnes, un abas ir tehniski nepieciešamas:
+            Nepieciešamās sīkdatnes ir trīs: valodas izvēle, pieteikšanās sesija
+            un pati sīkdatņu izvēle. Bez tām lapa nestrādā, tāpēc tām piekrišana
+            nav jāprasa.
           </p>
-          <ul className="flex list-disc flex-col gap-2 pl-5">
-            <li>
-              <strong className="text-cream">NEXT_LOCALE</strong> — atceras
-              izvēlēto valodu, lai nākamreiz nebūtu jāizvēlas no jauna.
-            </li>
-            <li>
-              <strong className="text-cream">sb-…</strong> — Supabase
-              pieteikšanās sīkdatnes. Tās parādās tikai tad, kad esi ienācis
-              savā kontā.
-            </li>
-          </ul>
           <p>
-            Abām piekrišana nav jāprasa, jo bez tām lapa nedarbotos tā, kā tu
-            to lūdzi. Izsekošanas, analītikas un reklāmas sīkdatņu mums nav
-            nevienas — arī Google Analytics.
+            Apmeklējumus skaitām ar Google Analytics 4, un tas notiek{' '}
+            <strong className="text-cream">tikai ar tavu piekrišanu</strong>.
+            Kamēr neesi piekritis, skaitītājs netiek ielādēts vispār. Piekrišanu
+            var atsaukt jebkurā brīdī — tad Google sīkdatnes tiek izdzēstas.
+            Reklāmas un atkārtotās mērķēšanas sīkdatņu mums nav nevienas.
+          </p>
+          <p>
+            Pilns saraksts ar to, kas tieši nonāk pārlūkā, ir{' '}
+            <Link href="/sikdatnes" className="text-gold hover:underline">
+              sīkdatņu politikā
+            </Link>
+            . Izvēli var mainīt jebkurā brīdī, kājenē atverot sīkdatņu
+            iestatījumus.
           </p>
         </Section>
 
@@ -202,6 +206,16 @@ export default async function PrivacyPage({
           <p>
             Ja politiku mainīsim būtiski, paziņosim par to lapā. Šī versija ir
             spēkā no {UPDATED}.
+          </p>
+          <p>
+            Ko drīkst un ko nedrīkst lapā, aprakstīts{' '}
+            <Link
+              href="/lietosanas-noteikumi"
+              className="text-gold hover:underline"
+            >
+              lietošanas noteikumos
+            </Link>
+            .
           </p>
         </Section>
       </div>

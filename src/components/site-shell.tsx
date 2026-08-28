@@ -1,3 +1,4 @@
+import { CookieConsent } from '@/components/cookie-consent'
 import { SiteFooter } from '@/components/site-footer'
 import { SiteHeader } from '@/components/site-header'
 
@@ -10,6 +11,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
         {children}
       </main>
       <SiteFooter />
+      <CookieConsent />
     </>
   )
 }

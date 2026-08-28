@@ -1,5 +1,6 @@
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
+import { CookieSettingsLink } from '@/components/cookie-settings-link'
 
 export function SiteFooter() {
   const t = useTranslations('Footer')
@@ -10,6 +11,8 @@ export function SiteFooter() {
     { href: '/auth/login?next=%2Fdashboard%2Fprofile', label: t('addProfile') },
     { href: '/kontakti', label: t('contact') },
     { href: '/privatums', label: t('privacy') },
+    { href: '/lietosanas-noteikumi', label: t('terms') },
+    { href: '/sikdatnes', label: t('cookies') },
   ]
 
   return (
@@ -33,6 +36,8 @@ export function SiteFooter() {
               {link.label}
             </Link>
           ))}
+          {/* Neved uz lapu — atver izvēles logu turpat */}
+          <CookieSettingsLink label={t('cookieSettings')} />
         </nav>
       </div>
 

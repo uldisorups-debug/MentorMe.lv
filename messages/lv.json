@@ -114,8 +114,11 @@
     "tagline": "Latvijas kouču un mentoru direktorija.",
     "addProfile": "Pievienot profilu",
     "contact": "Kontakti",
-    "privacy": "Privātums",
-    "rights": "Visas tiesības aizsargātas."
+    "privacy": "Privātuma politika",
+    "rights": "Visas tiesības aizsargātas.",
+    "terms": "Lietošanas noteikumi",
+    "cookies": "Sīkdatņu politika",
+    "cookieSettings": "Sīkdatņu iestatījumi"
   },
   "Coach": {
     "metaTitle": "{name} — {tagline}",

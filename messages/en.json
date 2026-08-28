@@ -114,8 +114,11 @@
     "tagline": "Latvia's directory of knowledge and skills.",
     "addProfile": "Add your profile",
     "contact": "Contact",
-    "privacy": "Privacy",
-    "rights": "All rights reserved."
+    "privacy": "Privacy policy",
+    "rights": "All rights reserved.",
+    "terms": "Terms of use",
+    "cookies": "Cookie policy",
+    "cookieSettings": "Cookie settings"
   },
   "Coach": {
     "metaTitle": "{name} — {tagline}",
