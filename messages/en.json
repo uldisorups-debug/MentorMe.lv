@@ -349,7 +349,9 @@
     "cityHint": "For example, Talsi or Roja. Optional, but it helps people nearby find you.",
     "regionHint": "If you only teach online, the region is optional.",
     "forTourists": "I offer masterclasses / experiences",
-    "myPosts": "My articles"
+    "myPosts": "My articles",
+    "errTooLong": "A field is too long or has too many items. Check the description, topics and gallery.",
+    "errUnknownNiche": "One of the chosen topics no longer exists. Pick it again."
   },
   "Account": {
     "sectionTitle": "Account",

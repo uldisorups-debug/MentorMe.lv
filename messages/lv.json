@@ -323,7 +323,9 @@
     "cityHint": "Piemēram, Talsi vai Roja. Neobligāti, bet palīdz cilvēkiem tuvumā tevi atrast.",
     "regionHint": "Ja māci tikai attālināti, reģions nav obligāts.",
     "forTourists": "Piedāvāju meistarklases / pieredzes",
-    "myPosts": "Mani raksti"
+    "myPosts": "Mani raksti",
+    "errTooLong": "Kāds lauks ir par garu vai tajā par daudz vienumu. Pārbaudi aprakstu, tēmas un galeriju.",
+    "errUnknownNiche": "Kāda no izvēlētajām tēmām vairs nepastāv. Izvēlies to no jauna."
   },
   "Contact": {
     "sendMessage": "Sūtīt ziņu",

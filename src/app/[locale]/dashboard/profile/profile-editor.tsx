@@ -242,12 +242,23 @@ export function ProfileEditor({
 
     if (error) {
       console.error('Profila saglabāšana neizdevās:', error.message)
-      // 23505 = unikalitātes pārkāpums, praksē vienmēr aizņemts slug
+
+      /*
+       * Datubāzei ir savi ierobežojumi blakus priekšpuses pārbaudēm.
+       * Ja tie nostrādā, cilvēkam jāzina, kurš tieši — "saglabāšana
+       * neizdevās" liek domāt, ka vainīgs serveris, un viņš mēģina to
+       * pašu vēl piecas reizes.
+       */
       if (error.code === '23505') {
+        // Unikalitātes pārkāpums, praksē vienmēr aizņemts slug
         setErrors({ slug: t('slugTaken') })
         setSaveError(null)
+      } else if (error.code === '23514') {
+        setSaveError(t('errTooLong'))
+      } else if (error.code === 'P0004') {
+        setSaveError(t('errUnknownNiche'))
       } else {
-        setSaveError(t('saveError'))
+        setSaveError(`${t('saveError')} (${error.message})`)
       }
       return
     }
@@ -289,6 +300,21 @@ export function ProfileEditor({
     setMovies(cleanMovies)
     setMusic(cleanMusic)
     setSavedAt(Date.now())
+
+    /*
+     * Publiskā lapa ir statiska ar ISR. Bez šī izmaiņas tur parādītos
+     * tikai pēc minūtes, un cilvēks, kurš tikko saglabāja un uzreiz
+     * atvēra savu profilu, redzētu veco versiju.
+     *
+     * Ja neizdodas, klusējam: profils ir saglabāts, un lapa atjaunosies
+     * pati pēc minūtes. Kļūdas paziņojums te maldinātu.
+     */
+    try {
+      await fetch('/api/revalidate-profile', { method: 'POST' })
+    } catch (refreshError) {
+      console.error('Publiskās lapas atsvaidzināšana:', refreshError)
+    }
+
     router.refresh()
   }
 
