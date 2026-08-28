@@ -252,7 +252,7 @@
     "bio": "Par mani",
     "bioHint": "Tukša rinda starp rindkopām veido jaunu rindkopu.",
     "avatar": "Profila bilde",
-    "avatarHint": "JPG, PNG vai WebP. Līdz 2 MB.",
+    "avatarHint": "Jebkura bilde no telefona der — mēs to samazinām paši.",
     "certification": "Sertifikācija",
     "certOtherLabel": "Kāda tieši?",
     "verifiedNote": "Profils ir verificēts.",
@@ -319,7 +319,10 @@
     "errUnknownNiche": "Kāda no izvēlētajām tēmām vairs nepastāv. Izvēlies to no jauna.",
     "certNote": "Sertifikāti un apliecības",
     "certNoteHint": "Ja tev tādi ir — uzraksti, kādi un no kā. Piemēram: \"ICF ACC, 2023\" vai \"Amatnieka apliecība, LAK\". Neobligāti.",
-    "uploading": "Augšupielādē..."
+    "uploading": "Augšupielādē...",
+    "uploadNotImage": "Šis nav attēls. Der JPG, PNG, WebP vai HEIC.",
+    "uploadInputTooLarge": "Fails ir pārāk liels pat samazināšanai. Izvēlies mazāku.",
+    "uploadUnreadable": "Šo attēlu neizdevās nolasīt. Pamēģini citu."
   },
   "Contact": {
     "sendMessage": "Sūtīt ziņu",

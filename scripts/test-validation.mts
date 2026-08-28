@@ -1,6 +1,7 @@
 // Validācijas testi. Palaišana: npm run test:validation
 // Node 24 nolasa .ts tieši, tāpēc testu ietvars nav vajadzīgs.
 
+import { fitWithin, renameFor } from '../src/lib/image-resize.ts'
 import {
   validateFile,
   validateCount,
@@ -495,6 +496,18 @@ check(
   (() => { sortCoaches(neitrali, 'none', D0); return neitrali[0].full_name })(),
   'A'
 )
+
+console.log('Bilžu samazināšana')
+check('4000x3000 -> 640 pa garāko malu', fitWithin(4000, 3000), { width: 640, height: 480 })
+check('vertikāla bilde griežas pareizi', fitWithin(1080, 1920), { width: 360, height: 640 })
+check('kvadrāts paliek kvadrāts', fitWithin(2000, 2000), { width: 640, height: 640 })
+check('mazu bildi nepalielinām', fitWithin(320, 200), { width: 320, height: 200 })
+check('tieši uz robežas nemainās', fitWithin(640, 400), { width: 640, height: 400 })
+check('ļoti šaura josla nesarūk līdz nullei', fitWithin(5000, 3), { width: 640, height: 1 })
+
+check('nosaukums maina paplašinājumu', renameFor('IMG_1234.HEIC', 'image/webp'), 'IMG_1234.webp')
+check('jpeg atkāpšanās variants', renameFor('bilde.png', 'image/jpeg'), 'bilde.jpg')
+check('nosaukums bez punkta', renameFor('bilde', 'image/webp'), 'bilde.webp')
 
 console.log('Pieteikšanās kļūdas')
 check(

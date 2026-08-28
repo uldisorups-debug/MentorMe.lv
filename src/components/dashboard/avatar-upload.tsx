@@ -7,6 +7,7 @@ import { ImagePlus, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { removeStoredFile, uploadFile } from '@/lib/upload-client'
 import { UPLOAD_RULES } from '@/lib/uploads'
+import { shrinkImage } from '@/lib/image-resize'
 import { useUploadError } from '@/components/dashboard/use-upload-error'
 
 export function AvatarUpload({
@@ -31,7 +32,19 @@ export function AvatarUpload({
     setBusy(true)
     setError(null)
 
-    const result = await uploadFile('avatar', file, userId)
+    /*
+     * Vispirms samazinām, tad sūtām. Telefona foto ir 3–5 MB un mūsu
+     * robežu pārsniegtu; pēc samazināšanas tas ir ap simts kilobaitiem.
+     * Pa ceļam pazūd arī EXIF dati — tostarp vieta, kur bilde uzņemta.
+     */
+    const shrunk = await shrinkImage(file)
+    if (!shrunk.ok) {
+      setError(describe({ code: shrunk.error }))
+      setBusy(false)
+      return
+    }
+
+    const result = await uploadFile('avatar', shrunk.file, userId)
     if (!result.ok) {
       setError(describe(result.error))
       setBusy(false)

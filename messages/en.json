@@ -278,7 +278,7 @@
     "bio": "About me",
     "bioHint": "An empty line between paragraphs starts a new paragraph.",
     "avatar": "Profile photo",
-    "avatarHint": "JPG, PNG or WebP. Up to 2 MB.",
+    "avatarHint": "Any photo from your phone works — we shrink it for you.",
     "certification": "Certification",
     "certOtherLabel": "Which one exactly?",
     "verifiedNote": "This profile is verified.",
@@ -345,7 +345,10 @@
     "errUnknownNiche": "One of the chosen topics no longer exists. Pick it again.",
     "certNote": "Certificates and qualifications",
     "certNoteHint": "If you have any — write which and from whom. For example: \"ICF ACC, 2023\". Optional.",
-    "uploading": "Uploading..."
+    "uploading": "Uploading...",
+    "uploadNotImage": "That is not an image. JPG, PNG, WebP or HEIC will do.",
+    "uploadInputTooLarge": "The file is too large even to shrink. Pick a smaller one.",
+    "uploadUnreadable": "This image could not be read. Try another one."
   },
   "Account": {
     "sectionTitle": "Account",
