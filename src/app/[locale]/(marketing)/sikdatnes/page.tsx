@@ -161,13 +161,27 @@ export default async function CookiePolicyPage({
         </p>
       </LegalSection>
 
-      <LegalSection title="Kas nav sīkdatne, bet der zināt">
+      <LegalSection title="Mūsu pašu skaitītājs — bez sīkdatnēm">
         <p>
-          Kad kāds atver meistara profilu vai rakstu, skaitītājs pieaug par
-          vienu. Lai viens cilvēks to nevarētu uzskrūvēt, no adreses, profila un
-          šodienas datuma tiek izrēķināts neatgriezenisks jaucējkods.{' '}
-          <strong className="text-cream">Pati adrese netiek glabāta nekur</strong>
-          , un šie kodi tiek dzēsti pēc divām dienām.
+          Blakus Google Analytics mēs skaitām apmeklējumus arī paši: cik reižu
+          katra lapa atvērta un no kāda domēna cilvēks atnāca. Tas notiek
+          serverī, un{' '}
+          <strong className="text-cream">
+            tavā pārlūkā no tā nenonāk nekas
+          </strong>{' '}
+          — tāpēc tas nav sīkdatne un piekrišanu neprasa.
+        </p>
+        <p>
+          Lai viens cilvēks skaitli neuzskrūvētu, no adreses, lapas un šodienas
+          datuma tiek izrēķināts neatgriezenisks jaucējkods. Pati adrese netiek
+          glabāta nekur, kodi tiek dzēsti pēc divām dienām, un no tiem atpakaļ
+          uz cilvēku aizrāpties nevar. Tas pats attiecas uz meistaru profilu un
+          rakstu skatījumiem.
+        </p>
+        <p>
+          No atsauces adreses paturam tikai domēnu — piemēram,{' '}
+          <code>google.com</code> vai <code>facebook.com</code>. Pilnais ceļš,
+          kurā varētu būt meklētais vārds, netiek saglabāts.
         </p>
       </LegalSection>
 

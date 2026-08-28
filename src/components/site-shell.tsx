@@ -1,4 +1,5 @@
 import { CookieConsent } from '@/components/cookie-consent'
+import { PageViewTracker } from '@/components/page-view-tracker'
 import { SiteFooter } from '@/components/site-footer'
 import { SiteHeader } from '@/components/site-header'
 
@@ -12,6 +13,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
       </main>
       <SiteFooter />
       <CookieConsent />
+      <PageViewTracker />
     </>
   )
 }

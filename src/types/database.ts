@@ -358,6 +358,18 @@ export type Database = {
         Relationships: []
       }
 
+      page_views: {
+        Row: {
+          path: string
+          viewed_on: string
+          source: string
+          views: number
+        }
+        Insert: never
+        Update: never
+        Relationships: []
+      }
+
       categories: {
         Row: {
           id: string
@@ -415,6 +427,10 @@ export type Database = {
     Functions: {
       increment_profile_views: {
         Args: { coach_slug: string }
+        Returns: undefined
+      }
+      record_page_view: {
+        Args: { page_path: string; referrer?: string | null }
         Returns: undefined
       }
       increment_post_views: {
