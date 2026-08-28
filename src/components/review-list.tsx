@@ -47,14 +47,7 @@ function ReportButton({ reviewId }: { reviewId: string }) {
   )
 }
 
-export function ReviewList({
-  reviews,
-  canReport,
-}: {
-  reviews: ReviewWithAuthor[]
-  /** Demonstrācijas atsauksmes datubāzē neeksistē — ziņot par tām nav ko. */
-  canReport: boolean
-}) {
+export function ReviewList({ reviews }: { reviews: ReviewWithAuthor[] }) {
   const t = useTranslations('Reviews')
   const [shown, setShown] = useState(PAGE_SIZE)
 
@@ -104,11 +97,9 @@ export function ReviewList({
               </p>
             )}
 
-            {canReport && (
-              <div className="mt-3 flex justify-end">
-                <ReportButton reviewId={review.id} />
-              </div>
-            )}
+            <div className="mt-3 flex justify-end">
+              <ReportButton reviewId={review.id} />
+            </div>
           </li>
         ))}
       </ul>

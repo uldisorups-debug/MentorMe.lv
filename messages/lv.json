@@ -4,10 +4,8 @@
     "description": "Latvijas zināšanu un prasmju direktorija. Kokle, matemātika, zapte, koučings vai remonts — atrodi cilvēku, kurš to prot un ir gatavs iemācīt. Filtrē pēc nozares, vietas un formāta."
   },
   "Nav": {
-    "find": "Meklēt",
     "howItWorks": "Kā tas darbojas",
     "forCoaches": "Man pieder zināšanas",
-    "login": "Ienākt",
     "skipToContent": "Pāriet uz saturu",
     "blog": "Raksti",
     "myPosts": "Mani raksti"
@@ -78,7 +76,6 @@
     "sectionLead": "Sertificēti profesionāļi, praktiķi, amatnieki un cilvēki ar dzīves pieredzi. Visi vienā sarakstā, pēc vienas loģikas.",
     "verified": "Verificēts",
     "book": "Skatīt profilu",
-    "viewProfile": "Skatīt profilu",
     "reviews": "{count, plural, =0 {nav atsauksmju} one {# atsauksme} other {# atsauksmes}}",
     "yearsExperience": "{years} g. pieredze",
     "empty": "Pēc šiem filtriem neviens neatbilst. Pamēģini paplašināt meklēšanu.",
@@ -99,13 +96,7 @@
   },
   "HowItWorks": {
     "title": "Kā tas darbojas",
-    "lead": "Trīs soļi. Bez maksas, bez starpniekiem.",
-    "step1Title": "Filtrē",
-    "step1Body": "Izvēlies nozari, vietu un vai gribi mācīties klātienē vai caur ekrānu. Saraksts sašaurinās līdz tiem, kas tev tiešām der.",
-    "step2Title": "Iepazīsties",
-    "step2Body": "Izlasi aprakstu, apskati bildes un to, ko cilvēks lasa un klausās. Sakritība ir svarīga.",
-    "step3Title": "Sāc",
-    "step3Body": "Uzraksti viņam tieši — WhatsApp vai e-pastā. Bez formām un gaidīšanas."
+    "lead": "Trīs soļi. Bez maksas, bez starpniekiem."
   },
   "ForCoaches": {
     "eyebrow": "Visiem, kam pieder zināšanas",
@@ -134,19 +125,14 @@
     "notFoundBody": "Iespējams, koučs profilu noņēmis vai saite ir nepareiza.",
     "backToList": "Atpakaļ uz sarakstu",
     "bookCall": "Pieteikt 15 min bezmaksas zvanu",
-    "bookCallShort": "Pieteikt zvanu",
-    "noCalendly": "Šis koučs vēl nav pievienojis kalendāru",
     "about": "Par mani",
-    "details": "Īsumā",
     "certification": "Sertifikācija",
     "certUnverified": "Nav pārbaudīts",
     "certVerified": "Pārbaudīts manuāli",
     "languages": "Mācību valoda",
     "experience": "Pieredze",
     "experienceValue": "{years, plural, one {# gads} other {# gadi}}",
-    "fields": "Jomas",
     "sphere": "Nozare",
-    "topics": "Tēmas",
     "priceLabel": "Cena",
     "gallery": "Galerija",
     "galleryAlt": "{name} — galerijas attēls {index}",
@@ -242,16 +228,6 @@
     "linkedin": "Turpināt ar LinkedIn",
     "facebook": "Turpināt ar Facebook"
   },
-  "Dashboard": {
-    "title": "Mans profils",
-    "greeting": "Sveiks, {name}!",
-    "stubTitle": "Profila redaktors top",
-    "stubBody": "Šeit varēsi pievienot bildi, aprakstu, cenu, sertifikātus un Calendly saiti. Pagaidām tavs profils ir izveidots, bet vēl nav publicēts.",
-    "stubStatus": "Profila statuss",
-    "notPublished": "Nav publicēts",
-    "published": "Publicēts",
-    "backHome": "Uz sākumu"
-  },
   "Editor": {
     "title": "Mans profils",
     "lead": "Aizpildi, saglabā, publicē. Melnrakstu neviens neredz.",
@@ -259,7 +235,6 @@
     "saving": "Saglabā...",
     "saved": "Saglabāts",
     "saveError": "Neizdevās saglabāt. Pamēģini vēlreiz.",
-    "unsaved": "Ir nesaglabātas izmaiņas",
     "viewPublic": "Skatīt publisko profilu",
     "sectionBasics": "Pamatinformācija",
     "sectionProfessional": "Profesionālā daļa",
@@ -334,8 +309,6 @@
     "contactOtherValue": "Cits kanāls — saite vai adrese",
     "consentLabel": "Piekrītu, ka šie kontakti tiek rādīti reģistrētiem MentorMe.lv lietotājiem",
     "consentHint": "Bez šīs piekrišanas kontaktus nerādām nevienam. Piekrišanu vari atsaukt jebkurā brīdī, noņemot ķeksi.",
-    "consentRequired": "Lai kontakti būtu redzami, jāapstiprina piekrišana.",
-    "needContactToPublish": "Lai publicētu profilu, pievieno vismaz vienu saziņas veidu vai kalendāra saiti — citādi tevi neviens nevarēs uzrunāt.",
     "sectionWhere": "Kur un kā tu māci",
     "teachingFormat": "Kā notiek nodarbības",
     "formatRemote": "Attālināti",
@@ -358,9 +331,7 @@
     "loginCta": "Ienākt un redzēt kontaktus",
     "loading": "Ielādē kontaktus...",
     "noContacts": "{name} vēl nav pievienojis nevienu saziņas veidu.",
-    "close": "Aizvērt",
-    "copyEmail": "Kopēt",
-    "copied": "Nokopēts"
+    "close": "Aizvērt"
   },
   "Account": {
     "sectionTitle": "Konts",
@@ -380,7 +351,6 @@
     "metaDescription": "Skolotāji, meistari un kouči raksta par to, ko paši prot. Praktiski raksti no cilvēkiem, kas ar to nodarbojas ikdienā.",
     "lead": "Cilvēki, kas šeit māca, raksta par to, ko paši prot. Bez teorijas no grāmatām.",
     "empty": "Vēl nav neviena raksta. Ja tev ir ko pastāstīt — tavs būs pirmais.",
-    "readMore": "Lasīt",
     "by": "Raksta",
     "readingTime": "{minutes} min lasīšanai",
     "views": "{count, plural, one {# skatījums} other {# skatījumi}}",
@@ -420,9 +390,6 @@
     "slugTaken": "Šī saite jau aizņemta. Izvēlies citu.",
     "deletePost": "Dzēst rakstu",
     "deleteConfirm": "Dzēst šo rakstu neatgriezeniski?",
-    "errTitle": "Virsrakstam jābūt no 5 līdz 140 rakstzīmēm.",
-    "errContent": "Teksts nedrīkst būt tukšs.",
-    "errSlug": "Atļauti tikai mazie burti bez garumzīmēm, cipari un defises.",
     "dailyLimit": "Viens raksts dienā. Nākamo varēsi publicēt rīt.",
     "writeAnother": "Rakstīt nākamo"
   }

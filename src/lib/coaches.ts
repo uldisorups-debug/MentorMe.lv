@@ -239,8 +239,12 @@ export function filterCoaches(
  */
 const NEW_PROFILE_DAYS = 14
 
-function isNew(coach: CoachCardData, now: number): boolean {
-  const age = now - new Date(coach.created_at).getTime()
+/** Vai profils vēl ir tik jauns, ka to vērts izcelt. */
+export function isNewProfile(
+  createdAt: string,
+  now: number = Date.now()
+): boolean {
+  const age = now - new Date(createdAt).getTime()
   return age < NEW_PROFILE_DAYS * 24 * 60 * 60 * 1000
 }
 
@@ -302,8 +306,8 @@ export function sortCoaches(
   }
 
   return list.sort((a, b) => {
-    const newA = isNew(a, now)
-    const newB = isNew(b, now)
+    const newA = isNewProfile(a.created_at, now)
+    const newB = isNewProfile(b.created_at, now)
     if (newA !== newB) return newA ? -1 : 1
     if (b.profile_views !== a.profile_views) {
       return b.profile_views - a.profile_views

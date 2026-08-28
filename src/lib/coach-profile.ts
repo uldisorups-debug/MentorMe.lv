@@ -51,8 +51,8 @@ export async function listCoachSlugs(): Promise<string[]> {
 }
 
 /**
- * Ielādē vienu profilu. Vispirms datubāze, tad demonstrācijas dati.
- * Atgriež null, ja tāda slug nav nekur — lapa tad met notFound().
+ * Ielādē vienu profilu ar tā reitingu un atsauksmēm.
+ * Atgriež null, ja tāda slug nav — lapa tad met notFound().
  */
 export async function loadCoachPage(slug: string): Promise<CoachPage | null> {
   const supabase = createPublicClient()

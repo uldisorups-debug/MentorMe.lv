@@ -16,11 +16,6 @@ export type BookEntry  = { title: string; author: string; visible: boolean }
 export type MovieEntry = { title: string; year: number | null; visible: boolean }
 export type MusicEntry = { artist: string; genre: string | null; visible: boolean }
 
-export type Json =
-  | string | number | boolean | null
-  | { [key: string]: Json | undefined }
-  | Json[]
-
 export type Database = {
   public: {
     Tables: {
@@ -30,7 +25,6 @@ export type Database = {
           role: UserRole
           display_name: string | null
           avatar_url: string | null
-          onboarded_at: string | null
           is_admin: boolean
           created_at: string
         }
@@ -39,7 +33,6 @@ export type Database = {
           role?: UserRole
           display_name?: string | null
           avatar_url?: string | null
-          onboarded_at?: string | null
           is_admin?: boolean
           created_at?: string
         }
@@ -48,7 +41,6 @@ export type Database = {
           role?: UserRole
           display_name?: string | null
           avatar_url?: string | null
-          onboarded_at?: string | null
           is_admin?: boolean
           created_at?: string
         }
@@ -457,16 +449,9 @@ export type Database = {
   }
 }
 
-// Ērtāki aliasi lietošanai komponentēs
-export type Profile      = Database['public']['Tables']['profiles']['Row']
-export type CoachProfile = Database['public']['Tables']['coach_profiles']['Row']
-export type Review       = Database['public']['Tables']['reviews']['Row']
-export type Category     = Database['public']['Tables']['categories']['Row']
-export type ReviewReport = Database['public']['Tables']['review_reports']['Row']
+// Aliasi tām tabulām, kuras komponentes tiešām lieto. Pārējām tos
+// neturam — neizmantots alias ir tikai vēl viens nosaukums, kas
+// jāuztur sinhroni ar shēmu.
+export type CoachProfile  = Database['public']['Tables']['coach_profiles']['Row']
 export type CoachContacts = Database['public']['Tables']['coach_contacts']['Row']
 export type Post          = Database['public']['Tables']['posts']['Row']
-export type Sphere        = Database['public']['Tables']['spheres']['Row']
-export type AdminAction   = Database['public']['Tables']['admin_actions']['Row']
-export type Region        = Database['public']['Tables']['regions']['Row']
-export type CoachRating   = Database['public']['Views']['coach_ratings']['Row']
-export type PublicReview  = Database['public']['Views']['reviews_public']['Row']

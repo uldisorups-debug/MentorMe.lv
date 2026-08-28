@@ -4,7 +4,12 @@ import { BadgeCheck, Eye, Star } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { LinkButton } from '@/components/link-button'
 import { CoachAvatar } from '@/components/coach-avatar'
-import { certLabel, PRICE_TIER_STEPS, type CoachCardData } from '@/lib/coaches'
+import {
+  certLabel,
+  isNewProfile,
+  PRICE_TIER_STEPS,
+  type CoachCardData,
+} from '@/lib/coaches'
 import { cn } from '@/lib/utils'
 
 function PriceTag({ coach }: { coach: CoachCardData }) {
@@ -76,12 +81,6 @@ const FORMAT_KEYS = {
   in_person: 'formatInPerson',
   hybrid: 'formatHybrid',
 } as const
-
-const NEW_DAYS = 14
-
-function isNewProfile(created: string): boolean {
-  return Date.now() - new Date(created).getTime() < NEW_DAYS * 86400000
-}
 
 export function CoachCard({
   coach,

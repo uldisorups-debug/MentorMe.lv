@@ -64,8 +64,8 @@ function StarPicker({
  * Atsauksmes forma.
  *
  * Auth pārbaude notiek pārlūkā, nevis serverī — tā lapa paliek statiska
- * un ISR turpina strādāt. Kamēr Phase 5 (pieteikšanās) nav gatava,
- * visi redz aicinājumu ienākt; forma sāks strādāt pati no sevis.
+ * un ISR turpina strādāt. Neielogotais redz aicinājumu ienākt, un pēc
+ * atgriešanās forma ir turpat, kur viņš to pameta.
  */
 export function ReviewForm({
   coachId,

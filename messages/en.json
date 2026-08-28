@@ -4,11 +4,9 @@
     "description": "Latvia's directory of knowledge and skills. Kokle, mathematics, jam-making, coaching or renovation — find the person who knows it and is ready to teach. Filter by field, place and format."
   },
   "Nav": {
-    "find": "Search",
     "howItWorks": "How it works",
     "forCoaches": "I have knowledge",
     "blog": "Articles",
-    "login": "Sign in",
     "myPosts": "My articles",
     "skipToContent": "Skip to content"
   },
@@ -78,7 +76,6 @@
     "sectionLead": "Certified professionals, practitioners, craftspeople and people with life experience. All in one list, by the same logic.",
     "verified": "Verified",
     "book": "View profile",
-    "viewProfile": "View profile",
     "reviews": "{count, plural, =0 {no reviews} one {# review} other {# reviews}}",
     "yearsExperience": "{years} yrs experience",
     "empty": "Nothing matches these filters. Try widening your search.",
@@ -99,13 +96,7 @@
   },
   "HowItWorks": {
     "title": "How it works",
-    "lead": "Three steps. Free, no middlemen.",
-    "step1Title": "Filter",
-    "step1Body": "Choose the field, the place and whether you want to learn in person or through a screen. The list narrows to those who actually fit.",
-    "step2Title": "Get to know",
-    "step2Body": "Read the description, look at the photos and at what the person reads and listens to. The match matters.",
-    "step3Title": "Start",
-    "step3Body": "Write to them directly — WhatsApp or email. No forms, no waiting."
+    "lead": "Three steps. Free, no middlemen."
   },
   "ForCoaches": {
     "eyebrow": "For everyone who has knowledge",
@@ -134,19 +125,14 @@
     "notFoundBody": "The person may have removed it, or the link is wrong.",
     "backToList": "Back to the list",
     "bookCall": "Book a free 15 min call",
-    "bookCallShort": "Book a call",
-    "noCalendly": "This person hasn't added a calendar yet",
     "about": "About me",
-    "details": "In short",
     "certification": "Certification",
     "certUnverified": "Not verified",
     "certVerified": "Checked manually",
     "languages": "Language of instruction",
     "experience": "Experience",
     "experienceValue": "{years, plural, one {# year} other {# years}}",
-    "fields": "Fields",
     "sphere": "Field",
-    "topics": "Topics",
     "priceLabel": "Price",
     "gallery": "Gallery",
     "galleryAlt": "{name} — gallery image {index}",
@@ -251,9 +237,7 @@
     "loginCta": "Sign in to see contacts",
     "loading": "Loading contacts...",
     "noContacts": "{name} hasn't added any way to get in touch yet.",
-    "close": "Close",
-    "copyEmail": "Copy",
-    "copied": "Copied"
+    "close": "Close"
   },
   "Blog": {
     "title": "Articles",
@@ -261,7 +245,6 @@
     "metaDescription": "Teachers, masters and coaches write about what they know themselves. Practical articles from people who do it every day.",
     "lead": "The people who teach here write about what they know themselves. No theory from books.",
     "empty": "No articles yet. If you have something to tell — yours would be the first.",
-    "readMore": "Read",
     "by": "Written by",
     "readingTime": "{minutes} min read",
     "views": "{count, plural, one {# view} other {# views}}",
@@ -271,16 +254,6 @@
     "notFoundBody": "The author may have removed it, or the link is wrong.",
     "writeOwn": "Write your own article"
   },
-  "Dashboard": {
-    "title": "My profile",
-    "greeting": "Hello, {name}!",
-    "stubTitle": "Profile editor",
-    "stubBody": "Here you can add a photo, description, price, certificates and a calendar link.",
-    "stubStatus": "Profile status",
-    "notPublished": "Not published",
-    "published": "Published",
-    "backHome": "Back home"
-  },
   "Editor": {
     "title": "My profile",
     "lead": "Fill it in, save, publish. Nobody sees a draft.",
@@ -288,7 +261,6 @@
     "saving": "Saving...",
     "saved": "Saved",
     "saveError": "Couldn't save. Please try again.",
-    "unsaved": "Unsaved changes",
     "viewPublic": "View public profile",
     "sectionBasics": "Basics",
     "sectionProfessional": "Professional",
@@ -363,8 +335,6 @@
     "contactOtherValue": "Other channel — link or address",
     "consentLabel": "I agree that these contacts are shown to registered MentorMe.lv users",
     "consentHint": "Without this we show them to nobody. You can withdraw consent at any time by unticking the box.",
-    "consentRequired": "To make contacts visible, confirm your consent.",
-    "needContactToPublish": "To publish, add at least one way to reach you or a calendar link — otherwise nobody can contact you.",
     "sectionWhere": "Where and how you teach",
     "teachingFormat": "How lessons happen",
     "formatRemote": "Online",
@@ -420,9 +390,6 @@
     "slugTaken": "That link is taken. Choose another.",
     "deletePost": "Delete article",
     "deleteConfirm": "Delete this article permanently?",
-    "errTitle": "The title must be 5 to 140 characters.",
-    "errContent": "The text can't be empty.",
-    "errSlug": "Only lowercase letters without diacritics, digits and hyphens.",
     "dailyLimit": "One article per day. You can publish the next one tomorrow.",
     "writeAnother": "Write another"
   }
