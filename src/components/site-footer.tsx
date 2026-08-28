@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { CookieSettingsLink } from '@/components/cookie-settings-link'
@@ -41,7 +42,57 @@ export function SiteFooter() {
         </nav>
       </div>
 
-      <p className="mx-auto mt-10 max-w-6xl text-xs text-mist/60">
+      {/*
+        Ģenerālsponsors.
+        rel="sponsored" ir Google prasība atbalstītāju saitēm. Bez tā
+        vienāda saite katrā lapā izskatās pēc pirktas, un no tā zaudē
+        abas puses. Ar to apmeklētājam nemainās nekas.
+
+        Logo ir uz gaiša plāksnīša ar nolūku: ALENOR zīmols ir zils uz
+        balta, un uz mūsu tumšā fona tas kļūtu tikko salasāms.
+      */}
+      <div className="mx-auto mt-10 max-w-6xl border-t border-hairline pt-6">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
+          <p className="text-xs tracking-widest text-mist/70 uppercase">
+            {t('sponsorLabel')}
+          </p>
+
+          <a
+            href="https://www.alenor.lv"
+            target="_blank"
+            rel="sponsored noopener noreferrer"
+            aria-label="ALENOR.LV"
+            className="inline-flex w-fit items-center rounded-lg bg-cream px-3 py-2 transition-opacity hover:opacity-80"
+          >
+            {/*
+              Izmēri pēc tā, cik liels tas ir ekrānā, ne pēc faila.
+              Ar 453×111 next/image pieprasītu 1080 pikseļu platu bildi
+              piecdesmit piecu pikseļu vietai.
+            */}
+            <Image
+              src="/brand/alenor.png"
+              alt="ALENOR"
+              width={82}
+              height={20}
+              className="h-5 w-auto"
+            />
+          </a>
+
+          <p className="max-w-md text-sm leading-relaxed text-mist">
+            <a
+              href="https://www.alenor.lv"
+              target="_blank"
+              rel="sponsored noopener noreferrer"
+              className="text-gold hover:underline"
+            >
+              ALENOR.LV
+            </a>{' '}
+            — {t('sponsorLine')}
+          </p>
+        </div>
+      </div>
+
+      <p className="mx-auto mt-8 max-w-6xl text-xs text-mist/60">
         © {new Date().getFullYear()} MentorMe.lv. {t('rights')}
       </p>
     </footer>

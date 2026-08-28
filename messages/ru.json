@@ -118,7 +118,9 @@
     "rights": "Все права защищены.",
     "terms": "Условия использования",
     "cookies": "Политика cookie",
-    "cookieSettings": "Настройки cookie"
+    "cookieSettings": "Настройки cookie",
+    "sponsorLabel": "Наш генеральный спонсор",
+    "sponsorLine": "качественные бутиловые продукты по самым конкурентным ценам на рынке."
   },
   "Coach": {
     "metaTitle": "{name} — {tagline}",
