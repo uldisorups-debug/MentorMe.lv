@@ -11,6 +11,7 @@ export type ContactDraft = {
   telegram: string
   messenger_url: string
   linkedin_url: string
+  instagram: string
   other_label: string
   other_value: string
 }
@@ -21,6 +22,7 @@ export const EMPTY_CONTACTS: ContactDraft = {
   telegram: '',
   messenger_url: '',
   linkedin_url: '',
+  instagram: '',
   other_label: '',
   other_value: '',
 }
@@ -36,6 +38,7 @@ const FIELDS: {
   { key: 'telegram', kind: 'telegram', labelKey: 'contactTelegram', placeholder: 'lietotajvards' },
   { key: 'messenger_url', kind: 'messenger', labelKey: 'contactMessenger', placeholder: 'https://m.me/tavs.profils' },
   { key: 'linkedin_url', kind: 'linkedin', labelKey: 'contactLinkedin', placeholder: 'https://linkedin.com/in/tavs-profils' },
+  { key: 'instagram', kind: 'instagram', labelKey: 'contactInstagram', placeholder: 'tavs.profils' },
   { key: 'other_label', kind: null, labelKey: 'contactOtherLabel', placeholder: 'Signal' },
   { key: 'other_value', kind: null, labelKey: 'contactOtherValue', placeholder: 'https://signal.me/...' },
 ]

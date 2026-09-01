@@ -271,7 +271,7 @@
     "sectionPricing": "Price",
     "sectionFields": "Fields",
     "sectionBooking": "Booking",
-    "sectionCulture": "Culture match",
+    "sectionCulture": "Sources of inspiration",
     "sectionPublish": "Publishing",
     "fullName": "Full name",
     "tagline": "Short description",
@@ -292,7 +292,7 @@
     "nichesHint": "Choose up to four fields you actually work in.",
     "calendly": "Calendly or Cal.com link",
     "calendlyHint": "Full https:// link. People will book directly in your calendar.",
-    "cultureHint": "Optional, but it helps people see whether you'll click. Each entry can be hidden without deleting it.",
+    "cultureHint": "Optional. What you read, watch and listen to says something the description cannot. Each entry can be hidden without deleting it.",
     "books": "Books",
     "movies": "Films",
     "music": "Music",
@@ -349,7 +349,8 @@
     "uploading": "Uploading...",
     "uploadNotImage": "That is not an image. JPG, PNG, WebP or HEIC will do.",
     "uploadInputTooLarge": "The file is too large even to shrink. Pick a smaller one.",
-    "uploadUnreadable": "This image could not be read. Try another one."
+    "uploadUnreadable": "This image could not be read. Try another one.",
+    "contactInstagram": "Instagram username"
   },
   "Account": {
     "sectionTitle": "Account",

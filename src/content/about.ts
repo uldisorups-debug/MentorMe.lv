@@ -28,7 +28,7 @@ export const ABOUT: Record<string, AboutContent> = {
       "Talsu novadā kāda sieviete zina ievārījuma recepti, kuru neviens cits neprot pagatavot tāpat. Kad lauku māju pārdos, recepte aizies līdzi. Ne tāpēc, ka viņa to slēptu. Tāpēc, ka neviens neatnāca un nepajautāja.",
       "Tā pazūd prasmes. Ne skaļi, ne uzreiz — vienkārši kādā brīdī vairs nav neviena, kas tās prot."
     ],
-    "pull": "Šī vietne pastāv tāpēc, ka katram cilvēkam ir zināšanas, par kurām kāds cits ir gatavs maksāt. Un abi parasti nekad viens otru nesatiek.",
+    "pull": "Šī vietne pastāv tāpēc, ka katram cilvēkam ir zināšanas, par kurām kāds cits ir gatavs maksāt, bet abi parasti nekad viens otru nesatiek.",
     "forWhom": "Kam tas domāts",
     "stories": [
       {
@@ -58,18 +58,18 @@ export const ABOUT: Record<string, AboutContent> = {
       },
       {
         "title": "Tūristam, kurš negrib suvenīru",
-        "body": "Bet grib vienu dienu, kurā iemācās ķert butes un tās izkūpināt. Nopīt Jāņu vainagu. Nodejot sudmaliņas. Aizbraukt mājās ar to, ko neviens nevar nopirkt lidostā.",
+        "body": "Bet grib vienu dienu, kurā iemācās ķert butes. Nopīt Jāņu vainagu. Nodejot sudmaliņas. Aizbraukt mājās ar to, ko neviens nevar nopirkt lidostā.",
         "emphasis": null
       },
       {
-        "title": "Un koučiem un mentoriem arī",
+        "title": "Arī koučiem un mentoriem",
         "body": "Sertificētiem un nesertificētiem. Tiem ar ICF MCC un divi tūkstoši piecsimt stundām, un tiem, kas tikai vāc pirmās prakses stundas. Tā ir viena nozare starp četrpadsmit — ne vairāk, bet arī ne mazāk svarīga par pārējām.",
         "emphasis": null
       }
     ],
     "howTitle": "Kā mēs to darām",
     "how": [
-      "Viena lapa, kur var atrast cilvēku pēc tā, ko viņš prot, kur viņš dzīvo un vai viņš māca klātienē vai attālināti. Jo dažas lietas var iemācīties caur ekrānu, un dažas nevar — kokli, mālu un kūpinātavu nevar.",
+      "Viena lapa, kur var atrast cilvēku pēc tā, ko viņš prot, kur viņš dzīvo un vai viņš māca klātienē vai attālināti. Jo dažas lietas var iemācīties caur ekrānu, un dažas nevar — kokli, mālu un maizes krāsni nevar.",
       "Bez maksas abām pusēm. Mēs neņemam komisiju no tā, par ko jūs vienojaties. Mēs neuzglabājam jūsu saraksti. Mēs tikai palīdzam satikties.",
       "Nav svarīgi, vai tev ir diploms. Ir svarīgi, vai tu proti kaut ko, ko kāds cits grib iemācīties."
     ],

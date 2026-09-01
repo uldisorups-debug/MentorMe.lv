@@ -21,6 +21,7 @@ import {
   buildContactLinks,
   normalizePhone,
   normalizeTelegram,
+  normalizeInstagram,
   hasAnyContact,
   type ContactValues,
 } from '../src/lib/contacts.ts'
@@ -243,7 +244,7 @@ check(
 console.log('Kontakti')
 const noContacts: ContactValues = {
   email: null, whatsapp: null, telegram: null,
-  messenger_url: null, linkedin_url: null,
+  messenger_url: null, linkedin_url: null, instagram: null,
   other_label: null, other_value: null,
 }
 
@@ -265,6 +266,28 @@ check(
 )
 check('http messenger nederīgs', validateContact('messenger', 'http://m.me/x'), 'Jābūt pilnai https:// saitei.')
 check('https messenger derīgs', validateContact('messenger', 'https://m.me/x'), null)
+
+check(
+  'Instagram: @vards -> vards',
+  normalizeInstagram('@zaigas.kokle'),
+  'zaigas.kokle'
+)
+check(
+  'Instagram: pilna saite -> vards',
+  normalizeInstagram('https://www.instagram.com/zaigas.kokle/'),
+  'zaigas.kokle'
+)
+check('Instagram: derīgs lietotājvārds', validateContact('instagram', 'zaigas.kokle'), null)
+check(
+  'Instagram: atstarpe nav atļauta',
+  validateContact('instagram', 'zaiga kokle') !== null,
+  true
+)
+check(
+  'Instagram saite tiek uzbūvēta',
+  buildContactLinks({ ...noContacts, instagram: '@zaigas.kokle' })[0].href,
+  'https://instagram.com/zaigas.kokle'
+)
 
 check('numura tīrīšana', normalizePhone('+371 20 123 456'), '37120123456')
 check('telegram tīrīšana no saites', normalizeTelegram('https://t.me/uldis'), 'uldis')

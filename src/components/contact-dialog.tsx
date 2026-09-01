@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl'
 import { Lock, Mail, MessageCircle, Send, Link as LinkIcon } from 'lucide-react'
 import {
   FacebookIcon,
+  InstagramIcon,
   LinkedInIcon,
   WhatsAppIcon,
 } from '@/components/provider-icons'
@@ -30,6 +31,7 @@ const ICONS: Record<ContactKind, (p: { className?: string }) => React.ReactNode>
   telegram: Send,
   messenger: FacebookIcon,
   linkedin: LinkedInIcon,
+  instagram: InstagramIcon,
   other: LinkIcon,
 }
 
@@ -80,7 +82,7 @@ export function ContactDialog({
     const { data, error } = await supabase
       .from('coach_contacts')
       .select(
-        'email, whatsapp, telegram, messenger_url, linkedin_url, other_label, other_value, consent_at'
+        'email, whatsapp, telegram, messenger_url, linkedin_url, instagram, other_label, other_value, consent_at'
       )
       .eq('coach_id', coachId)
       .maybeSingle()

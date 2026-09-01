@@ -245,7 +245,7 @@
     "sectionPricing": "Cena",
     "sectionFields": "Jomas",
     "sectionBooking": "Pieteikšanās",
-    "sectionCulture": "Kultūras sakritība",
+    "sectionCulture": "Iedvesmas avoti",
     "sectionPublish": "Publicēšana",
     "fullName": "Pilns vārds",
     "tagline": "Īsais apraksts",
@@ -266,7 +266,7 @@
     "nichesHint": "Izvēlies līdz četrām jomām, kurās tiešām strādā.",
     "calendly": "Calendly vai Cal.com saite",
     "calendlyHint": "Pilna https:// saite. Cilvēki pieteiksies tieši tavā kalendārā.",
-    "cultureHint": "Neobligāti, bet palīdz cilvēkiem saprast, vai jūs sakritīsiet. Katru ierakstu var paslēpt, nedzēšot.",
+    "cultureHint": "Neobligāti. Tas, ko lasi, skaties un klausies, par tevi pasaka to, ko apraksts nepasaka. Katru ierakstu var paslēpt, to nedzēšot.",
     "books": "Grāmatas",
     "movies": "Filmas",
     "music": "Mūzika",
@@ -323,7 +323,8 @@
     "uploading": "Augšupielādē...",
     "uploadNotImage": "Šis nav attēls. Der JPG, PNG, WebP vai HEIC.",
     "uploadInputTooLarge": "Fails ir pārāk liels pat samazināšanai. Izvēlies mazāku.",
-    "uploadUnreadable": "Šo attēlu neizdevās nolasīt. Pamēģini citu."
+    "uploadUnreadable": "Šo attēlu neizdevās nolasīt. Pamēģini citu.",
+    "contactInstagram": "Instagram lietotājvārds"
   },
   "Contact": {
     "sendMessage": "Sūtīt ziņu",

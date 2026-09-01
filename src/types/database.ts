@@ -224,6 +224,7 @@ export type Database = {
           telegram: string | null
           messenger_url: string | null
           linkedin_url: string | null
+          instagram: string | null
           other_label: string | null
           other_value: string | null
           consent_at: string | null
@@ -236,6 +237,7 @@ export type Database = {
           telegram?: string | null
           messenger_url?: string | null
           linkedin_url?: string | null
+          instagram?: string | null
           other_label?: string | null
           other_value?: string | null
           consent_at?: string | null

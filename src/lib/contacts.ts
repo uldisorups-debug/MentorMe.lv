@@ -11,6 +11,7 @@ export type ContactKind =
   | 'telegram'
   | 'messenger'
   | 'linkedin'
+  | 'instagram'
   | 'other'
 
 export type ContactValues = {
@@ -19,6 +20,7 @@ export type ContactValues = {
   telegram: string | null
   messenger_url: string | null
   linkedin_url: string | null
+  instagram: string | null
   other_label: string | null
   other_value: string | null
 }
@@ -36,6 +38,20 @@ export function normalizePhone(raw: string): string {
   return raw.replace(/[^\d]/g, '')
 }
 
+/**
+ * Instagram lietotājvārds bez @ un bez saites priekšdaļas.
+ *
+ * Cilvēki to ieraksta trīs veidos — @vards, vards, vai visu saiti.
+ * Visi trīs ir pareizi domāti, tāpēc pieņemam visus.
+ */
+export function normalizeInstagram(raw: string): string {
+  return raw
+    .trim()
+    .replace(/^https?:\/\/(www\.)?instagram\.com\//i, '')
+    .replace(/^@/, '')
+    .replace(/\/.*$/, '')
+}
+
 /** Telegram lietotājvārds bez @ un bez saites priekšdaļas. */
 export function normalizeTelegram(raw: string): string {
   return raw
@@ -46,6 +62,8 @@ export function normalizeTelegram(raw: string): string {
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 const TELEGRAM_PATTERN = /^[a-zA-Z0-9_]{5,32}$/
+// Instagram atļauj arī punktu un ir īsāks par Telegram
+const INSTAGRAM_PATTERN = /^[a-zA-Z0-9._]{1,30}$/
 
 export type ContactError = string | null
 
@@ -69,6 +87,11 @@ export function validateContact(kind: ContactKind, raw: string): ContactError {
       return TELEGRAM_PATTERN.test(normalizeTelegram(value))
         ? null
         : 'Lietotājvārds: 5–32 rakstzīmes, tikai burti, cipari un _.'
+
+    case 'instagram':
+      return INSTAGRAM_PATTERN.test(normalizeInstagram(value))
+        ? null
+        : 'Lietotājvārds: burti, cipari, punkts un _, līdz 30 rakstzīmēm.'
 
     case 'messenger':
     case 'linkedin': {
@@ -127,6 +150,15 @@ export function buildContactLinks(values: ContactValues): ContactLink[] {
       kind: 'messenger',
       label: 'Messenger',
       href: values.messenger_url.trim(),
+      external: true,
+    })
+  }
+
+  if (values.instagram && !validateContact('instagram', values.instagram)) {
+    links.push({
+      kind: 'instagram',
+      label: 'Instagram',
+      href: `https://instagram.com/${normalizeInstagram(values.instagram)}`,
       external: true,
     })
   }

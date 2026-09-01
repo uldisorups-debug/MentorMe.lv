@@ -105,6 +105,7 @@ export function ProfileEditor({
     telegram: savedContacts?.telegram ?? '',
     messenger_url: savedContacts?.messenger_url ?? '',
     linkedin_url: savedContacts?.linkedin_url ?? '',
+    instagram: savedContacts?.instagram ?? '',
     other_label: savedContacts?.other_label ?? '',
     other_value: savedContacts?.other_value ?? '',
   })
@@ -169,6 +170,7 @@ export function ProfileEditor({
       telegram: contacts.telegram || null,
       messenger_url: contacts.messenger_url || null,
       linkedin_url: contacts.linkedin_url || null,
+      instagram: contacts.instagram || null,
       other_label: contacts.other_label || null,
       other_value: contacts.other_value || null,
     }

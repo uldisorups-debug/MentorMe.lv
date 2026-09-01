@@ -68,7 +68,7 @@ export const HOW_IT_WORKS: Record<string, HowContent> = {
       "Tāpēc nav jēgas katru nedēļu nākt šeit un pārbaudīt. Uzliec profilu, atstāj kontaktu un aizmirsti. Kad kādam būs vajadzīgs tieši tas, ko tu proti, viņš tevi atradīs un uzrakstīs uz to e-pastu, ko tu lasi jebkurā gadījumā.",
       "Vienpadsmitklasnieks, kurš māca matemātiku jaunākajiem, var uzlikt profilu vienu reizi un saņemt skolēnus katru pavasari."
     ],
-    "mentorTitle": "Un tas, kas bija no paša sākuma",
+    "mentorTitle": "Tas, kas bija no paša sākuma",
     "mentorBody": "Atrod cilvēku, kurš ir bijis tur, kur tu gribi nokļūt. Ne tikai to, kurš par to lasījis grāmatā.",
     "freeTitle": "Cik tas maksā",
     "freeBody": [
