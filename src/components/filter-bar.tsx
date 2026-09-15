@@ -276,15 +276,18 @@ export function FilterBar({
               />
             )}
 
-            <label className="flex cursor-pointer items-center gap-2 rounded-full border border-hairline bg-surface px-3 py-2 text-sm text-mist">
-              <input
-                type="checkbox"
-                checked={filters.masterclass}
-                onChange={(event) => set('masterclass', event.target.checked)}
-                className="size-4 accent-[var(--gold)]"
-              />
-              {t('masterclass')}
-            </label>
+            <FilterSelect
+              label={t('experience')}
+              value={filters.experience}
+              onChange={(value) =>
+                set('experience', value as CoachFilters['experience'])
+              }
+              options={[
+                { value: 'all', label: t('experienceAll') },
+                { value: 'masterclass', label: t('experienceMasterclass') },
+                { value: 'retreat', label: t('experienceRetreat') },
+              ]}
+            />
 
             {(filters.budgetFrom || filters.budgetTo) && (
               <p className="w-full text-xs text-mist">{t('budgetHint')}</p>

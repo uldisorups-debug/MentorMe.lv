@@ -22,7 +22,7 @@ export type CoachCardData = Pick<
   | 'teaching_format'
   | 'region_slug'
   | 'city'
-  | 'for_tourists'
+  | 'experience_kind'
   | 'avg_rating'
   | 'review_count'
   | 'profile_views'
@@ -50,8 +50,8 @@ export type CoachFilters = {
   /** Meklētāja budžets eiro. Tukša virkne = nav norādīts. */
   budgetFrom: string
   budgetTo: string
-  /** Tikai tie, kas piedāvā meistarklases un pieredzes */
-  masterclass: boolean
+  /** 'all' — vienalga; citādi meistarklases vai retrīti */
+  experience: 'all' | 'masterclass' | 'retreat'
 }
 
 export const EMPTY_FILTERS: CoachFilters = {
@@ -65,7 +65,7 @@ export const EMPTY_FILTERS: CoachFilters = {
   budget: 'all',
   budgetFrom: '',
   budgetTo: '',
-  masterclass: false,
+  experience: 'all',
 }
 
 /**
@@ -187,7 +187,7 @@ export function filterCoaches(
       if (!sameRegion && !countrywide && !worksAnywhere) return false
     }
 
-    if (filters.masterclass && !coach.for_tourists) {
+    if (filters.experience !== 'all' && coach.experience_kind !== filters.experience) {
       return false
     }
 

@@ -69,8 +69,11 @@
     "budgetTo": "līdz",
     "budgetCurrency": "€ par nodarbību",
     "budgetHint": "Cilvēki, kas cenu nav norādījuši, paliek sarakstā.",
-    "masterclass": "Meistarklases un pieredzes",
-    "searchResets": "Meklēšana notīrīja filtrus. Rezultātus vari sašaurināt no jauna."
+    "searchResets": "Meklēšana notīrīja filtrus. Rezultātus vari sašaurināt no jauna.",
+    "experience": "Meistarklases",
+    "experienceAll": "Vienalga",
+    "experienceMasterclass": "Meistarklases",
+    "experienceRetreat": "Retrīti"
   },
   "Coaches": {
     "sectionTitle": "Meistari",
@@ -146,8 +149,9 @@
     "formatRemote": "Attālināti",
     "formatInPerson": "Klātienē",
     "formatHybrid": "Kombinēti",
-    "touristBadge": "Piedāvā pieredzes tūristiem un viesiem",
-    "masterclass": "Meistarklases un pieredzes"
+    "experienceMasterclass": "Piedāvā meistarklases un pieredzes",
+    "experienceRetreat": "Piedāvā retrītus",
+    "experienceKind": "Papildus stundām"
   },
   "Culture": {
     "title": "Iedvesmas avoti",
@@ -315,7 +319,6 @@
     "city": "Pilsēta vai vieta",
     "cityHint": "Piemēram, Talsi vai Roja. Neobligāti, bet palīdz cilvēkiem tuvumā tevi atrast.",
     "regionHint": "Ja māci tikai attālināti, reģions nav obligāts.",
-    "forTourists": "Piedāvāju meistarklases / pieredzes",
     "myPosts": "Mani raksti",
     "errTooLong": "Kāds lauks ir par garu vai tajā par daudz vienumu. Pārbaudi aprakstu, tēmas un galeriju.",
     "errUnknownNiche": "Kāda no izvēlētajām tēmām vairs nepastāv. Izvēlies to no jauna.",
@@ -331,7 +334,12 @@
     "seoTitle": "Virsraksts meklētājā",
     "seoDescription": "Apraksts meklētājā",
     "seoPreview": "Aptuveni tā tas izskatīsies",
-    "seoHint": "Ieraksti to, ko cilvēks tiešām meklētu — piemēram, „Klavierspēles stundas Rīgā“ vai „Kokles spēle iesācējiem“. Google atslēgvārdu lauku neskatās kopš 2009. gada, tāpēc tāda te nav; svarīgi ir šie divi teikumi un tavs apraksts profilā."
+    "seoHint": "Ieraksti to, ko cilvēks tiešām meklētu — piemēram, „Klavierspēles stundas Rīgā“ vai „Kokles spēle iesācējiem“. Google atslēgvārdu lauku neskatās kopš 2009. gada, tāpēc tāda te nav; svarīgi ir šie divi teikumi un tavs apraksts profilā.",
+    "experienceKind": "Meistarklases un retrīti",
+    "experienceHint": "Ja rīko vairāku dienu retrītu, izvēlies to — cilvēks, kurš meklē retrītu, meistarklasi neatvērs.",
+    "experienceNone": "Nepiedāvāju",
+    "experienceMasterclass": "Meistarklases un pieredzes",
+    "experienceRetreat": "Retrīti"
   },
   "Contact": {
     "sendMessage": "Sūtīt ziņu",

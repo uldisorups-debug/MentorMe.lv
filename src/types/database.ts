@@ -12,6 +12,9 @@ export type CertLevel = 'none' | 'acc' | 'pcc' | 'mcc' | 'metacoach' | 'other'
 export type PostStatus = 'draft' | 'published'
 export type TeachingFormat = 'remote' | 'in_person' | 'hybrid'
 
+/** Ko cilvēks rīko papildus stundām. null — neko. */
+export type ExperienceKind = 'masterclass' | 'retreat'
+
 export type BookEntry  = { title: string; author: string; visible: boolean }
 export type MovieEntry = { title: string; year: number | null; visible: boolean }
 export type MusicEntry = { artist: string; genre: string | null; visible: boolean }
@@ -71,6 +74,7 @@ export type Database = {
           region_slug: string | null
           city: string | null
           for_tourists: boolean
+          experience_kind: ExperienceKind | null
           avg_rating: number | null
           review_count: number
           meta_title: string | null
@@ -109,6 +113,7 @@ export type Database = {
           region_slug?: string | null
           city?: string | null
           for_tourists?: boolean
+          experience_kind?: ExperienceKind | null
           meta_title?: string | null
           meta_description?: string | null
           calendly_url?: string | null

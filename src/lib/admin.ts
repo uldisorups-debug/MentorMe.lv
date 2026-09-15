@@ -34,6 +34,7 @@ export async function logAdminAction(entry: {
 
 /** Darbību nosaukumi žurnāla lasīšanai. */
 export const ACTION_LABELS: Record<string, string> = {
+  invite_coach: 'Uzaicināts meistars',
   delete_user: 'Dzēsts lietotājs',
   delete_profile: 'Dzēsts profils',
   unpublish_profile: 'Profils noņemts no saraksta',

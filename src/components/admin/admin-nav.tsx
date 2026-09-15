@@ -8,6 +8,7 @@ const TABS = [
   { href: '/admin', label: 'Pārskats' },
   { href: '/admin/lietotaji', label: 'Lietotāji' },
   { href: '/admin/profili', label: 'Profili' },
+  { href: '/admin/uzaicinajumi', label: 'Uzaicinājumi' },
   { href: '/admin/atsauksmes', label: 'Atsauksmes' },
   { href: '/admin/raksti', label: 'Raksti' },
   { href: '/admin/statistika', label: 'Statistika' },

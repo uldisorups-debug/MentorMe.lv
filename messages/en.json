@@ -69,8 +69,11 @@
     "budgetTo": "to",
     "budgetCurrency": "€ per session",
     "budgetHint": "People who haven't stated a price stay in the list.",
-    "masterclass": "Masterclasses and experiences",
-    "searchResets": "Search cleared the filters. You can narrow the results again."
+    "searchResets": "Search cleared the filters. You can narrow the results again.",
+    "experience": "Masterclasses",
+    "experienceAll": "Any",
+    "experienceMasterclass": "Masterclasses",
+    "experienceRetreat": "Retreats"
   },
   "Coaches": {
     "sectionTitle": "Masters",
@@ -146,8 +149,9 @@
     "formatRemote": "Online",
     "formatInPerson": "In person",
     "formatHybrid": "Combined",
-    "touristBadge": "Offers experiences for visitors",
-    "masterclass": "Masterclasses and experiences"
+    "experienceMasterclass": "Offers masterclasses and experiences",
+    "experienceRetreat": "Offers retreats",
+    "experienceKind": "Beyond lessons"
   },
   "Culture": {
     "title": "Sources of inspiration",
@@ -341,7 +345,6 @@
     "city": "City or place",
     "cityHint": "For example, Talsi or Roja. Optional, but it helps people nearby find you.",
     "regionHint": "If you only teach online, the region is optional.",
-    "forTourists": "I offer masterclasses / experiences",
     "myPosts": "My articles",
     "errTooLong": "A field is too long or has too many items. Check the description, topics and gallery.",
     "errUnknownNiche": "One of the chosen topics no longer exists. Pick it again.",
@@ -357,7 +360,12 @@
     "seoTitle": "Title in search results",
     "seoDescription": "Description in search results",
     "seoPreview": "Roughly how it will look",
-    "seoHint": "Write what someone would actually search for — for example “Piano lessons in Riga”. Google has ignored the keywords field since 2009, so there is none here; what matters is these two sentences and your profile text."
+    "seoHint": "Write what someone would actually search for — for example “Piano lessons in Riga”. Google has ignored the keywords field since 2009, so there is none here; what matters is these two sentences and your profile text.",
+    "experienceKind": "Masterclasses and retreats",
+    "experienceHint": "If you run a multi-day retreat, pick that — someone looking for a retreat will not open a masterclass.",
+    "experienceNone": "Neither",
+    "experienceMasterclass": "Masterclasses and experiences",
+    "experienceRetreat": "Retreats"
   },
   "Account": {
     "sectionTitle": "Account",

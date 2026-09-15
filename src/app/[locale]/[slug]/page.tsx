@@ -347,13 +347,17 @@ export default async function CoachProfilePage({
                 </dd>
               </div>
 
-              {coach.for_tourists && (
+              {coach.experience_kind && (
                 <div>
                   <dt className="flex items-center gap-1.5 text-xs text-mist">
                     <Sparkles className="size-3.5" />
-                    {t('masterclass')}
+                    {t('experienceKind')}
                   </dt>
-                  <dd className="mt-1">{t('touristBadge')}</dd>
+                  <dd className="mt-1">
+                    {coach.experience_kind === 'retreat'
+                      ? t('experienceRetreat')
+                      : t('experienceMasterclass')}
+                  </dd>
                 </div>
               )}
             </dl>

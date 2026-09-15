@@ -39,6 +39,7 @@ import type {
   CoachContacts,
   CertLevel,
   CoachProfile,
+  ExperienceKind,
   MovieEntry,
   MusicEntry,
   PriceTier,
@@ -118,7 +119,9 @@ export function ProfileEditor({
   const [format, setFormat] = useState<TeachingFormat>(coach.teaching_format)
   const [region, setRegion] = useState(coach.region_slug ?? 'none')
   const [city, setCity] = useState(coach.city ?? '')
-  const [forTourists, setForTourists] = useState(coach.for_tourists)
+  const [experience, setExperience] = useState<ExperienceKind | 'none'>(
+    coach.experience_kind ?? 'none'
+  )
 
   const [errors, setErrors] = useState<FieldErrors>({})
   const [saving, setSaving] = useState(false)
@@ -147,6 +150,15 @@ export function ProfileEditor({
       { value: 'remote', label: t('formatRemote') },
       { value: 'in_person', label: t('formatInPerson') },
       { value: 'hybrid', label: t('formatHybrid') },
+    ],
+    [t]
+  )
+
+  const experienceOptions = useMemo(
+    () => [
+      { value: 'none', label: t('experienceNone') },
+      { value: 'masterclass', label: t('experienceMasterclass') },
+      { value: 'retreat', label: t('experienceRetreat') },
     ],
     [t]
   )
@@ -232,7 +244,7 @@ export function ProfileEditor({
         teaching_format: format,
         region_slug: region === 'none' ? null : region,
         city: city.trim() || null,
-        for_tourists: forTourists,
+        experience_kind: experience === 'none' ? null : experience,
         meta_title: seo.meta_title.trim() || null,
         meta_description: seo.meta_description.trim() || null,
         calendly_url: draft.calendly_url.trim() || null,
@@ -593,20 +605,27 @@ export function ProfileEditor({
           />
         </Field>
 
-        <div className="rounded-lg border border-hairline bg-ink px-4 py-3">
-          <label className="flex cursor-pointer items-center gap-3">
-            <input
-              type="checkbox"
-              checked={forTourists}
-              onChange={(event) => {
-                setForTourists(event.target.checked)
-                setSavedAt(null)
-              }}
-              className="size-4 accent-[var(--gold)]"
-            />
-            <span className="text-sm font-medium">{t('forTourists')}</span>
-          </label>
-        </div>
+        <Field label={t('experienceKind')} hint={t('experienceHint')}>
+          <Select
+            items={experienceOptions}
+            value={experience}
+            onValueChange={(next) => {
+              setExperience(String(next) as ExperienceKind | 'none')
+              setSavedAt(null)
+            }}
+          >
+            <SelectTrigger className="h-10 w-full bg-ink">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {experienceOptions.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </Field>
       </Section>
 
       <Section title={t('sectionBooking')}>

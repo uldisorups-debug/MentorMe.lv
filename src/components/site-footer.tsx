@@ -74,7 +74,6 @@ export function SiteFooter() {
               alt="ALENOR"
               width={82}
               height={20}
-              className="h-5 w-auto"
             />
           </a>
 
