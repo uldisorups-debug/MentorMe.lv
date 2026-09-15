@@ -364,6 +364,16 @@ export type Database = {
         Relationships: []
       }
 
+      daily_visitors: {
+        Row: {
+          viewed_on: string
+          visitors: number
+        }
+        Insert: never
+        Update: never
+        Relationships: []
+      }
+
       page_views: {
         Row: {
           path: string

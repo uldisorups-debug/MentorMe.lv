@@ -64,16 +64,28 @@ export default async function AdminStatsPage() {
   since.setDate(since.getDate() - DAYS)
   const sinceDay = since.toISOString().slice(0, 10)
 
-  const { data, error } = await supabase
-    .from('page_views')
-    .select('path, viewed_on, source, views')
-    .gte('viewed_on', sinceDay)
+  const [{ data, error }, { data: visitorRows, error: visitorError }] =
+    await Promise.all([
+      supabase
+        .from('page_views')
+        .select('path, viewed_on, source, views')
+        .gte('viewed_on', sinceDay),
+      supabase
+        .from('daily_visitors')
+        .select('viewed_on, visitors')
+        .gte('viewed_on', sinceDay),
+    ])
 
   if (error) {
     console.error('Neizdevās ielādēt statistiku:', error.message)
   }
+  if (visitorError) {
+    console.error('Neizdevās ielādēt apmeklētājus:', visitorError.message)
+  }
 
   const rows = data ?? []
+  const visitorDays = visitorRows ?? []
+  const visitors = visitorDays.reduce((acc, row) => acc + row.visitors, 0)
 
   /*
    * Apkopojam serverī, ne SQL: rindu skaits te ir dienas × lapas × avoti,
@@ -103,20 +115,47 @@ export default async function AdminStatsPage() {
     .slice(0, 14)
     .map(([label, value]) => ({ label, value }))
 
+  const recentVisitors = [...visitorDays]
+    .sort((a, b) => b.viewed_on.localeCompare(a.viewed_on))
+    .slice(0, 14)
+    .map((row) => ({ label: row.viewed_on, value: row.visitors }))
+
   return (
     <div className="flex flex-col gap-10">
       <section>
         <h2 className="font-display text-xl">Pēdējās {DAYS} dienas</h2>
         <p className="mt-1 text-sm leading-relaxed text-mist">
           Mūsu pašu skaitītājs. Šeit ir <strong className="text-cream">visi</strong>{' '}
-          apmeklētāji, arī tie, kas sīkdatnēm nepiekrita — tāpēc šis skaitlis ir
-          lielāks par to, ko rāda Google Analytics. Viens cilvēks vienā lapā
-          dienā skaitās vienu reizi.
+          apmeklētāji, arī tie, kas sīkdatnēm nepiekrita — tāpēc šie skaitļi ir
+          lielāki par Google Analytics.
         </p>
-        <p className="mt-4 font-display text-4xl text-gold tabular-nums">
-          {total}
+        <div className="mt-5 flex flex-wrap gap-10">
+          <div>
+            <p className="font-display text-4xl text-gold tabular-nums">
+              {visitors}
+            </p>
+            <p className="text-sm text-mist">cilvēki</p>
+          </div>
+          <div>
+            <p className="font-display text-4xl text-cream tabular-nums">
+              {total}
+            </p>
+            <p className="text-sm text-mist">lapu atvērumi</p>
+          </div>
+          <div>
+            <p className="font-display text-4xl text-cream tabular-nums">
+              {visitors > 0 ? (total / visitors).toFixed(1) : '—'}
+            </p>
+            <p className="text-sm text-mist">lapas uz cilvēku</p>
+          </div>
+        </div>
+
+        <p className="mt-4 max-w-2xl text-xs leading-relaxed text-mist">
+          &bdquo;Cilvēki&ldquo; ir unikālie apmeklētāji: viens cilvēks dienā
+          skaitās vienu reizi, lai cik lapu viņš atvērtu. &bdquo;Lapu
+          atvērumi&ldquo; skaita katru lapu atsevišķi. Ja otrais skaitlis ir
+          daudz lielāks par pirmo, cilvēki pa lapu staigā — tā ir laba zīme.
         </p>
-        <p className="text-sm text-mist">skatījumi kopā</p>
       </section>
 
       <Table
@@ -132,7 +171,13 @@ export default async function AdminStatsPage() {
       />
 
       <Table
-        title="Pa dienām"
+        title="Cilvēki pa dienām"
+        note="Unikālie apmeklētāji. Pēdējās divas nedēļas."
+        rows={recentVisitors}
+      />
+
+      <Table
+        title="Lapu atvērumi pa dienām"
         note="Pēdējās divas nedēļas."
         rows={recent}
       />
