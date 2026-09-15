@@ -17,7 +17,7 @@ export function SiteHeader() {
         {t('skipToContent')}
       </a>
 
-      <div className="mx-auto flex h-full max-w-6xl items-center justify-between px-6">
+      <div className="mx-auto flex h-full max-w-6xl items-center justify-between px-4 sm:px-6">
         <Link href="/" className="font-display text-lg tracking-tight">
           Mentor<span className="text-gold">Me</span>
           <span className="text-mist">.lv</span>

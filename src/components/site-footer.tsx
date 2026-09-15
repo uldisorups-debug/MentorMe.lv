@@ -92,7 +92,7 @@ export function SiteFooter() {
         </div>
       </div>
 
-      <p className="mx-auto mt-8 max-w-6xl text-xs text-mist/60">
+      <p className="mx-auto mt-8 max-w-6xl text-xs text-mist/80">
         © {new Date().getFullYear()} MentorMe.lv. {t('rights')}
       </p>
     </footer>

@@ -52,7 +52,7 @@ function StarPicker({
           <Star
             className={cn(
               'size-6 transition-colors',
-              star <= active ? 'fill-gold text-gold' : 'text-mist/30'
+              star <= active ? 'fill-gold text-gold' : 'text-mist/50'
             )}
           />
         </button>

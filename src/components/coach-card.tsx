@@ -36,7 +36,7 @@ function PriceTag({ coach }: { coach: CoachCardData }) {
         {[1, 2, 3].map((step) => (
           <span
             key={step}
-            className={cn(step <= steps ? 'text-gold' : 'text-mist/30')}
+            className={cn(step <= steps ? 'text-gold' : 'text-mist/50')}
           >
             €
           </span>

@@ -198,6 +198,7 @@
     "loginLeadReview": "Lai atstātu atsauksmi, vajag kontu. Vārdu vari neatklāt — to izvēlēsies pēc tam.",
     "loginLeadCoach": "Vēl viens solis, un vari sākt aizpildīt savu profilu.",
     "addProfile": "Pievienot savu profilu",
+    "addProfileShort": "Pievienoties",
     "or": "vai",
     "emailLabel": "E-pasta adrese",
     "emailPlaceholder": "vards@piemers.lv",

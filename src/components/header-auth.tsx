@@ -81,9 +81,15 @@ export function HeaderAuth() {
       <LinkButton
         href="/auth/login?next=%2Fdashboard%2Fprofile"
         variant="outline"
-        className="ml-2 h-9"
+        className="ml-2 h-9 shrink-0"
       >
-        {t('addProfile')}
+        {/*
+          Telefonā pilnais uzraksts aizņēma tik daudz, ka izvēlnes poga
+          aizbīdījās aiz ekrāna malas un uz 375px platuma nebija vispār
+          sasniedzama. Šaurumā tāpēc īsāks vārds, nevis izmesta poga.
+        */}
+        <span className="min-[420px]:hidden">{t('addProfileShort')}</span>
+        <span className="hidden min-[420px]:inline">{t('addProfile')}</span>
       </LinkButton>
     )
   }
