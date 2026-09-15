@@ -1,4 +1,5 @@
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
+import { localePath } from '@/i18n/routing'
 import { setRequestLocale } from 'next-intl/server'
 import { SiteShell } from '@/components/site-shell'
 import { AdminNav } from '@/components/admin/admin-nav'
@@ -10,6 +11,11 @@ import { createClient } from '@/lib/supabase/server'
  * Nav administrators — notFound(), nevis pāradresācija uz pieteikšanos.
  * Pāradresācija pateiktu svešiniekam, ka šī lapa eksistē; 404 nepasaka
  * neko. Datubāzes pusē to tāpat sargā RLS, šis ir otrs slānis.
+ *
+ * Bet neielogots cilvēks ir cits gadījums. Agrāk arī viņš dabūja 404, un
+ * administrators, kurš atvēra lapu no cita datora, domāja, ka panelis ir
+ * salūzis. Nezināt, vai esi ielogojies, nav noslēpums — to pasaka jau
+ * galvene. Tāpēc sūtām uz pieteikšanos un atpakaļ.
  *
  * Panelis ir latviski. Tas ir iekšējs rīks vienam cilvēkam, un trīs
  * valodas tam nozīmētu 150 tulkojumu bez ieguvuma.
@@ -26,7 +32,9 @@ export default async function AdminLayout({
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) notFound()
+  if (!user) {
+    redirect(localePath(locale, '/auth/login?next=/admin'))
+  }
 
   const { data: profile } = await supabase
     .from('profiles')

@@ -7,6 +7,21 @@ import { ConfirmButton } from '@/components/admin/confirm-button'
 import { logAdminAction } from '@/lib/admin'
 import { createClient } from '@/lib/supabase/client'
 
+/**
+ * Publisko lapu atsvaidzināšana pēc administratora lēmuma.
+ *
+ * Saraksts un profila lapas ir statiskas. Bez šī administratora lēmums
+ * parādītos tikai tad, kad kāds attiecīgo valodas versiju atver — un
+ * angļu ar krievu atver reti.
+ */
+async function refreshPublicPages() {
+  try {
+    await fetch('/api/revalidate-profile', { method: 'POST' })
+  } catch (error) {
+    console.error('Publisko lapu atsvaidzināšana:', error)
+  }
+}
+
 type Admin = { adminId: string; adminName: string | null }
 
 /** Kouča profils: verificēt, noņemt no saraksta, dzēst. */
@@ -26,6 +41,7 @@ export function ProfileActions({
   const router = useRouter()
   const supabase = createClient()
 
+
   // Konkrēts tips, ne Record<string, boolean> — citādi PostgREST
   // nepārbauda, vai lauks vispār eksistē tabulā
   async function patch(
@@ -34,6 +50,7 @@ export function ProfileActions({
   ) {
     const { error } = await supabase.from('coach_profiles').update(values).eq('id', id)
     if (error) return alert(error.message)
+    await refreshPublicPages()
     await logAdminAction({ ...admin, action, table: 'coach_profiles', targetId: id, targetLabel: label })
     router.refresh()
   }
@@ -41,6 +58,7 @@ export function ProfileActions({
   async function remove(reason: string | null) {
     const { error } = await supabase.from('coach_profiles').delete().eq('id', id)
     if (error) return alert(error.message)
+    await refreshPublicPages()
     await logAdminAction({
       ...admin, action: 'delete_profile', table: 'coach_profiles',
       targetId: id, targetLabel: label, reason,
@@ -101,6 +119,7 @@ export function ReviewActions({
   async function toggle() {
     const { error } = await supabase.from('reviews').update({ is_visible: !isVisible }).eq('id', id)
     if (error) return alert(error.message)
+    await refreshPublicPages()
     await logAdminAction({
       ...admin, action: isVisible ? 'hide_review' : 'show_review',
       table: 'reviews', targetId: id, targetLabel: label,
@@ -111,6 +130,7 @@ export function ReviewActions({
   async function remove(reason: string | null) {
     const { error } = await supabase.from('reviews').delete().eq('id', id)
     if (error) return alert(error.message)
+    await refreshPublicPages()
     await logAdminAction({
       ...admin, action: 'delete_review', table: 'reviews',
       targetId: id, targetLabel: label, reason,
@@ -168,6 +188,7 @@ export function PostActions({
       .update({ status: 'draft', hidden_by_admin: true })
       .eq('id', id)
     if (error) return alert(error.message)
+    await refreshPublicPages()
     await logAdminAction({
       ...admin, action: 'unpublish_post', table: 'posts', targetId: id, targetLabel: label,
     })
@@ -181,6 +202,7 @@ export function PostActions({
       .update({ hidden_by_admin: false })
       .eq('id', id)
     if (error) return alert(error.message)
+    await refreshPublicPages()
     await logAdminAction({
       ...admin, action: 'release_post', table: 'posts', targetId: id, targetLabel: label,
     })
@@ -190,6 +212,7 @@ export function PostActions({
   async function remove(reason: string | null) {
     const { error } = await supabase.from('posts').delete().eq('id', id)
     if (error) return alert(error.message)
+    await refreshPublicPages()
     await logAdminAction({
       ...admin, action: 'delete_post', table: 'posts',
       targetId: id, targetLabel: label, reason,

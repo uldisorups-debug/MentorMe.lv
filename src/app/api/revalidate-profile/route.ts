@@ -21,19 +21,24 @@ export async function POST() {
     return NextResponse.json({ ok: false }, { status: 401 })
   }
 
-  // Tikai tam, kam profils tiešām ir — citādi šis būtu veids, kā svešs
-  // varētu bez apstājas likt serverim pārbūvēt lapas
-  const { data: coach } = await supabase
-    .from('coach_profiles')
-    .select('slug')
-    .eq('user_id', user.id)
-    .maybeSingle()
+  /*
+   * Tikai tam, kam profils tiešām ir, vai administratoram. Citādi šis
+   * būtu veids, kā svešs varētu bez apstājas likt serverim pārbūvēt lapas.
+   *
+   * Administrators te ir ar nolūku: kad viņš profilu publicē vai noņem,
+   * saraksts jāatjauno tieši tāpat. Bez tā angļu un krievu versija
+   * palika ar veco skaitu, līdz kāds tās atvēra — un tās atver reti.
+   */
+  const [{ data: coach }, { data: profile }] = await Promise.all([
+    supabase.from('coach_profiles').select('slug').eq('user_id', user.id).maybeSingle(),
+    supabase.from('profiles').select('is_admin').eq('id', user.id).maybeSingle(),
+  ])
 
-  if (!coach) {
+  if (!coach && !profile?.is_admin) {
     return NextResponse.json({ ok: false }, { status: 404 })
   }
 
   revalidateProfilePages()
 
-  return NextResponse.json({ ok: true, slug: coach.slug })
+  return NextResponse.json({ ok: true, slug: coach?.slug ?? null })
 }

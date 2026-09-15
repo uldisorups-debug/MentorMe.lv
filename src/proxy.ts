@@ -21,8 +21,13 @@ export async function proxy(request: NextRequest) {
   return updateSession(request, intlResponse as NextResponse)
 }
 
+/*
+ * opengraph-image izslēgts kopā ar /api: next-intl to pāradresētu no
+ * /lv/opengraph-image uz /opengraph-image, un daļa koplietošanas
+ * skeneru bildēm pāradresācijai neseko — priekšskatījums paliktu tukšs.
+ */
 export const config = {
   matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|txt|xml)$).*)',
+    '/((?!api|.*opengraph-image|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|txt|xml)$).*)',
   ],
 }
