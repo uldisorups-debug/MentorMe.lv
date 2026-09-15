@@ -13,14 +13,29 @@ const supabaseHost = process.env.NEXT_PUBLIC_SUPABASE_URL
 const withNextIntl = createNextIntlPlugin()
 
 const nextConfig: NextConfig = {
-  // Adrese mainīta no /coach/ uz /profils/. 301 tāpēc, ka Google
-  // vecajai saitei jau var būt piešķīris svaru — pāradresācija to
-  // pārnes, 404 to izmestu.
+  /*
+   * Vecās adreses nedrīkst vienkārši pazust: Google tām jau var būt
+   * piešķīris svaru, un tās var būt kaut kur izsūtītas. 301 to pārnes,
+   * 404 to izmestu.
+   *
+   * /coach/ sūtām uzreiz uz galamērķi, nevis caur /profils/. Divas
+   * pāradresācijas pēc kārtas Google seko, bet katrā solī daļa svara
+   * paliek ceļā, un pārlūkam tas ir divi papildu turp-atpakaļ.
+   */
   async redirects() {
+    const koucs = [
+      { source: '/profils/:slug', destination: '/:slug', permanent: true },
+      { source: '/coach/:slug', destination: '/:slug', permanent: true },
+    ]
+
     return [
-      { source: '/coach/:slug', destination: '/profils/:slug', permanent: true },
-      // "Par mums" saplūda ar "Kā tas darbojas" — vecā saite nedrīkst
-      // vienkārši pazust, tā jau var būt kaut kur izsūtīta
+      ...koucs,
+      ...koucs.map((r) => ({
+        source: `/:locale(en|ru)${r.source}`,
+        destination: `/:locale${r.destination}`,
+        permanent: true,
+      })),
+      // "Par mums" saplūda ar "Kā tas darbojas"
       { source: '/par-mums', destination: '/ka-tas-darbojas', permanent: true },
       { source: '/:locale(en|ru)/par-mums', destination: '/:locale/ka-tas-darbojas', permanent: true },
     ]

@@ -96,7 +96,7 @@ export default async function PostPage({ params }: PageProps<'/[locale]/blog/[sl
         <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-hairline pb-6 text-sm text-mist">
           {post.author && (
             <a
-              href={`/profils/${post.author.slug}`}
+              href={`/${post.author.slug}`}
               className="flex items-center gap-2 transition-colors hover:text-cream"
             >
               <CoachAvatar
@@ -144,7 +144,7 @@ export default async function PostPage({ params }: PageProps<'/[locale]/blog/[sl
               <p className="font-display text-lg">{post.author.full_name}</p>
             </div>
             <LinkButton
-              href={`/profils/${post.author.slug}`}
+              href={`/${post.author.slug}`}
               variant="outline"
               className="h-10"
             >

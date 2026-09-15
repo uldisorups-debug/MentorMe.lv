@@ -8,10 +8,10 @@ import { revalidatePath } from 'next/cache'
  * redzētu veco versiju un domātu, ka nekas nenotika.
  *
  * Atsvaidzinām maršrutu, ne konkrētu adresi: ar next-intl viena lapa
- * dzīvo trijās adresēs (/profils/..., /en/profils/..., /ru/...), un
- * uzminēt tās visas ir vairāk vietu, kur kļūdīties.
+ * dzīvo trijās adresēs (/vards, /en/vards, /ru/vards), un uzminēt tās
+ * visas ir vairāk vietu, kur kļūdīties.
  */
 export function revalidateProfilePages(): void {
-  revalidatePath('/[locale]/profils/[slug]', 'page')
+  revalidatePath('/[locale]/[slug]', 'page')
   revalidatePath('/[locale]', 'page')
 }

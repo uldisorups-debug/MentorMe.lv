@@ -70,7 +70,7 @@ export default async function AdminProfilesPage() {
               <AdminRow
                 key={c.id}
                 title={c.full_name}
-                subtitle={<>/profils/{c.slug}{c.tagline && ` · ${c.tagline}`}</>}
+                subtitle={<>/{c.slug}{c.tagline && ` · ${c.tagline}`}</>}
                 badges={
                   <>
                     {c.is_verified && <Badge>Verificēts</Badge>}

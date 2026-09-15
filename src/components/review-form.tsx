@@ -183,7 +183,7 @@ export function ReviewForm({
         <p className="text-sm text-mist">{message}</p>
         {status.kind === 'anonymous' && (
           <LinkButton
-            href={`/auth/login?next=${encodeURIComponent(pathname ?? '/')}`}
+            href={`/auth/login?no=profils&next=${encodeURIComponent(pathname ?? '/')}`}
             variant="outline"
           >
             {t('loginCta')}

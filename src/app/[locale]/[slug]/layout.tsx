@@ -10,7 +10,7 @@ import { SiteShell } from '@/components/site-shell'
 export default async function CoachLayout({
   children,
   params,
-}: LayoutProps<'/[locale]/profils'>) {
+}: LayoutProps<'/[locale]/[slug]'>) {
   const { locale } = await params
   setRequestLocale(locale)
 

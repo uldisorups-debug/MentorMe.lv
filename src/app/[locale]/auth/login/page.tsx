@@ -17,13 +17,21 @@ export default async function LoginPage({
 
   const next = safeNext(typeof params.next === 'string' ? params.next : null)
 
-  // Paskaidrojums atkarīgs no tā, kāpēc cilvēks šeit nonāca.
-  // Pieteikšanās nekad nav sveiciens — vienmēr solis ceļā uz kaut ko.
-  const lead = next.startsWith('/dashboard')
-    ? t('loginLeadCoach')
-    : next.startsWith('/profils/')
+  /*
+   * Paskaidrojums atkarīgs no tā, kāpēc cilvēks šeit nonāca.
+   * Pieteikšanās nekad nav sveiciens — vienmēr solis ceļā uz kaut ko.
+   *
+   * No kurienes viņš nāk, pasaka pats saucējs, nevis mēs pēc adreses
+   * uzminam. Kamēr profila lapa bija /profils/..., to varēja nolasīt no
+   * ceļa; tagad tā ir mentorme.lv/vards-uzvards un no sakņu lapas pēc
+   * izskata neatšķiras.
+   */
+  const lead =
+    params.no === 'profils'
       ? t('loginLeadReview')
-      : t('loginLead')
+      : next.startsWith('/dashboard')
+        ? t('loginLeadCoach')
+        : t('loginLead')
 
   return (
     <div className="mx-auto flex max-w-md flex-col px-6 py-20">

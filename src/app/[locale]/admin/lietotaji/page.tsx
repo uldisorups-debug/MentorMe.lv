@@ -52,7 +52,7 @@ export default async function AdminUsersPage() {
                 subtitle={
                   <>
                     Reģistrējies {date.format(new Date(p.created_at))}
-                    {coach && ` · /profils/${coach.slug}`}
+                    {coach && ` · /${coach.slug}`}
                   </>
                 }
                 badges={

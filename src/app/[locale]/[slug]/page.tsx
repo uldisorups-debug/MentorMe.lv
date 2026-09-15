@@ -38,7 +38,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({
   params,
-}: PageProps<'/[locale]/profils/[slug]'>): Promise<Metadata> {
+}: PageProps<'/[locale]/[slug]'>): Promise<Metadata> {
   const { slug } = await params
   const page = await loadCoachPage(slug)
   const t = await getTranslations('Coach')
@@ -75,7 +75,7 @@ export async function generateMetadata({
   return {
     title,
     description,
-    alternates: { canonical: `/profils/${coach.slug}` },
+    alternates: { canonical: `/${coach.slug}` },
     openGraph: { title, description, type: 'profile' },
   }
 }
@@ -95,7 +95,7 @@ const LANGUAGE_LABELS: Record<string, string> = {
 
 export default async function CoachProfilePage({
   params,
-}: PageProps<'/[locale]/profils/[slug]'>) {
+}: PageProps<'/[locale]/[slug]'>) {
   const { slug, locale } = await params
   setRequestLocale(locale)
   const [page, categoryNames] = await Promise.all([

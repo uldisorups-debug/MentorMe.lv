@@ -116,7 +116,7 @@ export function ContactDialog({
               <DialogDescription>{t('loginBody')}</DialogDescription>
             </DialogHeader>
             <LinkButton
-              href={`/auth/login?next=${encodeURIComponent(pathname ?? '/')}`}
+              href={`/auth/login?no=profils&next=${encodeURIComponent(pathname ?? '/')}`}
               className="h-11 w-full"
             >
               {t('loginCta')}

@@ -4,8 +4,8 @@ import { defineRouting } from 'next-intl/routing'
  * Trīs valodas ar latviešu kā noklusējumu.
  *
  * localePrefix 'as-needed' nozīmē, ka latviešu paliek uz "/" bez prefiksa —
- * mentorme.lv/profils/uldis-orups, nevis mentorme.lv/lv/profils/...
- * Tā vecās saites nesalūzt un galvenā valoda paliek īsākā adresē.
+ * mentorme.lv/uldis-orups, nevis mentorme.lv/lv/uldis-orups. Tā vecās
+ * saites nesalūzt un galvenā valoda paliek īsākā adresē.
  *
  * localeDetection izslēgts ar nolūku. Pēc noklusējuma next-intl klausa
  * pārlūka Accept-Language galveni, un Latvijā ļoti daudziem tā ir angļu
