@@ -319,7 +319,7 @@
     "errTooLong": "Kāds lauks ir par garu vai tajā par daudz vienumu. Pārbaudi aprakstu, tēmas un galeriju.",
     "errUnknownNiche": "Kāda no izvēlētajām tēmām vairs nepastāv. Izvēlies to no jauna.",
     "certNote": "Sertifikāti un apliecības",
-    "certNoteHint": "Ja tev tādi ir — uzraksti, kādi un no kā. Piemēram: \"ICF ACC, 2023\" vai \"Amatnieka apliecība, LAK\". Neobligāti.",
+    "certNoteHint": "Ja tev tādi ir — uzraksti, kādi un no kā. Piemēram: „ICF ACC, 2023“ vai „Amatnieka apliecība, LAK“. Neobligāti.",
     "uploading": "Augšupielādē...",
     "uploadNotImage": "Šis nav attēls. Der JPG, PNG, WebP vai HEIC.",
     "uploadInputTooLarge": "Fails ir pārāk liels pat samazināšanai. Izvēlies mazāku.",
@@ -330,7 +330,7 @@
     "seoTitle": "Virsraksts meklētājā",
     "seoDescription": "Apraksts meklētājā",
     "seoPreview": "Aptuveni tā tas izskatīsies",
-    "seoHint": "Ieraksti to, ko cilvēks tiešām meklētu — piemēram, «Klavierspēles stundas Rīgā» vai «Kokles spēle iesācējiem». Google atslēgvārdu lauku neskatās kopš 2009. gada, tāpēc tāda te nav; svarīgi ir šie divi teikumi un tavs apraksts profilā."
+    "seoHint": "Ieraksti to, ko cilvēks tiešām meklētu — piemēram, „Klavierspēles stundas Rīgā“ vai „Kokles spēle iesācējiem“. Google atslēgvārdu lauku neskatās kopš 2009. gada, tāpēc tāda te nav; svarīgi ir šie divi teikumi un tavs apraksts profilā."
   },
   "Contact": {
     "sendMessage": "Sūtīt ziņu",

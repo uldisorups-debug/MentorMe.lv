@@ -345,7 +345,7 @@
     "errTooLong": "A field is too long or has too many items. Check the description, topics and gallery.",
     "errUnknownNiche": "One of the chosen topics no longer exists. Pick it again.",
     "certNote": "Certificates and qualifications",
-    "certNoteHint": "If you have any — write which and from whom. For example: \"ICF ACC, 2023\". Optional.",
+    "certNoteHint": "If you have any — write which and from whom. For example: “ICF ACC, 2023”. Optional.",
     "uploading": "Uploading...",
     "uploadNotImage": "That is not an image. JPG, PNG, WebP or HEIC will do.",
     "uploadInputTooLarge": "The file is too large even to shrink. Pick a smaller one.",
