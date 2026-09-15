@@ -284,8 +284,10 @@ export function FilterBar({
               }
               options={[
                 { value: 'all', label: t('experienceAll') },
-                { value: 'masterclass', label: t('experienceMasterclass') },
-                { value: 'retreat', label: t('experienceRetreat') },
+                { value: 'experience', label: t('expExperience') },
+                { value: 'masterclass', label: t('expMasterclass') },
+                { value: 'course', label: t('expCourse') },
+                { value: 'retreat', label: t('expRetreat') },
               ]}
             />
 

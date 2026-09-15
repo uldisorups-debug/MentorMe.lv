@@ -119,8 +119,8 @@ export function ProfileEditor({
   const [format, setFormat] = useState<TeachingFormat>(coach.teaching_format)
   const [region, setRegion] = useState(coach.region_slug ?? 'none')
   const [city, setCity] = useState(coach.city ?? '')
-  const [experience, setExperience] = useState<ExperienceKind | 'none'>(
-    coach.experience_kind ?? 'none'
+  const [experiences, setExperiences] = useState<ExperienceKind[]>(
+    coach.experience_kinds ?? []
   )
 
   const [errors, setErrors] = useState<FieldErrors>({})
@@ -154,11 +154,13 @@ export function ProfileEditor({
     [t]
   )
 
+  // Secība pēc tā, cik daudz laika prasa — stundas, pusdiena, nedēļas, dienas
   const experienceOptions = useMemo(
     () => [
-      { value: 'none', label: t('experienceNone') },
-      { value: 'masterclass', label: t('experienceMasterclass') },
-      { value: 'retreat', label: t('experienceRetreat') },
+      { value: 'experience', label: t('expExperience') },
+      { value: 'masterclass', label: t('expMasterclass') },
+      { value: 'course', label: t('expCourse') },
+      { value: 'retreat', label: t('expRetreat') },
     ],
     [t]
   )
@@ -244,7 +246,7 @@ export function ProfileEditor({
         teaching_format: format,
         region_slug: region === 'none' ? null : region,
         city: city.trim() || null,
-        experience_kind: experience === 'none' ? null : experience,
+        experience_kinds: experiences,
         meta_title: seo.meta_title.trim() || null,
         meta_description: seo.meta_description.trim() || null,
         calendly_url: draft.calendly_url.trim() || null,
@@ -606,25 +608,15 @@ export function ProfileEditor({
         </Field>
 
         <Field label={t('experienceKind')} hint={t('experienceHint')}>
-          <Select
-            items={experienceOptions}
-            value={experience}
-            onValueChange={(next) => {
-              setExperience(String(next) as ExperienceKind | 'none')
+          <ChipPicker
+            label={t('experienceKind')}
+            options={experienceOptions}
+            selected={experiences}
+            onChange={(next) => {
+              setExperiences(next as ExperienceKind[])
               setSavedAt(null)
             }}
-          >
-            <SelectTrigger className="h-10 w-full bg-ink">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {experienceOptions.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          />
         </Field>
       </Section>
 

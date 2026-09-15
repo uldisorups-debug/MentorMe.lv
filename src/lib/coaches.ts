@@ -1,4 +1,9 @@
-import type { CertLevel, CoachProfile, PriceTier } from '@/types/database'
+import type {
+  CertLevel,
+  CoachProfile,
+  ExperienceKind,
+  PriceTier,
+} from '@/types/database'
 
 /**
  * Kartītei vajadzīgais kouča datu apjoms.
@@ -22,7 +27,7 @@ export type CoachCardData = Pick<
   | 'teaching_format'
   | 'region_slug'
   | 'city'
-  | 'experience_kind'
+  | 'experience_kinds'
   | 'avg_rating'
   | 'review_count'
   | 'profile_views'
@@ -50,8 +55,8 @@ export type CoachFilters = {
   /** Meklētāja budžets eiro. Tukša virkne = nav norādīts. */
   budgetFrom: string
   budgetTo: string
-  /** 'all' — vienalga; citādi meistarklases vai retrīti */
-  experience: 'all' | 'masterclass' | 'retreat'
+  /** 'all' — filtrs nestrādā; citādi viens no četriem veidiem */
+  experience: 'all' | ExperienceKind
 }
 
 export const EMPTY_FILTERS: CoachFilters = {
@@ -187,7 +192,10 @@ export function filterCoaches(
       if (!sameRegion && !countrywide && !worksAnywhere) return false
     }
 
-    if (filters.experience !== 'all' && coach.experience_kind !== filters.experience) {
+    if (
+      filters.experience !== 'all' &&
+      !coach.experience_kinds.includes(filters.experience)
+    ) {
       return false
     }
 

@@ -334,7 +334,7 @@ const coach = (over: Partial<CoachCardData>): CoachCardData => ({
   avatar_url: null, certification: 'none', is_verified: false,
   years_experience: null, session_languages: ['lv'], price_tier: 'free',
   price_from: null, price_to: null, niches: [], teaching_format: 'remote',
-  region_slug: null, city: null, experience_kind: null,
+  region_slug: null, city: null, experience_kinds: [],
   profile_views: 0, created_at: '2026-01-01T00:00:00Z',
   avg_rating: null, review_count: 0, ...over,
 })
@@ -347,7 +347,7 @@ const sphereMap = {
 const koklePasniedzejs = coach({
   full_name: 'Zaiga', niches: ['kokle'],
   teaching_format: 'in_person', region_slug: 'kurzeme',
-  experience_kind: 'masterclass',
+  experience_kinds: ['masterclass', 'experience'],
 })
 const matZoom = coach({
   full_name: 'Andris', niches: ['matematika'],
@@ -401,20 +401,26 @@ check(
   ['Andris', 'Ilze']
 )
 
+check('meistarklases', names({ ...EMPTY_FILTERS, experience: 'masterclass' }), ['Zaiga'])
+// Zaiga rīko divas lietas no četrām — abas viņu atrod, pārējās ne
+check('pieredzes', names({ ...EMPTY_FILTERS, experience: 'experience' }), ['Zaiga'])
+check('kursi — neviens tādus nerīko', names({ ...EMPTY_FILTERS, experience: 'course' }), [])
+check('retrīti — neviens tādus nerīko', names({ ...EMPTY_FILTERS, experience: 'retreat' }), [])
+
+// Tieši tāpēc ķeksītis kļuva par četrām izvēlēm: retrīts nav meistarklase
+const retritaRikotajs = coach({
+  full_name: 'Baiba',
+  experience_kinds: ['retreat', 'course'],
+})
 check(
-  'meistarklases',
-  names({ ...EMPTY_FILTERS, experience: 'masterclass' }),
-  ['Zaiga']
-)
-// Retrīts nav meistarklase — tieši tāpēc ķeksītis kļuva par izvēli
-check('retrīti — neviens tādu nerīko', names({ ...EMPTY_FILTERS, experience: 'retreat' }), [])
-check(
-  'retrītu filtrs atrod retrīta rīkotāju',
-  names({ ...EMPTY_FILTERS, experience: 'retreat' }, [
-    coach({ full_name: 'Baiba', experience_kind: 'retreat' }),
-    koklePasniedzejs,
-  ]),
+  'retrītu filtrs atrod tikai retrīta rīkotāju',
+  names({ ...EMPTY_FILTERS, experience: 'retreat' }, [retritaRikotajs, koklePasniedzejs]),
   ['Baiba']
+)
+check(
+  'meistarklašu filtrs to pašu cilvēku neatrod',
+  names({ ...EMPTY_FILTERS, experience: 'masterclass' }, [retritaRikotajs]),
+  []
 )
 
 check('budžets: bezmaksas', names({ ...EMPTY_FILTERS, budget: 'free' }), ['Zaiga', 'Andris', 'Mareks'])

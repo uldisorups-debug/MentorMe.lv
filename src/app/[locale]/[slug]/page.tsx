@@ -86,6 +86,14 @@ const FORMAT_KEYS = {
   hybrid: 'formatHybrid',
 } as const
 
+/** Tādā secībā, kādā tie prasa arvien vairāk laika. */
+const EXPERIENCE_KEYS = {
+  experience: 'expExperience',
+  masterclass: 'expMasterclass',
+  course: 'expCourse',
+  retreat: 'expRetreat',
+} as const
+
 const LANGUAGE_LABELS: Record<string, string> = {
   lv: 'Latviešu',
   en: 'Angļu',
@@ -347,16 +355,21 @@ export default async function CoachProfilePage({
                 </dd>
               </div>
 
-              {coach.experience_kind && (
+              {coach.experience_kinds.length > 0 && (
                 <div>
                   <dt className="flex items-center gap-1.5 text-xs text-mist">
                     <Sparkles className="size-3.5" />
                     {t('experienceKind')}
                   </dt>
                   <dd className="mt-1">
-                    {coach.experience_kind === 'retreat'
-                      ? t('experienceRetreat')
-                      : t('experienceMasterclass')}
+                    {/* Secība no EXPERIENCE_KEYS, ne no masīva — citādi
+                        divos profilos tie paši vārdi stāvētu citādi */}
+                    {(
+                      Object.keys(EXPERIENCE_KEYS) as (keyof typeof EXPERIENCE_KEYS)[]
+                    )
+                      .filter((kind) => coach.experience_kinds.includes(kind))
+                      .map((kind) => t(EXPERIENCE_KEYS[kind]))
+                      .join(', ')}
                   </dd>
                 </div>
               )}

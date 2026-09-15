@@ -12,8 +12,16 @@ export type CertLevel = 'none' | 'acc' | 'pcc' | 'mcc' | 'metacoach' | 'other'
 export type PostStatus = 'draft' | 'published'
 export type TeachingFormat = 'remote' | 'in_person' | 'hybrid'
 
-/** Ko cilvēks rīko papildus stundām. null — neko. */
-export type ExperienceKind = 'masterclass' | 'retreat'
+/**
+ * Ko cilvēks rīko papildus privātstundām. Dalījums pēc tā, cik daudz
+ * laika jāatvēl: pieredze — stundas, meistarklase — pusdiena,
+ * kurss — nedēļas, retrīts — dienas ar nakšņošanu.
+ */
+export type ExperienceKind =
+  | 'experience'
+  | 'masterclass'
+  | 'course'
+  | 'retreat'
 
 export type BookEntry  = { title: string; author: string; visible: boolean }
 export type MovieEntry = { title: string; year: number | null; visible: boolean }
@@ -74,7 +82,7 @@ export type Database = {
           region_slug: string | null
           city: string | null
           for_tourists: boolean
-          experience_kind: ExperienceKind | null
+          experience_kinds: ExperienceKind[]
           avg_rating: number | null
           review_count: number
           meta_title: string | null
@@ -113,7 +121,7 @@ export type Database = {
           region_slug?: string | null
           city?: string | null
           for_tourists?: boolean
-          experience_kind?: ExperienceKind | null
+          experience_kinds?: ExperienceKind[]
           meta_title?: string | null
           meta_description?: string | null
           calendly_url?: string | null

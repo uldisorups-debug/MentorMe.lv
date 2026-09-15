@@ -70,10 +70,12 @@
     "budgetCurrency": "€ par nodarbību",
     "budgetHint": "Cilvēki, kas cenu nav norādījuši, paliek sarakstā.",
     "searchResets": "Meklēšana notīrīja filtrus. Rezultātus vari sašaurināt no jauna.",
-    "experience": "Meistarklases un retrīti",
-    "experienceAll": "Meistarklases un retrīti",
-    "experienceMasterclass": "Meistarklases",
-    "experienceRetreat": "Retrīti"
+    "experience": "Kursi un pasākumi",
+    "experienceAll": "Kursi un pasākumi",
+    "expExperience": "Pieredzes",
+    "expMasterclass": "Meistarklases",
+    "expCourse": "Kursi",
+    "expRetreat": "Retrīti"
   },
   "Coaches": {
     "sectionTitle": "Meistari",
@@ -149,9 +151,11 @@
     "formatRemote": "Attālināti",
     "formatInPerson": "Klātienē",
     "formatHybrid": "Kombinēti",
-    "experienceMasterclass": "Piedāvā meistarklases un pieredzes",
-    "experienceRetreat": "Piedāvā retrītus",
-    "experienceKind": "Papildus stundām"
+    "experienceKind": "Kursi un pasākumi",
+    "expExperience": "Pieredzes",
+    "expMasterclass": "Meistarklases",
+    "expCourse": "Kursi",
+    "expRetreat": "Retrīti"
   },
   "Culture": {
     "title": "Iedvesmas avoti",
@@ -335,11 +339,12 @@
     "seoDescription": "Apraksts meklētājā",
     "seoPreview": "Aptuveni tā tas izskatīsies",
     "seoHint": "Ieraksti to, ko cilvēks tiešām meklētu — piemēram, „Klavierspēles stundas Rīgā“ vai „Kokles spēle iesācējiem“. Google atslēgvārdu lauku neskatās kopš 2009. gada, tāpēc tāda te nav; svarīgi ir šie divi teikumi un tavs apraksts profilā.",
-    "experienceKind": "Meistarklases un retrīti",
-    "experienceHint": "Ja rīko vairāku dienu retrītu, izvēlies to — cilvēks, kurš meklē retrītu, meistarklasi neatvērs.",
-    "experienceNone": "Nepiedāvāju",
-    "experienceMasterclass": "Meistarklases un pieredzes",
-    "experienceRetreat": "Retrīti"
+    "experienceKind": "Kursi un pasākumi",
+    "experienceHint": "Pieredze — dažas stundas, viesis izdzīvo, nevis mācās. Meistarklase — pusdiena, viena prasme rokās. Kurss — vairākas nodarbības pēc kārtas. Retrīts — vairākas dienas ar nakšņošanu. Privātstundas te nav: tās ir visa lapa.",
+    "expExperience": "Pieredzes",
+    "expMasterclass": "Meistarklases",
+    "expCourse": "Kursi",
+    "expRetreat": "Retrīti"
   },
   "Contact": {
     "sendMessage": "Sūtīt ziņu",

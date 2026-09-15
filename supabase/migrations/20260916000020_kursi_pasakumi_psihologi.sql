@@ -1,31 +1,57 @@
 -- =============================================================
--- 1. Meistarklases un retrīti — no ķeksīša uz izvēli
+-- 1. Kursi un pasākumi — no ķeksīša uz četrām izvēlēm
 --
--- Līdz šim bija viens ķeksītis "piedāvāju meistarklases". Retrīts nav
--- meistarklase: tas ir vairākas dienas, ar nakšņošanu, un cilvēks, kurš
--- to meklē, meklē tieši to. Vienā ķeksītī abus salikt nozīmē, ka neviens
--- no tiem nav atrodams.
+-- Līdz šim bija viens ķeksītis "piedāvāju meistarklases / pieredzes".
+-- Tajā vienā vārdā bija sabāztas četras dažādas lietas, un neviena no
+-- tām nebija atrodama.
 --
--- for_tourists paliek vietā ar nolūku. Kamēr Vercel nav pabeidzis
--- izvietošanu, dzīvā lapa vēl prasa veco kolonnu; nodzēst to tajā pašā
--- minūtē nozīmētu salauztu sākumlapu uz pāris minūtēm. To noņem atsevišķi
--- pēc tam, kad jaunais kods jau strādā.
+-- Dalījums ir pēc tā, cik daudz laika cilvēkam jāatvēl — tas ir vienīgais,
+-- kas šīs četras lietas tiešām atšķir:
+--
+--   experience  Pieredze     — dažas stundas, viesis izdzīvo, nevis mācās
+--   masterclass Meistarklase — pusdiena, viena prasme rokās
+--   course      Kurss        — vairākas nodarbības pēc kārtas, viena grupa
+--   retreat     Retrīts      — vairākas dienas ar nakšņošanu
+--
+-- Masīvs, ne viena vērtība: keramiķis reāli rīko gan kursu, gan
+-- meistarklasi. Ar vienu izvēli viņam būtu jāizlemj, kuru no saviem
+-- pakalpojumiem noslēpt.
+--
+-- Privātstundu sarakstā nav ar nolūku — tās ir visa lapa. Ja tāda izvēle
+-- būtu, to atzīmētu visi, un filtrs kļūtu bezjēdzīgs.
+--
+-- for_tourists paliek vietā. Kamēr Vercel nav pabeidzis izvietošanu,
+-- dzīvā lapa vēl prasa veco kolonnu; nodzēst to tajā pašā minūtē nozīmētu
+-- salauztu sākumlapu uz pāris minūtēm. To noņem atsevišķi pēc tam.
 -- =============================================================
 
 do $$
 begin
   if not exists (select 1 from pg_type where typname = 'experience_kind') then
-    create type public.experience_kind as enum ('masterclass', 'retreat');
+    create type public.experience_kind as enum
+      ('experience', 'masterclass', 'course', 'retreat');
   end if;
 end $$;
 
 alter table public.coach_profiles
-  add column if not exists experience_kind public.experience_kind;
+  add column if not exists experience_kinds public.experience_kind[]
+    not null default '{}';
 
+alter table public.coach_profiles
+  drop constraint if exists coach_experience_max;
+alter table public.coach_profiles
+  add constraint coach_experience_max
+    check (cardinality(experience_kinds) <= 4);
+
+/*
+ * Vecais ķeksītis saucās "meistarklases / pieredzes" — abas vienā. Kuru
+ * no tām cilvēks domāja, uzminēt nevar, tāpēc ieliekam abas; viņš to
+ * vienā klikšķī salabos.
+ */
 update public.coach_profiles
-   set experience_kind = 'masterclass'
+   set experience_kinds = array['masterclass', 'experience']::public.experience_kind[]
  where for_tourists
-   and experience_kind is null;
+   and cardinality(experience_kinds) = 0;
 
 
 -- =============================================================

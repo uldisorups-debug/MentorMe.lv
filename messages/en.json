@@ -70,10 +70,12 @@
     "budgetCurrency": "€ per session",
     "budgetHint": "People who haven't stated a price stay in the list.",
     "searchResets": "Search cleared the filters. You can narrow the results again.",
-    "experience": "Masterclasses and retreats",
-    "experienceAll": "Masterclasses and retreats",
-    "experienceMasterclass": "Masterclasses",
-    "experienceRetreat": "Retreats"
+    "experience": "Courses and events",
+    "experienceAll": "Courses and events",
+    "expExperience": "Experiences",
+    "expMasterclass": "Masterclasses",
+    "expCourse": "Courses",
+    "expRetreat": "Retreats"
   },
   "Coaches": {
     "sectionTitle": "Masters",
@@ -149,9 +151,11 @@
     "formatRemote": "Online",
     "formatInPerson": "In person",
     "formatHybrid": "Combined",
-    "experienceMasterclass": "Offers masterclasses and experiences",
-    "experienceRetreat": "Offers retreats",
-    "experienceKind": "Beyond lessons"
+    "experienceKind": "Courses and events",
+    "expExperience": "Experiences",
+    "expMasterclass": "Masterclasses",
+    "expCourse": "Courses",
+    "expRetreat": "Retreats"
   },
   "Culture": {
     "title": "Sources of inspiration",
@@ -361,11 +365,12 @@
     "seoDescription": "Description in search results",
     "seoPreview": "Roughly how it will look",
     "seoHint": "Write what someone would actually search for — for example “Piano lessons in Riga”. Google has ignored the keywords field since 2009, so there is none here; what matters is these two sentences and your profile text.",
-    "experienceKind": "Masterclasses and retreats",
-    "experienceHint": "If you run a multi-day retreat, pick that — someone looking for a retreat will not open a masterclass.",
-    "experienceNone": "Neither",
-    "experienceMasterclass": "Masterclasses and experiences",
-    "experienceRetreat": "Retreats"
+    "experienceKind": "Courses and events",
+    "experienceHint": "Experience — a few hours, the guest lives it rather than learns it. Masterclass — half a day, one skill in hand. Course — several sessions in a row. Retreat — several days with an overnight stay. One-to-one lessons are not listed: that is the whole site.",
+    "expExperience": "Experiences",
+    "expMasterclass": "Masterclasses",
+    "expCourse": "Courses",
+    "expRetreat": "Retreats"
   },
   "Account": {
     "sectionTitle": "Account",
