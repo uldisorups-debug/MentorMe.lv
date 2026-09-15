@@ -1,7 +1,7 @@
 import type { CertLevel, CoachProfile, PriceTier } from '@/types/database'
 
 /**
- * Kartītei vajadzīgais kouča datu apjoms + reitings no coach_ratings skata.
+ * Kartītei vajadzīgais kouča datu apjoms.
  * Apzināti šaurāks par pilno CoachProfile — saraksta lapa nevelk bio un galeriju.
  */
 export type CoachCardData = Pick<
@@ -23,12 +23,11 @@ export type CoachCardData = Pick<
   | 'region_slug'
   | 'city'
   | 'for_tourists'
+  | 'avg_rating'
+  | 'review_count'
   | 'profile_views'
   | 'created_at'
-> & {
-  avg_rating: number | null
-  review_count: number
-}
+>
 
 /**
  * 'none' nozīmē, ka cilvēks kārtošanu nav izvēlējies. Tas nav tas pats,

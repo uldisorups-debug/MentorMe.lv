@@ -59,7 +59,7 @@ export async function loadCoachPage(slug: string): Promise<CoachPage | null> {
   const { data: coach, error } = await supabase
     .from('coach_profiles')
     .select(
-      'id, user_id, slug, full_name, tagline, bio, avatar_url, certification, cert_other_label, cert_note, is_verified, years_experience, session_languages, price_tier, price_from, price_to, niches, teaching_format, region_slug, city, for_tourists, calendly_url, books_top, movies_top, music_top, profile_views, created_at'
+      'id, user_id, slug, full_name, tagline, bio, avatar_url, certification, cert_other_label, cert_note, is_verified, years_experience, session_languages, price_tier, price_from, price_to, niches, teaching_format, region_slug, city, for_tourists, avg_rating, review_count, calendly_url, books_top, movies_top, music_top, profile_views, created_at'
     )
     .eq('slug', slug)
     .eq('is_published', true)
@@ -71,23 +71,21 @@ export async function loadCoachPage(slug: string): Promise<CoachPage | null> {
 
   if (!coach) return null
 
-  const [{ data: rating }, { data: reviewRows }] = await Promise.all([
-    supabase
-      .from('coach_ratings')
-      .select('avg_rating, review_count')
-      .eq('coach_id', coach.id)
-      .maybeSingle(),
-    /*
-     * Skats, ne pamattabula. Tajā client_id nav vispār, un anonīmajiem
-     * vārds ir null jau datubāzē. Agrāk vārdu paņēma un izmeta Reactā —
-     * tas nozīmēja, ka jebkurš to varēja izvilkt no Supabase tieši.
-     */
-    supabase
-      .from('reviews_public')
-      .select('id, rating, body, created_at, author_name')
-      .eq('coach_id', coach.id)
-      .order('created_at', { ascending: false }),
-  ])
+  /*
+   * Reitings nāk līdzi profilam — atsevišķa vaicājuma vairs nav.
+   *
+   * Atsauksmes lasām no skata, ne pamattabulas: tajā client_id nav
+   * vispār, un anonīmajiem vārds ir null jau datubāzē.
+   */
+  const { data: reviewRows, error: reviewsError } = await supabase
+    .from('reviews_public')
+    .select('id, rating, body, created_at, author_name')
+    .eq('coach_id', coach.id)
+    .order('created_at', { ascending: false })
+
+  if (reviewsError) {
+    console.error('Neizdevās ielādēt atsauksmes:', reviewsError.message)
+  }
 
   const reviews: ReviewWithAuthor[] = (reviewRows ?? []).map((row) => ({
     id: row.id,
@@ -103,8 +101,6 @@ export async function loadCoachPage(slug: string): Promise<CoachPage | null> {
       books_top: (coach.books_top ?? []) as BookEntry[],
       movies_top: (coach.movies_top ?? []) as MovieEntry[],
       music_top: (coach.music_top ?? []) as MusicEntry[],
-      avg_rating: rating?.avg_rating ?? null,
-      review_count: rating?.review_count ?? 0,
     },
     reviews,
   }

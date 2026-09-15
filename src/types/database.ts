@@ -71,6 +71,8 @@ export type Database = {
           region_slug: string | null
           city: string | null
           for_tourists: boolean
+          avg_rating: number | null
+          review_count: number
           calendly_url: string | null
           books_top: BookEntry[]
           movies_top: MovieEntry[]
@@ -418,14 +420,6 @@ export type Database = {
         Relationships: []
       }
 
-      coach_ratings: {
-        Row: {
-          coach_id: string | null
-          avg_rating: number | null
-          review_count: number | null
-        }
-        Relationships: []
-      }
     }
 
     Functions: {
