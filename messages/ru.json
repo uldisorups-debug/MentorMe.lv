@@ -70,8 +70,8 @@
     "budgetCurrency": "€ за занятие",
     "budgetHint": "Те, кто не указал цену, остаются в списке.",
     "searchResets": "Поиск сбросил фильтры. Результаты можно сузить заново.",
-    "experience": "Мастер-классы",
-    "experienceAll": "Неважно",
+    "experience": "Мастер-классы и ретриты",
+    "experienceAll": "Мастер-классы и ретриты",
     "experienceMasterclass": "Мастер-классы",
     "experienceRetreat": "Ретриты"
   },
