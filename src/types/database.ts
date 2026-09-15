@@ -73,6 +73,8 @@ export type Database = {
           for_tourists: boolean
           avg_rating: number | null
           review_count: number
+          meta_title: string | null
+          meta_description: string | null
           calendly_url: string | null
           books_top: BookEntry[]
           movies_top: MovieEntry[]
@@ -107,6 +109,8 @@ export type Database = {
           region_slug?: string | null
           city?: string | null
           for_tourists?: boolean
+          meta_title?: string | null
+          meta_description?: string | null
           calendly_url?: string | null
           books_top?: BookEntry[]
           movies_top?: MovieEntry[]

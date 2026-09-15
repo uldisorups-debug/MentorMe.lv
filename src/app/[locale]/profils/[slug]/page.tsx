@@ -51,7 +51,7 @@ export async function generateMetadata({
   // Google nogriež virsrakstu ap 60 rakstzīmēm, un layout pieliek
   // vēl " — MentorMe.lv". Ja tagline ir gara, ņemam sertifikātu.
   const withTagline = t('metaTitle', { name: coach.full_name, tagline })
-  const title =
+  const generatedTitle =
     withTagline.length <= 46
       ? withTagline
       : t('metaTitle', {
@@ -59,10 +59,18 @@ export async function generateMetadata({
           tagline: certLabel(coach.certification) ?? t('metaFallbackTagline'),
         })
 
-  const description = t('metaDescription', {
+  const generatedDescription = t('metaDescription', {
     name: coach.full_name,
     cert: certLabel(coach.certification) ?? t('metaFallbackTagline'),
   })
+
+  /*
+   * Ko meistars ierakstījis pats, tas iet pirmais. Cilvēks zina labāk
+   * par mums, pēc kā viņu meklē — mūsu ģenerētais variants ir tikai
+   * tas, kas paliek, ja viņš neko nav rakstījis.
+   */
+  const title = coach.meta_title?.trim() || generatedTitle
+  const description = coach.meta_description?.trim() || generatedDescription
 
   return {
     title,

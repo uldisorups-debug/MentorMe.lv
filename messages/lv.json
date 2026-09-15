@@ -1,7 +1,7 @@
 {
   "Meta": {
-    "title": "MentorMe.lv — atrodi to, kas zina",
-    "description": "Latvijas zināšanu un prasmju direktorija. Kokle, matemātika, zapte, koučings vai remonts — atrodi cilvēku, kurš to prot un ir gatavs iemācīt. Filtrē pēc nozares, vietas un formāta."
+    "title": "MentorMe.lv — mentori, kouči un pasniedzēji Latvijā",
+    "description": "Atrodi mentoru, kouču, pasniedzēju vai meistaru Latvijā. Privātstundas, kursi un meistarklases — klātienē vai attālināti. Bez maksas abām pusēm."
   },
   "Nav": {
     "howItWorks": "Kā tas darbojas",
@@ -74,7 +74,7 @@
   },
   "Coaches": {
     "sectionTitle": "Meistari",
-    "sectionLead": "Sertificēti profesionāļi, praktiķi, amatnieki un cilvēki ar dzīves pieredzi. Visi vienā sarakstā, pēc vienas loģikas.",
+    "sectionLead": "Mentori, kouči, pasniedzēji, amatnieki un cilvēki ar dzīves pieredzi. Visi vienā sarakstā, pēc vienas loģikas.",
     "verified": "Verificēts",
     "book": "Skatīt profilu",
     "reviews": "{count, plural, =0 {nav atsauksmju} one {# atsauksme} other {# atsauksmes}}",
@@ -324,7 +324,13 @@
     "uploadNotImage": "Šis nav attēls. Der JPG, PNG, WebP vai HEIC.",
     "uploadInputTooLarge": "Fails ir pārāk liels pat samazināšanai. Izvēlies mazāku.",
     "uploadUnreadable": "Šo attēlu neizdevās nolasīt. Pamēģini citu.",
-    "contactInstagram": "Instagram lietotājvārds"
+    "contactInstagram": "Instagram lietotājvārds",
+    "sectionSeo": "Kā tevi redz Google",
+    "seoLead": "Šos divus laukus redz tikai meklētājs un tu pats — profilā tie neparādās. Ja atstāj tukšus, mēs tos saliekam no tava vārda un apraksta.",
+    "seoTitle": "Virsraksts meklētājā",
+    "seoDescription": "Apraksts meklētājā",
+    "seoPreview": "Aptuveni tā tas izskatīsies",
+    "seoHint": "Ieraksti to, ko cilvēks tiešām meklētu — piemēram, «Klavierspēles stundas Rīgā» vai «Kokles spēle iesācējiem». Google atslēgvārdu lauku neskatās kopš 2009. gada, tāpēc tāda te nav; svarīgi ir šie divi teikumi un tavs apraksts profilā."
   },
   "Contact": {
     "sendMessage": "Sūtīt ziņu",

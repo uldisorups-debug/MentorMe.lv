@@ -11,6 +11,7 @@ import {
   type ContactDraft,
 } from '@/components/dashboard/contacts-section'
 import { CultureEditor } from '@/components/dashboard/culture-editor'
+import { SeoSection, type SeoDraft } from '@/components/dashboard/seo-section'
 import { Field, Section } from '@/components/dashboard/field'
 import { initials } from '@/components/coach-avatar'
 import { LinkButton } from '@/components/link-button'
@@ -108,6 +109,10 @@ export function ProfileEditor({
     instagram: savedContacts?.instagram ?? '',
     other_label: savedContacts?.other_label ?? '',
     other_value: savedContacts?.other_value ?? '',
+  })
+  const [seo, setSeo] = useState<SeoDraft>({
+    meta_title: coach.meta_title ?? '',
+    meta_description: coach.meta_description ?? '',
   })
   const [consent, setConsent] = useState(Boolean(savedContacts?.consent_at))
   const [format, setFormat] = useState<TeachingFormat>(coach.teaching_format)
@@ -228,6 +233,8 @@ export function ProfileEditor({
         region_slug: region === 'none' ? null : region,
         city: city.trim() || null,
         for_tourists: forTourists,
+        meta_title: seo.meta_title.trim() || null,
+        meta_description: seo.meta_description.trim() || null,
         calendly_url: draft.calendly_url.trim() || null,
         books_top: cleanBooks,
         movies_top: cleanMovies,
@@ -654,6 +661,24 @@ export function ProfileEditor({
             setMusic(next)
             setSavedAt(null)
           }}
+        />
+      </Section>
+
+      <Section title={t('sectionSeo')}>
+        <SeoSection
+          seo={seo}
+          onChange={(next) => {
+            setSeo(next)
+            setSavedAt(null)
+          }}
+          slug={draft.slug || coach.slug}
+          fallbackTitle={`${draft.full_name || coach.full_name}${
+            draft.tagline ? ` — ${draft.tagline}` : ''
+          }`}
+          fallbackDescription={
+            draft.bio.trim().slice(0, 155) ||
+            `${draft.full_name || coach.full_name} MentorMe.lv`
+          }
         />
       </Section>
 

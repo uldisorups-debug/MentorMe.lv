@@ -13,6 +13,8 @@ export type CoachDetail = CoachCardData & {
   bio: string | null
   calendly_url: string | null
   cert_other_label: string | null
+  meta_title: string | null
+  meta_description: string | null
   cert_note: string | null
   books_top: BookEntry[]
   movies_top: MovieEntry[]
@@ -59,7 +61,7 @@ export async function loadCoachPage(slug: string): Promise<CoachPage | null> {
   const { data: coach, error } = await supabase
     .from('coach_profiles')
     .select(
-      'id, user_id, slug, full_name, tagline, bio, avatar_url, certification, cert_other_label, cert_note, is_verified, years_experience, session_languages, price_tier, price_from, price_to, niches, teaching_format, region_slug, city, for_tourists, avg_rating, review_count, calendly_url, books_top, movies_top, music_top, profile_views, created_at'
+      'id, user_id, slug, full_name, tagline, bio, avatar_url, certification, cert_other_label, cert_note, is_verified, years_experience, session_languages, price_tier, price_from, price_to, niches, teaching_format, region_slug, city, for_tourists, avg_rating, review_count, meta_title, meta_description, calendly_url, books_top, movies_top, music_top, profile_views, created_at'
     )
     .eq('slug', slug)
     .eq('is_published', true)

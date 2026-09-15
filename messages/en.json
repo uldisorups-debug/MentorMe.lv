@@ -1,7 +1,7 @@
 {
   "Meta": {
-    "title": "MentorMe.lv — find someone who knows",
-    "description": "Latvia's directory of knowledge and skills. Kokle, mathematics, jam-making, coaching or renovation — find the person who knows it and is ready to teach. Filter by field, place and format."
+    "title": "MentorMe.lv — mentors, coaches and teachers in Latvia",
+    "description": "Find a mentor, coach, teacher or craftsperson in Latvia. Private lessons, courses and masterclasses — in person or online. Free for both sides."
   },
   "Nav": {
     "howItWorks": "How it works",
@@ -74,7 +74,7 @@
   },
   "Coaches": {
     "sectionTitle": "Masters",
-    "sectionLead": "Certified professionals, practitioners, craftspeople and people with life experience. All in one list, by the same logic.",
+    "sectionLead": "Mentors, coaches, teachers, craftspeople and people with life experience. All in one list, by the same logic.",
     "verified": "Verified",
     "book": "View profile",
     "reviews": "{count, plural, =0 {no reviews} one {# review} other {# reviews}}",
@@ -350,7 +350,13 @@
     "uploadNotImage": "That is not an image. JPG, PNG, WebP or HEIC will do.",
     "uploadInputTooLarge": "The file is too large even to shrink. Pick a smaller one.",
     "uploadUnreadable": "This image could not be read. Try another one.",
-    "contactInstagram": "Instagram username"
+    "contactInstagram": "Instagram username",
+    "sectionSeo": "How Google sees you",
+    "seoLead": "Only search engines and you see these two fields — they do not appear on your profile. Leave them empty and we build them from your name and description.",
+    "seoTitle": "Title in search results",
+    "seoDescription": "Description in search results",
+    "seoPreview": "Roughly how it will look",
+    "seoHint": "Write what someone would actually search for — for example “Piano lessons in Riga”. Google has ignored the keywords field since 2009, so there is none here; what matters is these two sentences and your profile text."
   },
   "Account": {
     "sectionTitle": "Account",
