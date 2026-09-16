@@ -81,7 +81,6 @@ export type Database = {
           teaching_format: TeachingFormat
           region_slug: string | null
           city: string | null
-          for_tourists: boolean
           experience_kinds: ExperienceKind[]
           avg_rating: number | null
           review_count: number
@@ -120,7 +119,6 @@ export type Database = {
           teaching_format?: TeachingFormat
           region_slug?: string | null
           city?: string | null
-          for_tourists?: boolean
           experience_kinds?: ExperienceKind[]
           meta_title?: string | null
           meta_description?: string | null
