@@ -14,4 +14,12 @@ import { revalidatePath } from 'next/cache'
 export function revalidateProfilePages(): void {
   revalidatePath('/[locale]/[slug]', 'page')
   revalidatePath('/[locale]', 'page')
+
+  /*
+   * Arī sitemap. Tam ir stundas logs, un bez šī jauns profils Google
+   * kartē nonāca tikai pēc stundas — publicēts, redzams lapā, bet
+   * meklētājam vēl neesošs. Stunda nav traģēdija, bet tā ir stunda
+   * velti tieši tajā brīdī, kad cilvēks visvairāk grib, lai viņu atrod.
+   */
+  revalidatePath('/sitemap.xml')
 }
