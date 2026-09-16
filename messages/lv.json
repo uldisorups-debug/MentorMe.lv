@@ -239,7 +239,12 @@
     "errRateLimited": "Par daudz mēģinājumu pēc kārtas. Pagaidi mirkli un mēģini vēlreiz.",
     "errWeakPassword": "Šī parole ir par vāju. Izvēlies garāku.",
     "linkedin": "Turpināt ar LinkedIn",
-    "facebook": "Turpināt ar Facebook"
+    "facebook": "Turpināt ar Facebook",
+    "signUpTitle": "Izveido kontu",
+    "signUpLead": "Konts vajadzīgs, lai profils paliktu tavs — to varēsi labot un noņemt tikai tu.",
+    "tabSignIn": "Man jau ir konts",
+    "tabSignUp": "Izveidot kontu",
+    "switchToSignUp": "Izveidot kontu ar šo adresi"
   },
   "Editor": {
     "title": "Mans profils",

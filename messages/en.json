@@ -239,7 +239,12 @@
     "errRateLimited": "Too many attempts in a row. Wait a moment and try again.",
     "errWeakPassword": "That password is too weak. Choose a longer one.",
     "linkedin": "Continue with LinkedIn",
-    "facebook": "Continue with Facebook"
+    "facebook": "Continue with Facebook",
+    "signUpTitle": "Create an account",
+    "signUpLead": "An account keeps the profile yours — only you can edit or remove it.",
+    "tabSignIn": "I already have an account",
+    "tabSignUp": "Create an account",
+    "switchToSignUp": "Create an account with this address"
   },
   "Contact": {
     "sendMessage": "Send a message",

@@ -10,8 +10,10 @@ import {
   GoogleIcon,
   LinkedInIcon,
 } from '@/components/provider-icons'
+import { cn } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/client'
 import { validateContact } from '@/lib/contacts'
+import type { AuthErrorKey } from '@/lib/auth-errors'
 import { authErrorKey, MIN_PASSWORD_LENGTH, passwordTooShort } from '@/lib/auth-errors'
 
 type Mode = 'signin' | 'signup' | 'forgot'
@@ -34,13 +36,22 @@ const PROVIDERS: { id: Provider; icon: typeof GoogleIcon; labelKey: string }[] =
  * atjauno pa e-pastu — ja cilvēks tiek klāt savai pastkastītei, tas
  * pierāda tikpat daudz, cik vecā parole.
  */
-export function LoginForm({ next }: { next: string }) {
+export function LoginForm({
+  next,
+  startMode = 'signin',
+}: {
+  next: string
+  /** Ar ko lapa atveras — to izlemj lapa pēc tā, no kurienes cilvēks nāk */
+  startMode?: 'signin' | 'signup'
+}) {
   const t = useTranslations('Auth')
-  const [mode, setMode] = useState<Mode>('signin')
+  const [mode, setMode] = useState<Mode>(startMode)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [pending, setPending] = useState<Provider | 'email' | null>(null)
   const [error, setError] = useState<string | null>(null)
+  /** Vajadzīgs, lai pie nepareizas paroles varam piedāvāt izveidot kontu */
+  const [errorKey, setErrorKey] = useState<AuthErrorKey>(null)
   const [sent, setSent] = useState<Sent | null>(null)
 
   function callbackUrl(target = next): string {
@@ -52,12 +63,16 @@ export function LoginForm({ next }: { next: string }) {
   /** Supabase runā angliski — pārtulkojam, ko protam. */
   function showError(message: string) {
     const key = authErrorKey(message)
+    setErrorKey(key)
     setError(key ? t(key) : message)
   }
 
   function switchMode(to: Mode) {
     setMode(to)
     setError(null)
+    setErrorKey(null)
+    // Adrese paliek: cilvēks to jau ierakstīja, un otrreiz to prasīt
+    // nozīmētu sodīt par to, ka viņš uzminēja nepareizo pogu
     setPassword('')
   }
 
@@ -96,6 +111,7 @@ export function LoginForm({ next }: { next: string }) {
 
     setPending('email')
     setError(null)
+    setErrorKey(null)
     const supabase = createClient()
 
     if (mode === 'forgot') {
@@ -137,6 +153,7 @@ export function LoginForm({ next }: { next: string }) {
        * te būtu meli.
        */
       if (data.user && data.user.identities?.length === 0) {
+          setErrorKey('errAlreadyRegistered')
         setError(t('errAlreadyRegistered'))
         return
       }
@@ -193,6 +210,37 @@ export function LoginForm({ next }: { next: string }) {
 
   return (
     <div className="flex flex-col gap-5">
+      {/*
+        Divas vienādi redzamas pogas augšā, ne rindiņa lapas apakšā.
+        Agrāk forma vienmēr atvērās uz "Pieteikties", un reģistrācija
+        bija teksta saitīte zem visa pārējā. Cilvēks, kuram konta vēl
+        nav, to nepamanīja, ierakstīja adresi ar izdomātu paroli un
+        dabūja "Nepareiza adrese vai parole" bez norādes, ko darīt.
+      */}
+      {mode !== 'forgot' && (
+        <div
+          role="group"
+          className="flex gap-1 rounded-xl border border-hairline bg-surface p-1"
+        >
+          {(['signup', 'signin'] as const).map((option) => (
+            <button
+              key={option}
+              type="button"
+              aria-pressed={mode === option}
+              onClick={() => switchMode(option)}
+              className={cn(
+                'flex-1 rounded-lg px-3 py-2.5 text-sm transition-colors',
+                mode === option
+                  ? 'bg-gold/15 text-cream'
+                  : 'text-mist hover:text-cream'
+              )}
+            >
+              {option === 'signup' ? t('tabSignUp') : t('tabSignIn')}
+            </button>
+          ))}
+        </div>
+      )}
+
       <div className="flex flex-col gap-3">
         {PROVIDERS.map((provider) => (
           <Button
@@ -278,30 +326,37 @@ export function LoginForm({ next }: { next: string }) {
       </form>
 
       {error && (
-        <p className="rounded-lg border border-coral/30 bg-coral/10 px-4 py-3 text-sm text-coral-soft">
-          {error}
-        </p>
+        <div className="rounded-lg border border-coral/30 bg-coral/10 px-4 py-3 text-sm text-coral-soft">
+          <p>{error}</p>
+
+          {/*
+            Nepareiza parole visbiežāk nozīmē, ka konta nav vispār.
+            Strupceļa vietā — poga, kas ved tālāk, saglabājot adresi.
+          */}
+          {mode === 'signin' && errorKey === 'errInvalidCredentials' && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="mt-3 h-9"
+              onClick={() => switchMode('signup')}
+            >
+              {t('switchToSignUp')}
+            </Button>
+          )}
+        </div>
       )}
 
       <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
-        {mode === 'signin' ? (
-          <>
-            <button
-              type="button"
-              className="text-gold hover:underline"
-              onClick={() => switchMode('signup')}
-            >
-              {t('noAccount')}
-            </button>
-            <button
-              type="button"
-              className="text-mist hover:text-cream"
-              onClick={() => switchMode('forgot')}
-            >
-              {t('forgot')}
-            </button>
-          </>
-        ) : (
+        {mode === 'signin' && (
+          <button
+            type="button"
+            className="text-mist hover:text-cream"
+            onClick={() => switchMode('forgot')}
+          >
+            {t('forgot')}
+          </button>
+        )}
+        {mode === 'forgot' && (
           <button
             type="button"
             className="text-gold hover:underline"
