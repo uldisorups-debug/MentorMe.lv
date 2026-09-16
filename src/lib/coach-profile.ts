@@ -36,19 +36,24 @@ export type CoachPage = {
   reviews: ReviewWithAuthor[]
 }
 
-/** Visi slug'i, kas jāpāragatavo statiski. */
-export async function listCoachSlugs(): Promise<string[]> {
+/** Slug kopā ar pēdējo labojuma laiku — sitemapam vajag abus. */
+export type CoachSlug = { slug: string; updatedAt: string }
+
+export async function listCoachSlugs(): Promise<CoachSlug[]> {
   const supabase = createPublicClient()
   const { data, error } = await supabase
     .from('coach_profiles')
-    .select('slug')
+    .select('slug, updated_at')
     .eq('is_published', true)
 
   if (error) {
     console.error('Neizdevās ielādēt slug sarakstu:', error.message)
     return []
   }
-  return (data ?? []).map((row) => row.slug)
+  return (data ?? []).map((row) => ({
+    slug: row.slug,
+    updatedAt: row.updated_at,
+  }))
 }
 
 /**

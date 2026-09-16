@@ -98,16 +98,21 @@ export async function loadPost(slug: string): Promise<PostDetail | null> {
   }
 }
 
-export async function listPostSlugs(): Promise<string[]> {
+export async function listPostSlugs(): Promise<
+  { slug: string; updatedAt: string }[]
+> {
   const supabase = createPublicClient()
   const { data, error } = await supabase
     .from('posts')
-    .select('slug')
+    .select('slug, updated_at')
     .eq('status', 'published')
 
   if (error) {
     console.error('Neizdevās ielādēt rakstu slug sarakstu:', error.message)
     return []
   }
-  return (data ?? []).map((row) => row.slug)
+  return (data ?? []).map((row) => ({
+    slug: row.slug,
+    updatedAt: row.updated_at,
+  }))
 }

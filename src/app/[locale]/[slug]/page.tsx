@@ -25,14 +25,15 @@ import { Badge } from '@/components/ui/badge'
 import { certLabel } from '@/lib/coaches'
 import { listCoachSlugs, loadCoachPage } from '@/lib/coach-profile'
 import { loadGroupNames, loadRegionName, loadSphereNames } from '@/lib/taxonomy'
+import { SITE_URL } from '@/lib/supabase/config'
 
 export const revalidate = 60
 
 export async function generateStaticParams() {
-  const slugs = await listCoachSlugs()
+  const coaches = await listCoachSlugs()
   // Katrs slug reiz katrā valodā — citādi /en/... krīt uz dinamisko
   return routing.locales.flatMap((locale) =>
-    slugs.map((slug) => ({ locale, slug }))
+    coaches.map(({ slug }) => ({ locale, slug }))
   )
 }
 
@@ -134,8 +135,61 @@ export default async function CoachProfilePage({
           ? tPrice('from', { from: coach.price_from })
           : tPrice(coach.price_tier)
 
+  /*
+   * Strukturētie dati. Rakstiem tie bija, profiliem ne — un tieši profils
+   * ir tas, ko šī vietne piedāvā. Bez tā Google redz tekstu ar bildi un
+   * pats min, kas tur ir; ar to tas redz cilvēku, viņa amatu, vietu un
+   * reitingu.
+   *
+   * Liekam tikai to, kas tiešām ir. Tukšs lauks shēmā ir sliktāk nekā
+   * neviena lauka: tas ir apgalvojums bez seguma.
+   */
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ProfilePage',
+    mainEntity: {
+      '@type': 'Person',
+      name: coach.full_name,
+      url: `${SITE_URL}/${coach.slug}`,
+      ...(coach.tagline ? { jobTitle: coach.tagline } : {}),
+      ...(coach.bio ? { description: coach.bio } : {}),
+      ...(coach.avatar_url ? { image: coach.avatar_url } : {}),
+      ...(spheres.length > 0
+        ? { knowsAbout: spheres.map((sphere) => sphere.label) }
+        : {}),
+      ...(coach.session_languages.length > 0
+        ? { knowsLanguage: coach.session_languages }
+        : {}),
+      ...(coach.city || regionName
+        ? {
+            address: {
+              '@type': 'PostalAddress',
+              addressCountry: 'LV',
+              ...(coach.city ? { addressLocality: coach.city } : {}),
+              ...(regionName ? { addressRegion: regionName } : {}),
+            },
+          }
+        : {}),
+      ...(coach.avg_rating !== null && coach.review_count > 0
+        ? {
+            aggregateRating: {
+              '@type': 'AggregateRating',
+              ratingValue: coach.avg_rating,
+              reviewCount: coach.review_count,
+              bestRating: 5,
+              worstRating: 1,
+            },
+          }
+        : {}),
+    },
+  }
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <ProfileViewTracker slug={coach.slug} />
 
       {/* ---------- Hero ---------- */}

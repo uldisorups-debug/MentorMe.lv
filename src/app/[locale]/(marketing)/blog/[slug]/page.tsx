@@ -12,10 +12,10 @@ import { listPostSlugs, loadPost } from '@/lib/posts'
 export const revalidate = 60
 
 export async function generateStaticParams() {
-  const slugs = await listPostSlugs()
+  const posts = await listPostSlugs()
   // Katrs slug reiz katrā valodā — citādi /en/... krīt uz dinamisko
   return routing.locales.flatMap((locale) =>
-    slugs.map((slug) => ({ locale, slug }))
+    posts.map(({ slug }) => ({ locale, slug }))
   )
 }
 
