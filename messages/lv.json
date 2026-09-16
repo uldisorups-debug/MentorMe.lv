@@ -352,7 +352,11 @@
     "expRetreat": "Retrīti",
     "unsavedWarning": "Ierakstītais vēl nav saglabāts. Ja tagad aizej, tas pazudīs.",
     "draftNoticeTitle": "Šo profilu pagaidām neredz neviens",
-    "draftNoticeBody": "Tas ir saglabāts, bet vēl ir melnraksts. Publicē to, un tas parādīsies sarakstā un būs atrodams Google."
+    "draftNoticeBody": "Tas ir saglabāts, bet vēl ir melnraksts. Publicē to, un tas parādīsies sarakstā un būs atrodams Google.",
+    "saveAndPublish": "Saglabāt un publicēt",
+    "saveAsDraft": "Saglabāt melnrakstā",
+    "unpublish": "Paņemt atpakaļ",
+    "draftHint": "Melnrakstu neredz neviens, arī tu pats ne no malas."
   },
   "Contact": {
     "sendMessage": "Sūtīt ziņu",

@@ -378,7 +378,11 @@
     "expRetreat": "Retreats",
     "unsavedWarning": "What you have written is not saved yet. If you leave now, it will be lost.",
     "draftNoticeTitle": "Nobody can see this profile yet",
-    "draftNoticeBody": "It is saved, but still a draft. Publish it and it will appear in the list and be findable on Google."
+    "draftNoticeBody": "It is saved, but still a draft. Publish it and it will appear in the list and be findable on Google.",
+    "saveAndPublish": "Save and publish",
+    "saveAsDraft": "Save as draft",
+    "unpublish": "Take it back",
+    "draftHint": "A draft is visible to nobody, not even to you from the outside."
   },
   "Account": {
     "sectionTitle": "Account",

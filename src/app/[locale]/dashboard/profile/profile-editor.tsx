@@ -305,18 +305,10 @@ export function ProfileEditor({
     }
 
     /*
-     * Loma seko publicēšanai, ne lapas atvēršanai. Agrāk to uzlika
-     * jau tad, kad kāds vienkārši atvēra redaktoru — arī aiz ziņkāres.
+     * Lomu te vairs neliekam — to dara datubāzes trigeris, kad
+     * is_published kļūst true. Tā tas nostrādā arī tad, kad profilu
+     * publicē administrators no paneļa, nevis cilvēks pats.
      */
-    if (willPublish) {
-      const { error: roleError } = await supabase
-        .from('profiles')
-        .update({ role: 'coach' })
-        .eq('id', userId)
-      if (roleError) {
-        console.error('Lomas maiņa neizdevās:', roleError.message)
-      }
-    }
 
     // Kontakti dzīvo atsevišķā tabulā, tāpēc atsevišķs upsert.
     // consent_at glabā datumu, nevis boolean — lai vēlāk var pierādīt,
@@ -758,42 +750,90 @@ export function ProfileEditor({
         />
       </Section>
 
+      {/*
+        Ķeksīša te vairs nav.
+        
+        Agrāk publicēšana bija ķeksītis šajā sadaļā, bet saglabāšana —
+        poga lapas apakšā. Divas atsevišķas darbības divās vietās, un
+        cilvēks, kurš nospieda tikai "Saglabāt", palika melnrakstā,
+        nesaprotot, kas vēl trūkst. Tagad izvēle stāv turpat, kur poga.
+
+        Šī sadaļa rāda stāvokli un ļauj profilu paņemt atpakaļ.
+      */}
       <Section title={t('sectionPublish')}>
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <label className="flex cursor-pointer items-center gap-3">
-              <input
-                type="checkbox"
-                checked={draft.is_published}
-                onChange={(event) => set('is_published', event.target.checked)}
-                className="size-4 accent-[var(--gold)]"
-              />
-              <span className="text-sm font-medium">{t('publishToggle')}</span>
-            </label>
-            <p className="mt-1.5 text-xs text-mist">{t('publishHint')}</p>
+          <div className="min-w-0 flex-1">
+            <Badge variant={draft.is_published ? 'default' : 'outline'}>
+              {draft.is_published ? t('statusLive') : t('statusDraft')}
+            </Badge>
+            <p className="mt-2 text-xs leading-relaxed text-mist">
+              {draft.is_published ? t('publishHint') : t('draftHint')}
+            </p>
           </div>
+
+          {draft.is_published && (
+            <Button
+              type="button"
+              variant="outline"
+              className="h-10"
+              disabled={saving}
+              onClick={() => {
+                set('is_published', false)
+                void save(false)
+              }}
+            >
+              {t('unpublish')}
+            </Button>
+          )}
 
           {errors.has_contact && (
             <p className="w-full text-xs text-coral">{errors.has_contact}</p>
           )}
-
-          <Badge variant={draft.is_published ? 'default' : 'outline'}>
-            {draft.is_published ? t('statusLive') : t('statusDraft')}
-          </Badge>
         </div>
       </Section>
 
       {/* Saglabāšanas josla pielīp apakšā, lai garā formā nav jāritina */}
       <div className="sticky bottom-0 -mx-6 flex flex-wrap items-center gap-3 border-t border-hairline bg-ink/90 px-6 py-4 backdrop-blur-lg">
-        <Button
-          type="button"
-          className="h-11 gap-2 px-6"
-          disabled={saving}
-          onClick={() => save()}
-        >
-          <Save className="size-4" />
-          {saving ? t('saving') : t('save')}
-        </Button>
+        {/*
+          Nepublicētam profilam divas pogas, ne viena. Publicēšana ir
+          lēmums, un to pieņem tajā pašā mirklī, kad saglabā — nevis
+          atsevišķā sadaļā, kuru līdz beigām neviens neizritina.
+        */}
+        {draft.is_published ? (
+          <Button
+            type="button"
+            className="h-11 gap-2 px-6"
+            disabled={saving}
+            onClick={() => save()}
+          >
+            <Save className="size-4" />
+            {saving ? t('saving') : t('save')}
+          </Button>
+        ) : (
+          <>
+            <Button
+              type="button"
+              className="h-11 gap-2 px-6"
+              disabled={saving}
+              onClick={() => {
+                set('is_published', true)
+                void save(true)
+              }}
+            >
+              <Save className="size-4" />
+              {saving ? t('saving') : t('saveAndPublish')}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              className="h-11"
+              disabled={saving}
+              onClick={() => save(false)}
+            >
+              {t('saveAsDraft')}
+            </Button>
+          </>
+        )}
 
         {coach.is_published && (
           <LinkButton
