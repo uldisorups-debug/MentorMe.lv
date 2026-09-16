@@ -1,11 +1,12 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useRouter } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { ExternalLink, Save } from 'lucide-react'
 import { AvatarUpload } from '@/components/dashboard/avatar-upload'
 import { ChipPicker } from '@/components/dashboard/chip-picker'
+import { useUnsavedGuard } from '@/components/dashboard/unsaved-guard'
 import {
   ContactsSection,
   type ContactDraft,
@@ -127,10 +128,22 @@ export function ProfileEditor({
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
   const [savedAt, setSavedAt] = useState<number | null>(null)
+  const [dirty, setDirty] = useState(false)
+
+  /*
+   * Katra izmaiņa noņem "saglabāts" zīmi un ieslēdz brīdinājumu par
+   * aiziešanu. Abas iet kopā — atsevišķi kāda no tām tiktu aizmirsta.
+   */
+  const markChanged = useCallback(() => {
+    setSavedAt(null)
+    setDirty(true)
+  }, [])
+
+  useUnsavedGuard(dirty, t('unsavedWarning'))
 
   const set = <K extends keyof ProfileDraft>(key: K, value: ProfileDraft[K]) => {
     setDraft((current) => ({ ...current, [key]: value }))
-    setSavedAt(null)
+    markChanged()
   }
 
   const certOptions = useMemo(
@@ -319,6 +332,7 @@ export function ProfileEditor({
     setMovies(cleanMovies)
     setMusic(cleanMusic)
     setSavedAt(Date.now())
+    setDirty(false)
 
     /*
      * Publiskā lapa ir statiska ar ISR. Bez šī izmaiņas tur parādītos
@@ -346,7 +360,7 @@ export function ProfileEditor({
           fallback={initials(draft.full_name || '?')}
           onChange={(url) => {
             setAvatarUrl(url)
-            setSavedAt(null)
+            markChanged()
           }}
         />
 
@@ -455,7 +469,7 @@ export function ProfileEditor({
             value={certNote}
             onChange={(event) => {
               setCertNote(event.target.value)
-              setSavedAt(null)
+              markChanged()
             }}
             className="bg-ink"
           />
@@ -555,7 +569,7 @@ export function ProfileEditor({
             value={format}
             onValueChange={(next) => {
               setFormat(String(next) as TeachingFormat)
-              setSavedAt(null)
+              markChanged()
             }}
           >
             <SelectTrigger className="h-10 w-full bg-ink">
@@ -577,7 +591,7 @@ export function ProfileEditor({
             value={region}
             onValueChange={(next) => {
               setRegion(String(next))
-              setSavedAt(null)
+              markChanged()
             }}
           >
             <SelectTrigger className="h-10 w-full bg-ink">
@@ -601,7 +615,7 @@ export function ProfileEditor({
             placeholder="Talsi"
             onChange={(event) => {
               setCity(event.target.value)
-              setSavedAt(null)
+              markChanged()
             }}
             className="bg-ink"
           />
@@ -614,7 +628,7 @@ export function ProfileEditor({
             selected={experiences}
             onChange={(next) => {
               setExperiences(next as ExperienceKind[])
-              setSavedAt(null)
+              markChanged()
             }}
           />
         </Field>
@@ -644,12 +658,12 @@ export function ProfileEditor({
           contacts={contacts}
           onChange={(next) => {
             setContacts(next)
-            setSavedAt(null)
+            markChanged()
           }}
           consent={consent}
           onConsent={(next) => {
             setConsent(next)
-            setSavedAt(null)
+            markChanged()
           }}
           consentError={errors.consent_given}
         />
@@ -662,15 +676,15 @@ export function ProfileEditor({
           music={music}
           onBooks={(next) => {
             setBooks(next)
-            setSavedAt(null)
+            markChanged()
           }}
           onMovies={(next) => {
             setMovies(next)
-            setSavedAt(null)
+            markChanged()
           }}
           onMusic={(next) => {
             setMusic(next)
-            setSavedAt(null)
+            markChanged()
           }}
         />
       </Section>
@@ -680,7 +694,7 @@ export function ProfileEditor({
           seo={seo}
           onChange={(next) => {
             setSeo(next)
-            setSavedAt(null)
+            markChanged()
           }}
           slug={draft.slug || coach.slug}
           fallbackTitle={`${draft.full_name || coach.full_name}${

@@ -344,7 +344,8 @@
     "expExperience": "Pieredzes",
     "expMasterclass": "Meistarklases",
     "expCourse": "Kursi",
-    "expRetreat": "Retrīti"
+    "expRetreat": "Retrīti",
+    "unsavedWarning": "Ierakstītais vēl nav saglabāts. Ja tagad aizej, tas pazudīs."
   },
   "Contact": {
     "sendMessage": "Sūtīt ziņu",
@@ -415,6 +416,7 @@
     "deletePost": "Dzēst rakstu",
     "deleteConfirm": "Dzēst šo rakstu neatgriezeniski?",
     "dailyLimit": "Viens raksts dienā. Nākamo varēsi publicēt rīt.",
-    "writeAnother": "Rakstīt nākamo"
+    "writeAnother": "Rakstīt nākamo",
+    "unsavedWarning": "Ierakstītais vēl nav saglabāts. Ja tagad aizej, tas pazudīs."
   }
 }

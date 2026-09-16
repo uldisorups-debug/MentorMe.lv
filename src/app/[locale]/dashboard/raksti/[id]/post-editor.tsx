@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import { useUnsavedGuard } from '@/components/dashboard/unsaved-guard'
 import { createClient } from '@/lib/supabase/client'
 import { slugify } from '@/lib/slugify'
 import { renderMarkdown, readingMinutes, autoExcerpt } from '@/lib/markdown'
@@ -49,6 +50,9 @@ export function PostEditor({ post }: { post: Post }) {
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
   const [savedAt, setSavedAt] = useState<number | null>(null)
+  const [dirty, setDirty] = useState(false)
+
+  useUnsavedGuard(dirty, t('unsavedWarning'))
 
   const set = <K extends keyof PostDraft>(key: K, value: PostDraft[K]) => {
     setDraft((current) => {
@@ -59,6 +63,7 @@ export function PostEditor({ post }: { post: Post }) {
       return next
     })
     setSavedAt(null)
+    setDirty(true)
   }
 
   // Priekšskatījums iet caur to pašu sanitizāciju, kas publiskā lapa —
@@ -105,11 +110,13 @@ export function PostEditor({ post }: { post: Post }) {
 
     setPublished(nextPublished)
     setSavedAt(Date.now())
+    setDirty(false)
     router.refresh()
   }
 
   async function remove() {
     if (!window.confirm(t('deleteConfirm'))) return
+    setDirty(false)
     setSaving(true)
     const { error } = await createClient().from('posts').delete().eq('id', post.id)
     if (error) {

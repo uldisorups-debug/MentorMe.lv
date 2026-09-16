@@ -370,7 +370,8 @@
     "expExperience": "Experiences",
     "expMasterclass": "Masterclasses",
     "expCourse": "Courses",
-    "expRetreat": "Retreats"
+    "expRetreat": "Retreats",
+    "unsavedWarning": "What you have written is not saved yet. If you leave now, it will be lost."
   },
   "Account": {
     "sectionTitle": "Account",
@@ -415,6 +416,7 @@
     "deletePost": "Delete article",
     "deleteConfirm": "Delete this article permanently?",
     "dailyLimit": "One article per day. You can publish the next one tomorrow.",
-    "writeAnother": "Write another"
+    "writeAnother": "Write another",
+    "unsavedWarning": "What you have written is not saved yet. If you leave now, it will be lost."
   }
 }

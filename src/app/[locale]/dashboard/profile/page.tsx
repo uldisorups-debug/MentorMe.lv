@@ -120,11 +120,22 @@ export default async function DashboardProfilePage() {
         />
       </div>
 
-      <div className="mt-10">
-        <LinkButton href="/dashboard/raksti" variant="outline" className="h-11">
-          {t('myPosts')}
-        </LinkButton>
-      </div>
+      {/*
+        Rakstu poga parādās tikai tad, kad profils jau ir publicēts.
+        Agrāk tā stāvēja tieši zem nepabeigtas formas un izskatījās pēc
+        nākamā soļa — cilvēks aizpildīja visu, noritināja līdz apakšai un
+        nospieda to, nevis "Saglabāt". Viss ierakstītais pazuda.
+
+        Un raksts tāpat iet kāda vārdā: bez publiska profila tam nav, kur
+        piesieties.
+      */}
+      {coach.is_published && (
+        <div className="mt-10">
+          <LinkButton href="/dashboard/raksti" variant="outline" className="h-11">
+            {t('myPosts')}
+          </LinkButton>
+        </div>
+      )}
 
       <div className="mt-10">
         <DeleteAccount />
