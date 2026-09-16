@@ -350,7 +350,9 @@
     "expMasterclass": "Meistarklases",
     "expCourse": "Kursi",
     "expRetreat": "Retrīti",
-    "unsavedWarning": "Ierakstītais vēl nav saglabāts. Ja tagad aizej, tas pazudīs."
+    "unsavedWarning": "Ierakstītais vēl nav saglabāts. Ja tagad aizej, tas pazudīs.",
+    "draftNoticeTitle": "Šo profilu pagaidām neredz neviens",
+    "draftNoticeBody": "Tas ir saglabāts, bet vēl ir melnraksts. Publicē to, un tas parādīsies sarakstā un būs atrodams Google."
   },
   "Contact": {
     "sendMessage": "Sūtīt ziņu",

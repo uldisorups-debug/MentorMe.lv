@@ -193,7 +193,15 @@ export function ProfileEditor({
     []
   )
 
-  async function save() {
+  /**
+   * publishNow ļauj publicēt ar vienu klikšķi.
+   *
+   * Bez tā vajadzētu vispirms uzstādīt stāvokli un tad saukt save(), bet
+   * React to atjauno vēlāk — save() vēl redzētu veco vērtību un profils
+   * paliktu melnrakstā, kaut cilvēks nospieda "Publicēt".
+   */
+  async function save(publishNow?: boolean) {
+    const willPublish = publishNow ?? draft.is_published
     // Kontaktu klātbūtne nav atsevišķs lauks formā — to aprēķinām no
     // ievadītā tieši pirms pārbaudes, lai stāvoklis nenovecotu
     const contactValues = {
@@ -213,6 +221,7 @@ export function ProfileEditor({
 
     const checked = {
       ...draft,
+      is_published: willPublish,
       has_contact: reachable,
       contacts_filled: contactsFilled,
       consent_given: consent,
@@ -221,7 +230,7 @@ export function ProfileEditor({
     const found = validateProfile(checked)
     setErrors(found)
     if (hasErrors(found)) {
-      setSaveError(draft.is_published ? t('publishBlocked') : null)
+      setSaveError(willPublish ? t('publishBlocked') : null)
       return
     }
 
@@ -266,7 +275,7 @@ export function ProfileEditor({
         books_top: cleanBooks,
         movies_top: cleanMovies,
         music_top: cleanMusic,
-        is_published: draft.is_published,
+        is_published: willPublish,
       })
       .eq('user_id', userId)
 
@@ -299,7 +308,7 @@ export function ProfileEditor({
      * Loma seko publicēšanai, ne lapas atvēršanai. Agrāk to uzlika
      * jau tad, kad kāds vienkārši atvēra redaktoru — arī aiz ziņkāres.
      */
-    if (draft.is_published) {
+    if (willPublish) {
       const { error: roleError } = await supabase
         .from('profiles')
         .update({ role: 'coach' })
@@ -351,8 +360,50 @@ export function ProfileEditor({
     router.refresh()
   }
 
+  /*
+   * Vai ir kas publicējams. Tukšam, tikko atvērtam profilam apakšā
+   * esošais paziņojums būtu tikai bakstīšana — cilvēks vēl nav neko
+   * uzrakstījis.
+   */
+  const started =
+    draft.tagline.trim() !== '' ||
+    draft.bio.trim() !== '' ||
+    draft.niches.length > 0
+
   return (
     <div className="flex flex-col gap-6">
+      {/*
+        Publicēšanas ķeksītis ir formas pašā apakšā, atsevišķā sadaļā.
+        Inese aizpildīja visu — aprakstu, bio, četras nozares, bildi,
+        kontaktus ar piekrišanu, pat Calendly — saglabāja un aizgāja.
+        Profils palika melnrakstā, un viņa to neuzzināja: vienīgā zīme
+        bija maza pelēka plāksnīte lapas galā.
+
+        Tāpēc tas pats teikums lapas augšā, kur to nevar nepamanīt, un
+        poga, kas izdara to pašu, kas ķeksītis.
+      */}
+      {!draft.is_published && started && (
+        <div className="flex flex-wrap items-center gap-4 rounded-xl border border-gold/40 bg-gold/10 px-5 py-4">
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-medium text-cream">{t('draftNoticeTitle')}</p>
+            <p className="mt-1 text-sm leading-relaxed text-mist">
+              {t('draftNoticeBody')}
+            </p>
+          </div>
+          <Button
+            type="button"
+            className="h-11 gap-2 px-5"
+            disabled={saving}
+            onClick={() => {
+              set('is_published', true)
+              void save(true)
+            }}
+          >
+            {saving ? t('saving') : t('publishToggle')}
+          </Button>
+        </div>
+      )}
+
       <Section title={t('sectionBasics')}>
         <AvatarUpload
           userId={userId}
@@ -738,7 +789,7 @@ export function ProfileEditor({
           type="button"
           className="h-11 gap-2 px-6"
           disabled={saving}
-          onClick={save}
+          onClick={() => save()}
         >
           <Save className="size-4" />
           {saving ? t('saving') : t('save')}
