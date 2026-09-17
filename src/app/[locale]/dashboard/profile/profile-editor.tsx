@@ -38,12 +38,12 @@ import { hasAnyContact } from '@/lib/contacts'
 import type {
   BookEntry,
   CoachContacts,
-  CertLevel,
   CoachProfile,
   ExperienceKind,
   MovieEntry,
   MusicEntry,
   PriceTier,
+  QualificationLevel,
   TeachingFormat,
 } from '@/types/database'
 
@@ -91,10 +91,9 @@ export function ProfileEditor({
     consent_given: false,
   })
 
-  const [certification, setCertification] = useState<CertLevel>(
-    coach.certification ?? 'none'
-  )
-  const [certOtherLabel, setCertOtherLabel] = useState(coach.cert_other_label ?? '')
+  const [qualification, setQualification] = useState<
+    QualificationLevel | 'unknown'
+  >(coach.qualification ?? 'unknown')
   const [certNote, setCertNote] = useState(coach.cert_note ?? '')
   const [priceTier, setPriceTier] = useState<PriceTier>(coach.price_tier)
   const [avatarUrl, setAvatarUrl] = useState<string | null>(coach.avatar_url)
@@ -146,16 +145,20 @@ export function ProfileEditor({
     markChanged()
   }
 
-  const certOptions = useMemo(
+  /*
+   * Četras izvēles, kas der visām nozarēm. ICF līmeņu te vairs nav:
+   * keramiķim un psihologam tie neko nenozīmē, un praksē tos nebija
+   * izvēlējies neviens — abi, kam sertifikāti ir, tos aprakstīja
+   * zemāk esošajā brīvajā laukā.
+   */
+  const qualOptions = useMemo(
     () => [
-      { value: 'none', label: 'Bez sertifikāta' },
-      { value: 'acc', label: 'ICF ACC' },
-      { value: 'pcc', label: 'ICF PCC' },
-      { value: 'mcc', label: 'ICF MCC' },
-      { value: 'metacoach', label: 'MetaCoach' },
-      { value: 'other', label: 'Cita' },
+      { value: 'certified', label: t('qualCertified') },
+      { value: 'none', label: t('qualNone') },
+      { value: 'studying', label: t('qualStudying') },
+      { value: 'unknown', label: t('qualUnknown') },
     ],
-    []
+    [t]
   )
 
   const formatOptions = useMemo(
@@ -251,9 +254,7 @@ export function ProfileEditor({
         tagline: draft.tagline.trim() || null,
         bio: draft.bio.trim() || null,
         avatar_url: avatarUrl,
-        certification,
-        cert_other_label:
-          certification === 'other' ? certOtherLabel.trim() || null : null,
+        qualification: qualification === 'unknown' ? null : qualification,
         cert_note: certNote.trim() || null,
         years_experience:
           draft.years_experience.trim() === ''
@@ -469,17 +470,20 @@ export function ProfileEditor({
       </Section>
 
       <Section title={t('sectionProfessional')}>
-        <Field label={t('certification')}>
+        <Field label={t('qualification')} hint={t('qualHint')}>
           <Select
-            items={certOptions}
-            value={certification}
-            onValueChange={(next) => setCertification(String(next) as CertLevel)}
+            items={qualOptions}
+            value={qualification}
+            onValueChange={(next) => {
+              setQualification(String(next) as QualificationLevel | 'unknown')
+              markChanged()
+            }}
           >
             <SelectTrigger className="h-10 w-full bg-ink">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {certOptions.map((option) => (
+              {qualOptions.map((option) => (
                 <SelectItem key={option.value} value={option.value}>
                   {option.label}
                 </SelectItem>
@@ -487,17 +491,6 @@ export function ProfileEditor({
             </SelectContent>
           </Select>
         </Field>
-
-        {certification === 'other' && (
-          <Field label={t('certOtherLabel')} htmlFor="cert_other">
-            <Input
-              id="cert_other"
-              value={certOtherLabel}
-              onChange={(event) => setCertOtherLabel(event.target.value)}
-              className="bg-ink"
-            />
-          </Field>
-        )}
 
         {/*
           Faila augšupielādes vietā apraksts. Pārbaudīt sertifikātu

@@ -1,5 +1,4 @@
 import { ImageResponse } from 'next/og'
-import { certLabel } from '@/lib/coaches'
 import { loadCoachPage } from '@/lib/coach-profile'
 
 export const size = { width: 1200, height: 630 }
@@ -22,7 +21,17 @@ export default async function OpengraphImage({
 
   const name = page?.coach.full_name ?? 'MentorMe.lv'
   const tagline = page?.coach.tagline ?? 'Kouči un mentori Latvijā'
-  const cert = page ? certLabel(page.coach.certification) : null
+  /*
+   * Teksts te ir latviski: ImageResponse iekšienē next-intl nav, un
+   * viena vārda dēļ vilkt to iekšā nozīmētu ielādēt visu tekstu paku
+   * katrai bildes ģenerēšanai.
+   */
+  const cert =
+    page?.coach.qualification === 'certified'
+      ? 'Sertificēts'
+      : page?.coach.qualification === 'studying'
+        ? 'Mācās'
+        : null
 
   const initials = name
     .split(/\s+/)

@@ -75,7 +75,13 @@
     "expExperience": "Experiences",
     "expMasterclass": "Masterclasses",
     "expCourse": "Courses",
-    "expRetreat": "Retreats"
+    "expRetreat": "Retreats",
+    "qualification": "Qualification",
+    "qualCertified": "Certified",
+    "qualNone": "No certificate",
+    "qualStudying": "Studying",
+    "qualUnknown": "Not stated",
+    "qualHint": "What people look for when they want a real professional. A certificate is not required — many skills are not measured that way."
   },
   "Coaches": {
     "sectionTitle": "Masters",
@@ -155,7 +161,11 @@
     "expExperience": "Experiences",
     "expMasterclass": "Masterclasses",
     "expCourse": "Courses",
-    "expRetreat": "Retreats"
+    "expRetreat": "Retreats",
+    "qualification": "Qualification",
+    "qualCertified": "Certified",
+    "qualNone": "No certificate",
+    "qualStudying": "Studying"
   },
   "Culture": {
     "title": "Sources of inspiration",
@@ -382,7 +392,13 @@
     "saveAndPublish": "Save and publish",
     "saveAsDraft": "Save as draft",
     "unpublish": "Take it back",
-    "draftHint": "A draft is visible to nobody, not even to you from the outside."
+    "draftHint": "A draft is visible to nobody, not even to you from the outside.",
+    "qualification": "Qualification",
+    "qualCertified": "Certified",
+    "qualNone": "No certificate",
+    "qualStudying": "Studying",
+    "qualUnknown": "Not stated",
+    "qualHint": "What people look for when they want a real professional. A certificate is not required — many skills are not measured that way."
   },
   "Account": {
     "sectionTitle": "Account",

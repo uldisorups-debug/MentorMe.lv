@@ -1,8 +1,8 @@
 import type {
-  CertLevel,
   CoachProfile,
   ExperienceKind,
   PriceTier,
+  QualificationLevel,
 } from '@/types/database'
 
 /**
@@ -16,7 +16,7 @@ export type CoachCardData = Pick<
   | 'full_name'
   | 'tagline'
   | 'avatar_url'
-  | 'certification'
+  | 'qualification'
   | 'is_verified'
   | 'years_experience'
   | 'session_languages'
@@ -49,7 +49,8 @@ export type CoachFilters = {
   sphere: string
   region: string
   format: string
-  certification: string
+  /** 'all' — filtrs nestrādā; 'unknown' — tie, kas nav norādījuši */
+  qualification: 'all' | QualificationLevel | 'unknown'
   language: string
   budget: BudgetMode
   /** Meklētāja budžets eiro. Tukša virkne = nav norādīts. */
@@ -65,7 +66,7 @@ export const EMPTY_FILTERS: CoachFilters = {
   sphere: 'all',
   region: 'all',
   format: 'all',
-  certification: 'all',
+  qualification: 'all',
   language: 'all',
   budget: 'all',
   budgetFrom: '',
@@ -88,9 +89,6 @@ export function filtersOnNewSearch(query: string): CoachFilters {
 /** Reģions tiem, kas nav piesieti vienai vietai. */
 export const COUNTRYWIDE_REGION = 'visa-latvija'
 
-/** Sertifikācija ir jēdzīga tikai koučingā — citur to nerādām. */
-export const CERT_SPHERE = 'koucings'
-
 /** Cenu līmeņu secība — vajadzīga € simbolu skaita noteikšanai. */
 export const PRICE_TIER_STEPS: Record<PriceTier, number> = {
   free: 0,
@@ -99,19 +97,24 @@ export const PRICE_TIER_STEPS: Record<PriceTier, number> = {
   premium: 3,
 }
 
-/** Sertifikācijas īsais apzīmējums uz kartītes. Null = nerādīt nekā. */
-export function certLabel(cert: CertLevel | null): string | null {
-  switch (cert) {
-    case 'acc':
-      return 'ICF ACC'
-    case 'pcc':
-      return 'ICF PCC'
-    case 'mcc':
-      return 'ICF MCC'
-    case 'metacoach':
-      return 'MetaCoach'
-    case 'other':
-      return 'Sertificēts'
+/**
+ * Teksta atslēga kvalifikācijai. Null = uz kartītes nerādīt nekā.
+ *
+ * Atslēga, ne gatavs teksts: agrāk šī funkcija atdeva "Sertificēts"
+ * latviski, un tieši tā tas stāvēja arī angļu un krievu kartītēs.
+ *
+ * "Sertifikāta nav" te atgriež null ar nolūku. Tā ir godīga atbilde
+ * filtram, bet uz kartītes tā būtu zīmogs — un daudzas prasmes ar
+ * sertifikātiem nemaz nemēra.
+ */
+export function qualificationKey(
+  level: QualificationLevel | null
+): 'qualCertified' | 'qualStudying' | null {
+  switch (level) {
+    case 'certified':
+      return 'qualCertified'
+    case 'studying':
+      return 'qualStudying'
     default:
       return null
   }
@@ -199,9 +202,10 @@ export function filterCoaches(
       return false
     }
 
-    if (filters.certification !== 'all') {
-      const cert = coach.certification ?? 'none'
-      if (cert !== filters.certification) return false
+    if (filters.qualification !== 'all') {
+      // 'unknown' ir īsta izvēle: tie, kas par to nav neko teikuši
+      const level = coach.qualification ?? 'unknown'
+      if (level !== filters.qualification) return false
     }
 
     if (filters.budget === 'free' && coach.price_tier !== 'free') return false

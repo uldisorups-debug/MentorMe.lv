@@ -9,6 +9,12 @@
 export type UserRole  = 'client' | 'coach'
 export type PriceTier = 'free' | 'affordable' | 'mid' | 'premium'
 export type CertLevel = 'none' | 'acc' | 'pcc' | 'mcc' | 'metacoach' | 'other'
+
+/**
+ * Kvalifikācijas statuss, kas der visām nozarēm. null — nav norādīts,
+ * un tā ir atbilde, ne tukšums. Konkrēto sertifikātu glabā cert_note.
+ */
+export type QualificationLevel = 'certified' | 'none' | 'studying'
 export type PostStatus = 'draft' | 'published'
 export type TeachingFormat = 'remote' | 'in_person' | 'hybrid'
 
@@ -71,6 +77,7 @@ export type Database = {
           cert_other_label: string | null
           cert_proof_url: string | null
           cert_note: string | null
+          qualification: QualificationLevel | null
           is_verified: boolean
           years_experience: number | null
           session_languages: string[]
@@ -110,6 +117,7 @@ export type Database = {
           cert_other_label?: string | null
           cert_proof_url?: string | null
           cert_note?: string | null
+          qualification?: QualificationLevel | null
           years_experience?: number | null
           session_languages?: string[]
           price_tier?: PriceTier

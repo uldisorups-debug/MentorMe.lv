@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { LinkButton } from '@/components/link-button'
 import { CoachAvatar } from '@/components/coach-avatar'
 import {
-  certLabel,
+  qualificationKey,
   isNewProfile,
   PRICE_TIER_STEPS,
   type CoachCardData,
@@ -94,7 +94,7 @@ export function CoachCard({
   regionNames: Record<string, string>
 }) {
   const t = useTranslations('Coaches')
-  const cert = certLabel(coach.certification)
+  const qualKey = qualificationKey(coach.qualification)
   // Ja cilvēks tikko filtrēja pēc vietas, viņam to vajag redzēt arī kartītē
   const place = [coach.city, regionNames[coach.region_slug ?? '']]
     .filter(Boolean)
@@ -140,9 +140,9 @@ export function CoachCard({
             )}
           </h3>
 
-          {cert && (
+          {qualKey && (
             <p className="mt-1 text-xs font-medium tracking-wide text-mist uppercase">
-              {cert}
+              {t(qualKey)}
               {coach.years_experience !== null && (
                 <span className="ml-2 normal-case">
                   · {t('yearsExperience', { years: coach.years_experience })}

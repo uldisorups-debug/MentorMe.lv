@@ -331,7 +331,7 @@ console.log('Meklēšanas filtrs')
 
 const coach = (over: Partial<CoachCardData>): CoachCardData => ({
   id: 'x', slug: 'x', full_name: 'Testa Cilvēks', tagline: null,
-  avatar_url: null, certification: 'none', is_verified: false,
+  avatar_url: null, qualification: null, is_verified: false,
   years_experience: null, session_languages: ['lv'], price_tier: 'free',
   price_from: null, price_to: null, niches: [], teaching_format: 'remote',
   region_slug: null, city: null, experience_kinds: [],
@@ -421,6 +421,43 @@ check(
   'meistarklašu filtrs to pašu cilvēku neatrod',
   names({ ...EMPTY_FILTERS, experience: 'masterclass' }, [retritaRikotajs]),
   []
+)
+
+/*
+ * Kvalifikācija. "Nav norādīts" ir īsta izvēle, ne tukšums: klients, kurš
+ * meklē sertificētu cilvēku, nedrīkst dabūt tos, par kuriem tas nav zināms.
+ */
+const kvalificetie = [
+  coach({ full_name: 'Sertificēta', qualification: 'certified' }),
+  coach({ full_name: 'Bez papīra', qualification: 'none' }),
+  coach({ full_name: 'Mācās', qualification: 'studying' }),
+  coach({ full_name: 'Klusē', qualification: null }),
+]
+
+check(
+  'kvalifikācija: sertificēts',
+  names({ ...EMPTY_FILTERS, qualification: 'certified' }, kvalificetie),
+  ['Sertificēta']
+)
+check(
+  'kvalifikācija: sertifikāta nav',
+  names({ ...EMPTY_FILTERS, qualification: 'none' }, kvalificetie),
+  ['Bez papīra']
+)
+check(
+  'kvalifikācija: mācās',
+  names({ ...EMPTY_FILTERS, qualification: 'studying' }, kvalificetie),
+  ['Mācās']
+)
+check(
+  'kvalifikācija: nav norādīts atrod tikai klusētājus',
+  names({ ...EMPTY_FILTERS, qualification: 'unknown' }, kvalificetie),
+  ['Klusē']
+)
+check(
+  'bez kvalifikācijas filtra ir visi',
+  names(EMPTY_FILTERS, kvalificetie),
+  ['Sertificēta', 'Bez papīra', 'Mācās', 'Klusē']
 )
 
 check('budžets: bezmaksas', names({ ...EMPTY_FILTERS, budget: 'free' }), ['Zaiga', 'Andris', 'Mareks'])

@@ -13,7 +13,6 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import {
-  CERT_SPHERE,
   EMPTY_FILTERS,
   filtersOnNewSearch,
   type BudgetMode,
@@ -111,8 +110,6 @@ export function FilterBar({
       if (!nowHas) setJustSearched(false)
     }
   }
-
-  const showCert = filters.sphere === CERT_SPHERE
 
   const isDirty = (Object.keys(EMPTY_FILTERS) as (keyof CoachFilters)[]).some(
     (key) => filters[key] !== EMPTY_FILTERS[key]
@@ -259,22 +256,27 @@ export function FilterBar({
               ]}
             />
 
-            {showCert && (
-              <FilterSelect
-                label={t('certification')}
-                value={filters.certification}
-                onChange={(value) => set('certification', value)}
-                options={[
-                  { value: 'all', label: t('certAll') },
-                  { value: 'mcc', label: t('certMcc') },
-                  { value: 'pcc', label: t('certPcc') },
-                  { value: 'acc', label: t('certAcc') },
-                  { value: 'metacoach', label: t('certMetacoach') },
-                  { value: 'other', label: t('certOther') },
-                  { value: 'none', label: t('certNone') },
-                ]}
-              />
-            )}
+            {/*
+              Kvalifikācija rādās vienmēr, ne tikai koučingā. Agrāk tā
+              parādījās tikai tad, kad izvēlēta nozare "Koučings", un
+              izvēles bija ICF līmeņi — keramiķim, psihologam vai
+              matemātikas skolotājam tas nederēja ne pēc formas, ne pēc
+              satura.
+            */}
+            <FilterSelect
+              label={t('qualification')}
+              value={filters.qualification}
+              onChange={(value) =>
+                set('qualification', value as CoachFilters['qualification'])
+              }
+              options={[
+                { value: 'all', label: t('qualification') },
+                { value: 'certified', label: t('qualCertified') },
+                { value: 'none', label: t('qualNone') },
+                { value: 'studying', label: t('qualStudying') },
+                { value: 'unknown', label: t('qualUnknown') },
+              ]}
+            />
 
             <FilterSelect
               label={t('experience')}

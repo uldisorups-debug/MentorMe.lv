@@ -75,7 +75,13 @@
     "expExperience": "Pieredzes",
     "expMasterclass": "Meistarklases",
     "expCourse": "Kursi",
-    "expRetreat": "Retrīti"
+    "expRetreat": "Retrīti",
+    "qualification": "Kvalifikācija",
+    "qualCertified": "Sertificēts",
+    "qualNone": "Sertifikāta nav",
+    "qualStudying": "Mācos / apgūstu",
+    "qualUnknown": "Nav norādīts",
+    "qualHint": "Ko cilvēks meklē, gribot atrast īstu profesionāli. Sertifikāts nav obligāts — daudzas prasmes ar tādiem nemaz nemēra."
   },
   "Coaches": {
     "sectionTitle": "Meistari",
@@ -155,7 +161,11 @@
     "expExperience": "Pieredzes",
     "expMasterclass": "Meistarklases",
     "expCourse": "Kursi",
-    "expRetreat": "Retrīti"
+    "expRetreat": "Retrīti",
+    "qualification": "Kvalifikācija",
+    "qualCertified": "Sertificēts",
+    "qualNone": "Bez sertifikāta",
+    "qualStudying": "Mācās / apgūst"
   },
   "Culture": {
     "title": "Iedvesmas avoti",
@@ -356,7 +366,13 @@
     "saveAndPublish": "Saglabāt un publicēt",
     "saveAsDraft": "Saglabāt melnrakstā",
     "unpublish": "Paņemt atpakaļ",
-    "draftHint": "Melnrakstu neredz neviens, arī tu pats ne no malas."
+    "draftHint": "Melnrakstu neredz neviens, arī tu pats ne no malas.",
+    "qualification": "Kvalifikācija",
+    "qualCertified": "Sertificēts",
+    "qualNone": "Sertifikāta nav",
+    "qualStudying": "Mācos / apgūstu",
+    "qualUnknown": "Nav norādīts",
+    "qualHint": "Ko cilvēks meklē, gribot atrast īstu profesionāli. Sertifikāts nav obligāts — daudzas prasmes ar tādiem nemaz nemēra."
   },
   "Contact": {
     "sendMessage": "Sūtīt ziņu",

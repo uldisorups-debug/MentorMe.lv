@@ -22,7 +22,7 @@ import { ReviewForm } from '@/components/review-form'
 import { ReviewList } from '@/components/review-list'
 import { StarRating } from '@/components/star-rating'
 import { Badge } from '@/components/ui/badge'
-import { certLabel } from '@/lib/coaches'
+import { qualificationKey } from '@/lib/coaches'
 import { listCoachSlugs, loadCoachPage } from '@/lib/coach-profile'
 import { loadGroupNames, loadRegionName, loadSphereNames } from '@/lib/taxonomy'
 import { SITE_URL } from '@/lib/supabase/config'
@@ -48,6 +48,7 @@ export async function generateMetadata({
 
   const { coach } = page
   const tagline = coach.tagline ?? t('metaFallbackTagline')
+  const qualKeyForMeta = qualificationKey(coach.qualification)
 
   // Google nogriež virsrakstu ap 60 rakstzīmēm, un layout pieliek
   // vēl " — MentorMe.lv". Ja tagline ir gara, ņemam sertifikātu.
@@ -57,12 +58,12 @@ export async function generateMetadata({
       ? withTagline
       : t('metaTitle', {
           name: coach.full_name,
-          tagline: certLabel(coach.certification) ?? t('metaFallbackTagline'),
+          tagline: qualKeyForMeta ? t(qualKeyForMeta) : t('metaFallbackTagline'),
         })
 
   const generatedDescription = t('metaDescription', {
     name: coach.full_name,
-    cert: certLabel(coach.certification) ?? t('metaFallbackTagline'),
+    cert: qualKeyForMeta ? t(qualKeyForMeta) : t('metaFallbackTagline'),
   })
 
   /*
@@ -125,7 +126,7 @@ export default async function CoachProfilePage({
   const tReviews = await getTranslations('Reviews')
   const tCoaches = await getTranslations('Coaches')
 
-  const cert = certLabel(coach.certification)
+  const qualKey = qualificationKey(coach.qualification)
   const priceText =
     coach.price_tier === 'free'
       ? tPrice('free')
@@ -325,14 +326,19 @@ export default async function CoachProfilePage({
             </div>
 
             <dl className="mt-6 flex flex-col gap-4 border-t border-hairline pt-5 text-sm">
-              {cert && (
+              {qualKey && (
                 <div>
                   <dt className="flex items-center gap-1.5 text-xs text-mist">
                     <ShieldCheck className="size-3.5" />
-                    {t('certification')}
+                    {t('qualification')}
                   </dt>
                   <dd className="mt-1">
-                    {coach.cert_other_label ?? cert}
+                    {t(qualKey)}
+                    {coach.cert_note && (
+                      <span className="mt-0.5 block text-xs text-mist">
+                        {coach.cert_note}
+                      </span>
+                    )}
                     <span
                       className={
                         coach.is_verified
