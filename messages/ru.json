@@ -96,7 +96,9 @@
     "formatInPerson": "Очно",
     "formatHybrid": "Комбинированно",
     "newBadge": "Новый",
-    "views": "{count, plural, one {# просмотр} few {# просмотра} many {# просмотров} other {# просмотра}}"
+    "views": "{count, plural, one {# просмотр} few {# просмотра} many {# просмотров} other {# просмотра}}",
+    "qualCertified": "Сертифицирован",
+    "qualStudying": "Учится"
   },
   "Price": {
     "free": "Бесплатно",

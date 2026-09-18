@@ -1,7 +1,7 @@
 import { revalidatePath } from 'next/cache'
 
 /**
- * Pārbūvē publiskās lapas, kurās redzams profils.
+ * Pārbūvē visas publiskās lapas: sarakstu, profilus, blogu un sitemap.
  *
  * Profila lapa un saraksts ir statiski ar ISR — bez šī izmaiņas
  * parādītos tikai pēc minūtes, un cilvēks, kurš tikko kaut ko saglabāja,
@@ -11,7 +11,7 @@ import { revalidatePath } from 'next/cache'
  * dzīvo trijās adresēs (/vards, /en/vards, /ru/vards), un uzminēt tās
  * visas ir vairāk vietu, kur kļūdīties.
  */
-export function revalidateProfilePages(): void {
+export function revalidatePublicPages(): void {
   revalidatePath('/[locale]/[slug]', 'page')
   revalidatePath('/[locale]', 'page')
 
@@ -21,5 +21,14 @@ export function revalidateProfilePages(): void {
    * meklētājam vēl neesošs. Stunda nav traģēdija, bet tā ir stunda
    * velti tieši tajā brīdī, kad cilvēks visvairāk grib, lai viņu atrod.
    */
+  /*
+   * Arī blogs. Raksta publicēšana līdz šim neatsvaidzināja neko: redaktors
+   * sauca router.refresh(), un tas atjauno tikai to lapu, uz kuras cilvēks
+   * stāv, ne publiskās. Autors redzēja "Publicēts", bet sarakstā raksta
+   * nebija.
+   */
+  revalidatePath('/[locale]/blog', 'page')
+  revalidatePath('/[locale]/blog/[slug]', 'page')
+
   revalidatePath('/sitemap.xml')
 }

@@ -96,7 +96,9 @@
     "formatInPerson": "In person",
     "formatHybrid": "Combined",
     "newBadge": "New",
-    "views": "{count, plural, one {# view} other {# views}}"
+    "views": "{count, plural, one {# view} other {# views}}",
+    "qualCertified": "Certified",
+    "qualStudying": "Studying"
   },
   "Price": {
     "free": "Free",

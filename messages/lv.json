@@ -96,7 +96,9 @@
     "formatInPerson": "Klātienē",
     "formatHybrid": "Kombinēti",
     "newBadge": "Jauns",
-    "views": "{count, plural, one {# skatījums} other {# skatījumi}}"
+    "views": "{count, plural, one {# skatījums} other {# skatījumi}}",
+    "qualCertified": "Sertificēts",
+    "qualStudying": "Mācās / apgūst"
   },
   "Price": {
     "free": "Bezmaksas",

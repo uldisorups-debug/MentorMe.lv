@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { revalidateProfilePages } from '@/lib/revalidate'
+import { revalidatePublicPages } from '@/lib/revalidate'
 
 /**
  * Publisko lapu atsvaidzināšana pēc profila saglabāšanas.
@@ -38,7 +38,7 @@ export async function POST() {
     return NextResponse.json({ ok: false }, { status: 404 })
   }
 
-  revalidateProfilePages()
+  revalidatePublicPages()
 
   return NextResponse.json({ ok: true, slug: coach?.slug ?? null })
 }

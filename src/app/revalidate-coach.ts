@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { revalidateProfilePages } from '@/lib/revalidate'
+import { revalidatePublicPages } from '@/lib/revalidate'
 
 /**
  * Liek pārbūvēt profila lapas pēc atsauksmes.
@@ -19,5 +19,5 @@ export async function refreshAfterReview(): Promise<void> {
   // Atsauksmi var atstāt tikai ielogotais — tas pats attiecas uz šo
   if (!user) return
 
-  revalidateProfilePages()
+  revalidatePublicPages()
 }

@@ -111,6 +111,21 @@ export function PostEditor({ post }: { post: Post }) {
     setPublished(nextPublished)
     setSavedAt(Date.now())
     setDirty(false)
+
+    /*
+     * router.refresh() atjauno tikai šo lapu. Publiskais blogs ir statisks
+     * ar ISR, un bez šī pieprasījuma tur nekas nemainās — autors redz
+     * "Publicēts", bet sarakstā raksta nav. Tieši tā arī notika.
+     *
+     * Ja neizdodas, klusējam: raksts ir saglabāts, un lapa atjaunosies
+     * pati. Kļūdas paziņojums te liktu domāt, ka pazuda pats raksts.
+     */
+    try {
+      await fetch('/api/revalidate-profile', { method: 'POST' })
+    } catch (refreshError) {
+      console.error('Publisko lapu atsvaidzināšana:', refreshError)
+    }
+
     router.refresh()
   }
 
