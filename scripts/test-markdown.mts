@@ -32,6 +32,53 @@ function omits(name: string, html: string, needle: string) {
   }
 }
 
+/*
+ * Vesels HTML dokuments raksta laukā.
+ *
+ * Artūrs Lasmanis 2026-09-18 ielīmēja rakstā visu lapu no <!DOCTYPE html>
+ * līdz </html> — ar <head>, <meta> un <title>. Tas ir gaidāms: cilvēks
+ * kopē no kaut kurienes, kur teksts jau bija noformēts.
+ *
+ * Svarīgi, ka no tā iznāk lasāms raksts, ne dokumenta gabali. Šie testi
+ * to tur pie vārda.
+ */
+console.log('\nIelīmēts vesels HTML dokuments')
+{
+  const dokuments = [
+    '<!DOCTYPE html>',
+    '<html lang="lv">',
+    '<head>',
+    '  <meta charset="UTF-8">',
+    '  <title>Virsraksts, kas nedrīkst nonākt tekstā</title>',
+    '  <style>body { color: red }</style>',
+    '</head>',
+    '<body>',
+    '<article>',
+    '<h1>Dublēts virsraksts</h1>',
+    '<h2>Sadaļa</h2>',
+    '<p>Rindkopa ar <strong>treknu</strong> tekstu.</p>',
+    '<ul><li>Pirmais</li><li>Otrais</li></ul>',
+    '</article>',
+    '</body>',
+    '</html>',
+  ].join('\n')
+
+  const html = renderMarkdown(dokuments)
+
+  omits('<head> saturs nenonāk lapā', html, 'Virsraksts, kas nedrīkst')
+  omits('<style> izkrīt', html, '<style')
+  omits('<meta> izkrīt', html, '<meta')
+  omits('<html> izkrīt', html, '<html')
+  omits('<body> izkrīt', html, '<body')
+  contains('rindkopa paliek', html, 'Rindkopa ar')
+  contains('treknais teksts paliek', html, '<strong>')
+  contains('h2 paliek', html, '<h2>')
+  contains('saraksts paliek', html, '<li>')
+  // h1 nav atļauto tagu sarakstā: lapa virsrakstu rāda pati no title lauka
+  omits('h1 tags neiziet cauri', html, '<h1')
+  contains('h1 teksts tomēr nepazūd', html, 'Dublēts virsraksts')
+}
+
 console.log('\nDrošība — XSS')
 omits('script tags', renderMarkdown('Teksts <script>alert(1)</script>'), '<script')
 omits('onerror atribūts', renderMarkdown('<img src=x onerror="alert(1)">'), 'onerror')
