@@ -1,7 +1,7 @@
 {
   "Meta": {
-    "title": "MentorMe.lv — mentori, kouči un pasniedzēji Latvijā",
-    "description": "Atrodi mentoru, kouču, pasniedzēju vai meistaru Latvijā. Privātstundas, kursi un meistarklases — klātienē vai attālināti. Bez maksas abām pusēm."
+    "title": "Mentori, kouči, privātskolotāji un kursi — MentorMe.lv",
+    "description": "Atrodi mentoru, kouču, privātskolotāju vai meistaru Latvijā. Privātstundas, kursi, meistarklases un retrīti — klātienē vai attālināti. Bez maksas."
   },
   "Nav": {
     "howItWorks": "Kā tas darbojas",
@@ -85,7 +85,7 @@
   },
   "Coaches": {
     "sectionTitle": "Meistari",
-    "sectionLead": "Mentori, kouči, pasniedzēji, amatnieki un cilvēki ar dzīves pieredzi. Visi vienā sarakstā, pēc vienas loģikas.",
+    "sectionLead": "Mentori, kouči, skolotāji, privātskolotāji, amatnieki un cilvēki ar dzīves pieredzi. Privātstundas, kursi, meistarklases un retrīti — visi vienā sarakstā.",
     "verified": "Verificēts",
     "book": "Skatīt profilu",
     "reviews": "{count, plural, =0 {nav atsauksmju} one {# atsauksme} other {# atsauksmes}}",

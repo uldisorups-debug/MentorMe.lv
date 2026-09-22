@@ -12,6 +12,7 @@ import {
 import {
   filterCoaches,
   sortCoaches,
+  isNewProfile,
   filtersOnNewSearch,
   EMPTY_FILTERS,
   type CoachCardData,
@@ -334,7 +335,7 @@ const coach = (over: Partial<CoachCardData>): CoachCardData => ({
   avatar_url: null, qualification: null, is_verified: false,
   years_experience: null, session_languages: ['lv'], price_tier: 'free',
   price_from: null, price_to: null, niches: [], teaching_format: 'remote',
-  region_slug: null, city: null, experience_kinds: [],
+  region_slug: null, city: null, experience_kinds: [], is_background: false,
   profile_views: 0, created_at: '2026-01-01T00:00:00Z',
   avg_rating: null, review_count: 0, ...over,
 })
@@ -577,6 +578,50 @@ check(
   (() => { sortCoaches(neitrali, 'none', D0); return neitrali[0].full_name })(),
   'A'
 )
+
+/*
+ * Fona profili — mūsu pašu, liktie iekšā, lai tukša vietne neizskatītos
+ * pamesta. Tie nedrīkst aizņemt vietu augšā nevienā kārtošanā.
+ */
+console.log('Fona profili')
+{
+  const fons = coach({
+    full_name: 'Fons', is_background: true,
+    profile_views: 9999, created_at: days(1),
+    avg_rating: 5, review_count: 99,
+  })
+  const istais = coach({
+    full_name: 'Īstais', profile_views: 1, created_at: days(300),
+    avg_rating: 1, review_count: 1,
+  })
+  const pari = [fons, istais]
+  const kartibā = (k: 'none' | 'popular' | 'rated' | 'newest') =>
+    sortCoaches(pari, k, NOW).map((c) => c.full_name)
+
+  // Fonam ir labākie skaitļi visās kategorijās, un tomēr tas ir pēdējais
+  check('fons pēdējais: bez kārtošanas', kartibā('none'), ['Īstais', 'Fons'])
+  check('fons pēdējais: populārākie', kartibā('popular'), ['Īstais', 'Fons'])
+  check('fons pēdējais: labāk novērtētie', kartibā('rated'), ['Īstais', 'Fons'])
+  check('fons pēdējais: jaunākie', kartibā('newest'), ['Īstais', 'Fons'])
+}
+
+/*
+ * Neizvēlētā kārtībā jaunie iet pa priekšu. Tā ir vienīgā vieta, kur
+ * cilvēks neko nav lūdzis, un jaunam profilam tā ir vienīgā iespēja tikt
+ * pamanītam.
+ */
+console.log('Jaunie profili priekšgalā')
+{
+  const jaunais = coach({ id: 'z', full_name: 'Jaunais', created_at: days(5) })
+  const vecais  = coach({ id: 'a', full_name: 'Vecais',  created_at: days(100) })
+  check(
+    'jaunais pirms vecā, lai ko rādītu dienas jaucējkods',
+    sortCoaches([vecais, jaunais], 'none', NOW).map((c) => c.full_name),
+    ['Jaunais', 'Vecais']
+  )
+  check('19 dienas vēl ir jauns', isNewProfile(days(19), NOW), true)
+  check('21 diena vairs nav jauns', isNewProfile(days(21), NOW), false)
+}
 
 console.log('Bilžu samazināšana')
 check('4000x3000 -> 640 pa garāko malu', fitWithin(4000, 3000), { width: 640, height: 480 })

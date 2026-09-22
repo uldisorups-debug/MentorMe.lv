@@ -89,6 +89,7 @@ export type Database = {
           region_slug: string | null
           city: string | null
           experience_kinds: ExperienceKind[]
+          is_background: boolean
           avg_rating: number | null
           review_count: number
           meta_title: string | null
@@ -128,6 +129,7 @@ export type Database = {
           region_slug?: string | null
           city?: string | null
           experience_kinds?: ExperienceKind[]
+          is_background?: boolean
           meta_title?: string | null
           meta_description?: string | null
           calendly_url?: string | null

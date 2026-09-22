@@ -28,6 +28,7 @@ export type CoachCardData = Pick<
   | 'region_slug'
   | 'city'
   | 'experience_kinds'
+  | 'is_background'
   | 'avg_rating'
   | 'review_count'
   | 'profile_views'
@@ -242,13 +243,12 @@ export function filterCoaches(
 /**
  * Saraksta kārtošana.
  *
- * "Populārākie" pēc skatījumiem, bet ar vienu izņēmumu: profili, kas
- * jaunāki par divām nedēļām, tiek pacelti augšā neatkarīgi no skatījumu
- * skaita. Bez tā sanāktu slazds — jauns cilvēks nekad neparādās augšā,
- * tāpēc viņu neviens neredz, tāpēc viņam nav skatījumu, tāpēc viņš nekad
- * neparādās augšā. Divas nedēļas ir logs, kurā viņu vispār var pamanīt.
+ * Jauni profili tiek pacelti augšā neatkarīgi no skatījumu skaita. Bez
+ * tā sanāktu slazds — jauns cilvēks nekad neparādās augšā, tāpēc viņu
+ * neviens neredz, tāpēc viņam nav skatījumu, tāpēc viņš nekad neparādās
+ * augšā. Divdesmit dienas ir logs, kurā viņu vispār var pamanīt.
  */
-const NEW_PROFILE_DAYS = 14
+const NEW_PROFILE_DAYS = 20
 
 /** Vai profils vēl ir tik jauns, ka to vērts izcelt. */
 export function isNewProfile(
@@ -284,6 +284,23 @@ function dailyOrderKey(id: string, now: number): number {
   return hash >>> 0
 }
 
+/**
+ * Fona profili vienmēr pēdējie, lai kā saraksts būtu sakārtots.
+ *
+ * Tie ir mūsu pašu profili, likti iekšā, lai tukša vietne neizskatītos
+ * pamesta. Meklētājam tie nav piedāvājumi, un vieta augšā pienākas tiem,
+ * kas tiešām gaida klientus. Tāpēc tas ir ārējais slānis pār katru
+ * kārtošanu, ne viens gadījums vienā no tām.
+ */
+function backgroundLast(
+  compare: (a: CoachCardData, b: CoachCardData) => number
+): (a: CoachCardData, b: CoachCardData) => number {
+  return (a, b) => {
+    if (a.is_background !== b.is_background) return a.is_background ? 1 : -1
+    return compare(a, b)
+  }
+}
+
 export function sortCoaches(
   coaches: CoachCardData[],
   sort: SortKey,
@@ -292,37 +309,54 @@ export function sortCoaches(
   const list = [...coaches]
 
   if (sort === 'none') {
-    return list.sort((a, b) => {
-      const diff = dailyOrderKey(a.id, now) - dailyOrderKey(b.id, now)
-      // id kā rezerve, lai vienādas atslēgas nedotu nejaušu secību
-      return diff !== 0 ? diff : a.id.localeCompare(b.id)
-    })
+    /*
+     * Neizvēlētā kārtībā jaunie iet pa priekšu. Tā ir vienīgā vieta, kur
+     * cilvēks neko nav lūdzis, un tieši tur jaunam profilam ir vienīgā
+     * iespēja tikt pamanītam.
+     */
+    return list.sort(
+      backgroundLast((a, b) => {
+        const newA = isNewProfile(a.created_at, now)
+        const newB = isNewProfile(b.created_at, now)
+        if (newA !== newB) return newA ? -1 : 1
+
+        const diff = dailyOrderKey(a.id, now) - dailyOrderKey(b.id, now)
+        // id kā rezerve, lai vienādas atslēgas nedotu nejaušu secību
+        return diff !== 0 ? diff : a.id.localeCompare(b.id)
+      })
+    )
   }
 
   if (sort === 'newest') {
     return list.sort(
-      (a, b) =>
-        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      backgroundLast(
+        (a, b) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      )
     )
   }
 
   if (sort === 'rated') {
-    return list.sort((a, b) => {
-      // Bez atsauksmēm reitinga nav — tie iet uz beigām, nevis uz augšu
-      const scoreA = a.avg_rating === null ? -1 : a.avg_rating
-      const scoreB = b.avg_rating === null ? -1 : b.avg_rating
-      if (scoreB !== scoreA) return scoreB - scoreA
-      return b.review_count - a.review_count
-    })
+    return list.sort(
+      backgroundLast((a, b) => {
+        // Bez atsauksmēm reitinga nav — tie iet uz beigām, ne uz augšu
+        const scoreA = a.avg_rating === null ? -1 : a.avg_rating
+        const scoreB = b.avg_rating === null ? -1 : b.avg_rating
+        if (scoreB !== scoreA) return scoreB - scoreA
+        return b.review_count - a.review_count
+      })
+    )
   }
 
-  return list.sort((a, b) => {
-    const newA = isNewProfile(a.created_at, now)
-    const newB = isNewProfile(b.created_at, now)
-    if (newA !== newB) return newA ? -1 : 1
-    if (b.profile_views !== a.profile_views) {
-      return b.profile_views - a.profile_views
-    }
-    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-  })
+  return list.sort(
+    backgroundLast((a, b) => {
+      const newA = isNewProfile(a.created_at, now)
+      const newB = isNewProfile(b.created_at, now)
+      if (newA !== newB) return newA ? -1 : 1
+      if (b.profile_views !== a.profile_views) {
+        return b.profile_views - a.profile_views
+      }
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    })
+  )
 }

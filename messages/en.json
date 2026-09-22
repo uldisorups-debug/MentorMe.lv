@@ -1,7 +1,7 @@
 {
   "Meta": {
-    "title": "MentorMe.lv — mentors, coaches and teachers in Latvia",
-    "description": "Find a mentor, coach, teacher or craftsperson in Latvia. Private lessons, courses and masterclasses — in person or online. Free for both sides."
+    "title": "Mentors, coaches, private tutors and courses — MentorMe.lv",
+    "description": "Find a mentor, coach, private tutor or craftsperson in Latvia. Private lessons, courses, masterclasses and retreats — in person or online. Free."
   },
   "Nav": {
     "howItWorks": "How it works",
@@ -85,7 +85,7 @@
   },
   "Coaches": {
     "sectionTitle": "Masters",
-    "sectionLead": "Mentors, coaches, teachers, craftspeople and people with life experience. All in one list, by the same logic.",
+    "sectionLead": "Mentors, coaches, teachers, private tutors, craftspeople and people with life experience. Private lessons, courses, masterclasses and retreats — all in one list.",
     "verified": "Verified",
     "book": "View profile",
     "reviews": "{count, plural, =0 {no reviews} one {# review} other {# reviews}}",
