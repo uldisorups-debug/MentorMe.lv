@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { routing } from '@/i18n/routing'
+import { alternateLanguages, localePath, routing } from '@/i18n/routing'
 import { notFound } from 'next/navigation'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { ArrowLeft, Eye } from 'lucide-react'
@@ -22,7 +22,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: PageProps<'/[locale]/blog/[slug]'>): Promise<Metadata> {
-  const { slug } = await params
+  const { slug, locale } = await params
   const post = await loadPost(slug)
   const t = await getTranslations('Blog')
 
@@ -31,7 +31,11 @@ export async function generateMetadata({
   return {
     title: post.title,
     description: post.excerpt,
-    alternates: { canonical: `/blog/${post.slug}` },
+    // Katra valoda norāda uz sevi — skat. profila lapu
+    alternates: {
+      canonical: localePath(locale, `/blog/${post.slug}`),
+      languages: alternateLanguages(`/blog/${post.slug}`),
+    },
     openGraph: {
       type: 'article',
       title: post.title,

@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { routing } from '@/i18n/routing'
+import { alternateLanguages, localePath, routing } from '@/i18n/routing'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import {
   BadgeCheck,
@@ -22,7 +22,7 @@ import { ReviewForm } from '@/components/review-form'
 import { ReviewList } from '@/components/review-list'
 import { StarRating } from '@/components/star-rating'
 import { Badge } from '@/components/ui/badge'
-import { qualificationKey } from '@/lib/coaches'
+import { assembleProfileDetails, qualificationKey } from '@/lib/coaches'
 import { listCoachSlugs, loadCoachPage } from '@/lib/coach-profile'
 import { loadGroupNames, loadRegionName, loadSphereNames } from '@/lib/taxonomy'
 import { SITE_URL } from '@/lib/supabase/config'
@@ -40,8 +40,11 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: PageProps<'/[locale]/[slug]'>): Promise<Metadata> {
-  const { slug } = await params
-  const page = await loadCoachPage(slug)
+  const { slug, locale } = await params
+  const [page, categoryNames] = await Promise.all([
+    loadCoachPage(slug),
+    loadGroupNames(locale),
+  ])
   const t = await getTranslations('Coach')
 
   if (!page) return { title: t('notFoundTitle') }
@@ -61,9 +64,26 @@ export async function generateMetadata({
           tagline: qualKeyForMeta ? t(qualKeyForMeta) : t('metaFallbackTagline'),
         })
 
-  const generatedDescription = t('metaDescription', {
+  /*
+   * Budžets pēc tā, cik vietas atliek. Google apraksta rādīšanu griež ap
+   * 155–160 rakstzīmēm; vārds un CTA teikums ir fiksēti, tāpēc saturīgajai
+   * daļai paliek tas, kas pāri. Fiksēts skaitlis te neder — "AirBnb bizness
+   * no A līdz Z" aizņem divreiz vairāk nekā "Inese Stade".
+   */
+  const frameLength = t('metaDescriptionRich', {
     name: coach.full_name,
-    cert: qualKeyForMeta ? t(qualKeyForMeta) : t('metaFallbackTagline'),
+    details: '',
+  }).length
+  const details = assembleProfileDetails({
+    tagline,
+    niches: coach.niches,
+    categoryNames,
+    city: coach.city,
+    maxLength: Math.max(40, 158 - frameLength),
+  })
+  const generatedDescription = t('metaDescriptionRich', {
+    name: coach.full_name,
+    details,
   })
 
   /*
@@ -77,7 +97,16 @@ export async function generateMetadata({
   return {
     title,
     description,
-    alternates: { canonical: `/${coach.slug}` },
+    /*
+     * Katra valodas versija norāda uz sevi, ne uz latviešu. Agrāk /en/x
+     * teica "īstā ir /x" — un Google dokumentācija tieši to aizliedz:
+     * canonical uz citu valodu kopā ar hreflang ir pretrunīgi signāli,
+     * un tad Google hreflang ignorē. Sākumlapa to jau darīja pareizi.
+     */
+    alternates: {
+      canonical: localePath(locale, `/${coach.slug}`),
+      languages: alternateLanguages(`/${coach.slug}`),
+    },
     openGraph: { title, description, type: 'profile' },
   }
 }

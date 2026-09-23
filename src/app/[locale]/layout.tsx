@@ -4,7 +4,8 @@ import { Inter, Playfair_Display } from 'next/font/google'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server'
 import { publicMessages } from '@/i18n/client-messages'
-import { routing } from '@/i18n/routing'
+import { OrganizationSchema } from '@/components/organization-schema'
+import { alternateLanguages, routing } from '@/i18n/routing'
 import { SITE_URL } from '@/lib/supabase/config'
 
 const inter = Inter({
@@ -30,17 +31,14 @@ export async function generateMetadata({
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'Meta' })
 
-  // hreflang: pasaka Google, ka šīs ir vienas lapas versijas, nevis
-  // dublikāti. Bez tā trīs valodas konkurē savā starpā.
-  const languages = Object.fromEntries(
-    routing.locales.map((l) => [l, l === routing.defaultLocale ? '/' : `/${l}`])
-  )
-
   return {
     metadataBase: new URL(SITE_URL),
     title: { default: t('title'), template: '%s — MentorMe.lv' },
     description: t('description'),
-    alternates: { canonical: locale === routing.defaultLocale ? '/' : `/${locale}`, languages },
+    alternates: {
+      canonical: locale === routing.defaultLocale ? '/' : `/${locale}`,
+      languages: alternateLanguages('/'),
+    },
     openGraph: {
       type: 'website',
       locale,
@@ -69,6 +67,7 @@ export default async function LocaleLayout({
       className={`${inter.variable} ${playfair.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
+        <OrganizationSchema />
         <NextIntlClientProvider messages={publicMessages(messages)}>
           {children}
         </NextIntlClientProvider>

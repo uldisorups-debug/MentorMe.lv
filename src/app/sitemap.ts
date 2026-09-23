@@ -31,9 +31,14 @@ function entry(
   priority: number,
   lastModified: Date
 ): MetadataRoute.Sitemap {
-  const languages = Object.fromEntries(
-    routing.locales.map((locale) => [locale, url(locale, path)])
-  )
+  const languages = {
+    ...Object.fromEntries(
+      routing.locales.map((locale) => [locale, url(locale, path)])
+    ),
+    // x-default: kurp sūtīt meklētāju, kura valoda nesakrīt ne ar
+    // vienu no trim — uz latviešu, jo tā ir noklusējuma versija.
+    'x-default': url(routing.defaultLocale, path),
+  }
 
   return routing.locales.map((locale) => ({
     url: url(locale, path),

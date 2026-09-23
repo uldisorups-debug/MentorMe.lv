@@ -167,7 +167,8 @@
     "qualification": "Kvalifikācija",
     "qualCertified": "Sertificēts",
     "qualNone": "Bez sertifikāta",
-    "qualStudying": "Mācās / apgūst"
+    "qualStudying": "Mācās / apgūst",
+    "metaDescriptionRich": "{name} — {details}. Atrodi un sazinies MentorMe.lv."
   },
   "Culture": {
     "title": "Iedvesmas avoti",

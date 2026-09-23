@@ -167,7 +167,8 @@
     "qualification": "Квалификация",
     "qualCertified": "Сертифицирован",
     "qualNone": "Без сертификата",
-    "qualStudying": "Учится"
+    "qualStudying": "Учится",
+    "metaDescriptionRich": "{name} — {details}. Найдите и свяжитесь на MentorMe.lv."
   },
   "Culture": {
     "title": "Источники вдохновения",

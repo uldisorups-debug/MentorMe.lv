@@ -13,6 +13,7 @@ import {
   filterCoaches,
   sortCoaches,
   isNewProfile,
+  assembleProfileDetails,
   filtersOnNewSearch,
   EMPTY_FILTERS,
   type CoachCardData,
@@ -508,6 +509,98 @@ check(
   filtersOnNewSearch('kokle'),
   { ...EMPTY_FILTERS, query: 'kokle' }
 )
+
+console.log('Profila meta apraksts')
+{
+  const kategorijas = { 'kouc-bizness': 'Biznesa koučings', bizness: 'Bizness & vadība' }
+
+  check(
+    'tagline + divas nozares + pilsēta ietilpst',
+    assembleProfileDetails({
+      tagline: 'ICF koučs un mentors',
+      niches: ['bizness', 'kouc-bizness'],
+      categoryNames: kategorijas,
+      city: 'Rīga',
+      maxLength: 110,
+    }),
+    'ICF koučs un mentors. Bizness & vadība, Biznesa koučings, Rīga'
+  )
+
+  check(
+    'bez pilsētas — tikai nozares',
+    assembleProfileDetails({
+      tagline: 'ICF koučs un mentors',
+      niches: ['bizness'],
+      categoryNames: kategorijas,
+      city: null,
+      maxLength: 110,
+    }),
+    'ICF koučs un mentors. Bizness & vadība'
+  )
+
+  check(
+    'nezināms nozares slug tiek izlaists klusi',
+    assembleProfileDetails({
+      tagline: 'Māca ko citu',
+      niches: ['nav-tadas-nozares'],
+      categoryNames: kategorijas,
+      city: null,
+      maxLength: 110,
+    }),
+    'Māca ko citu'
+  )
+
+  check(
+    'par garš ar pilsētu — pilsēta atkrīt, nozares paliek',
+    assembleProfileDetails({
+      tagline: 'Ilgtspējas meistarklases uzņēmumiem, komandām un pašvaldībām',
+      niches: ['bizness', 'kouc-bizness'],
+      categoryNames: kategorijas,
+      city: 'Ļoti gara pilsētas nosaukuma virkne',
+      maxLength: 100,
+    }),
+    'Ilgtspējas meistarklases uzņēmumiem, komandām un pašvaldībām. Bizness & vadība, Biznesa koučings'
+  )
+
+  check(
+    'pati tagline par garu — apgriež pa vārdu, bez pieturzīmes galā',
+    /[.…!?,;:]$/.test(
+      assembleProfileDetails({
+        tagline: 'Šī ir ļoti gara tagline, kas nekādi neietilpst atvēlētajā vietā pat bez papildu informācijas',
+        niches: [],
+        categoryNames: {},
+        city: null,
+        maxLength: 40,
+      })
+    ),
+    false
+  )
+
+  // Veidne aiz šī pati liek punktu — citādi sanāca "..pielietojumu.."
+  check(
+    'tagline ar punktu galā — punkts noņemts',
+    assembleProfileDetails({
+      tagline: 'Konsultēju par lentēm un to pielietojumu.',
+      niches: [],
+      categoryNames: {},
+      city: null,
+      maxLength: 110,
+    }),
+    'Konsultēju par lentēm un to pielietojumu'
+  )
+
+  check(
+    'rezultāts nekad nepārsniedz maxLength',
+    assembleProfileDetails({
+      tagline: 'Šī ir ļoti gara tagline, kas nekādi neietilpst atvēlētajā vietā',
+      niches: [],
+      categoryNames: {},
+      city: null,
+      maxLength: 40,
+    }).length <= 40,
+    true
+  )
+}
 
 console.log('Kārtošana')
 

@@ -360,3 +360,57 @@ export function sortCoaches(
     })
   )
 }
+
+/**
+ * Profila meta apraksta saturīgā daļa — tagline plus līdz divas nozares
+ * un pilsēta, apgriezta, lai ietilptu Google rādāmajā garumā.
+ *
+ * Agrāk šī vieta bija viens un tas pats teikums desmit no vienpadsmit
+ * profiliem — tikai kvalifikācijas statuss mainījās, tagline un nozare
+ * netika lietoti vispār. Meta apraksts ir "vitrīna" Google rezultātos;
+ * desmit gandrīz identiski teikumi izskatās pēc automātiski ģenerēta,
+ * mazvērtīga satura un nesatur nevienu atslēgvārdu.
+ *
+ * maxLength ir budžets šai daļai vien — saucējs vēl pieliek "{vārds} — "
+ * priekšā un CTA teikumu aiz tās.
+ *
+ * Rezultāts nekad nebeidzas ar pieturzīmi: veidne aiz tā pati liek
+ * punktu. Bez šī tagline, kas beidzās ar punktu, deva "..pielietojumu.."
+ * un apgriezta — "…." pirms CTA.
+ */
+export function assembleProfileDetails({
+  tagline,
+  niches,
+  categoryNames,
+  city,
+  maxLength,
+}: {
+  tagline: string
+  niches: string[]
+  categoryNames: Record<string, string>
+  city: string | null
+  maxLength: number
+}): string {
+  const trimEnd = (text: string) => text.replace(/[\s.…!?,;:–—-]+$/u, '')
+  const base = trimEnd(tagline)
+
+  const nicheLabels = niches
+    .map((slug) => categoryNames[slug])
+    .filter((label): label is string => Boolean(label))
+    .slice(0, 2)
+
+  const withNichesAndCity = [nicheLabels.join(', '), city]
+    .filter(Boolean)
+    .join(', ')
+  const withNichesOnly = nicheLabels.join(', ')
+
+  // Mēģinām no bagātākā uz vienkāršāko, līdz kāds variants ietilpst
+  for (const extra of [withNichesAndCity, withNichesOnly, '']) {
+    const details = extra ? `${base}. ${extra}` : base
+    if (details.length <= maxLength) return details
+  }
+
+  // Pat pati tagline nesatilpst — apgriežam pa vārdu robežu. Bez "…":
+  // veidne aiz tā tāpat pieliek punktu, un "…." izskatās pēc kļūdas.
+  return trimEnd(base.slice(0, maxLength).replace(/\s+\S*$/, ''))
+}

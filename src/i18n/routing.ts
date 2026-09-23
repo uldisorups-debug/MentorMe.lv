@@ -46,3 +46,25 @@ export function nameColumn(locale: string): 'name_lv' | 'name_en' | 'name_ru' {
 export function localePath(locale: string, path: string): string {
   return locale === routing.defaultLocale ? path : `/${locale}${path}`
 }
+
+/**
+ * hreflang saišu saraksts vienam ceļam, visām valodām plus x-default.
+ *
+ * path ir valodas prefiksa neatkarīgs ('/', '/uldis-orups', '/blog/x').
+ * x-default rāda uz noklusējuma (latviešu) versiju — bez tā Google
+ * nezina, kuru versiju rādīt meklētājam, kura valoda nesakrīt ne ar
+ * vienu no trim.
+ *
+ * Katrai lapai, kas pati uzstāda metadata.alternates, šis jāsauc pašai —
+ * Next.js to nemanto no izkārtojuma, kad lapa savu alternates uzstāda
+ * klāt. Bez šī profilu un rakstu lapām hreflang nebija nemaz.
+ */
+export function alternateLanguages(path: string): Record<string, string> {
+  const clean = path === '/' ? '' : path
+  return {
+    ...Object.fromEntries(
+      routing.locales.map((l) => [l, l === routing.defaultLocale ? path : `/${l}${clean}`])
+    ),
+    'x-default': path,
+  }
+}

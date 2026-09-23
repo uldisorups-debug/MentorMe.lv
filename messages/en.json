@@ -167,7 +167,8 @@
     "qualification": "Qualification",
     "qualCertified": "Certified",
     "qualNone": "No certificate",
-    "qualStudying": "Studying"
+    "qualStudying": "Studying",
+    "metaDescriptionRich": "{name} — {details}. Find and get in touch on MentorMe.lv."
   },
   "Culture": {
     "title": "Sources of inspiration",
