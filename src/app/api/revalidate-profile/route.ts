@@ -1,6 +1,7 @@
-import { NextResponse } from 'next/server'
+import { after, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePublicPages } from '@/lib/revalidate'
+import { allLocaleUrls, submitToIndexNow } from '@/lib/indexnow'
 
 /**
  * Publisko lapu atsvaidzināšana pēc profila saglabāšanas.
@@ -30,7 +31,7 @@ export async function POST() {
    * palika ar veco skaitu, līdz kāds tās atvēra — un tās atver reti.
    */
   const [{ data: coach }, { data: profile }] = await Promise.all([
-    supabase.from('coach_profiles').select('slug').eq('user_id', user.id).maybeSingle(),
+    supabase.from('coach_profiles').select('slug, is_published').eq('user_id', user.id).maybeSingle(),
     supabase.from('profiles').select('is_admin').eq('id', user.id).maybeSingle(),
   ])
 
@@ -39,6 +40,15 @@ export async function POST() {
   }
 
   revalidatePublicPages()
+
+  /*
+   * Publicēts profils — paziņojam meklētājiem uzreiz, nevis gaidām, kad
+   * tie paši atnāks pa sitemap. after() izpilda to pēc atbildes
+   * nosūtīšanas: cilvēks nesagaida IndexNow atbildi, saglabājot profilu.
+   */
+  if (coach?.is_published) {
+    after(() => submitToIndexNow(allLocaleUrls(`/${coach.slug}`)))
+  }
 
   return NextResponse.json({ ok: true, slug: coach?.slug ?? null })
 }
