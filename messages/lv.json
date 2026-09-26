@@ -12,36 +12,23 @@
     "menu": "Izvēlne"
   },
   "Hero": {
-    "kicker": "Latvijas zināšanu direktorija",
-    "formats": "Privātstundas · Kursi · Meistarklases · Retrīti · Pieredzes",
     "greeting": "Sveiki. Tu meklē",
     "rotating": [
-      "zināšanas?",
-      "mentoru?",
-      "kouču?",
-      "privātskolotāju?",
-      "kursus?",
-      "meistarklases?",
-      "retrītus?",
-      "pieredzes?"
+      "Zināšanas?",
+      "Mentoru?",
+      "Kouču?",
+      "Privātskolotāju?",
+      "Kursus?",
+      "Meistarklases?",
+      "Retrītus?",
+      "Pieredzes?"
     ],
     "subline": "Spēlēt kokli, atrast integrāli, izvārīt vissaldāko ievārījumu vai uzsākt biznesu — kāds Latvijā to prot un ir gatavs tev to iemācīt",
     "ctaPrimary": "Meklēt zināšanas",
     "ctaSecondary": "Man pieder zināšanas — pievienoties",
     "statCoaches": "{count, plural, =0 {cilvēku, kas māca} one {cilvēks, kas māca} other {cilvēki, kas māca}}",
     "statFields": "{count, plural, =0 {nozaru} one {nozare} other {nozares}}",
-    "statPrice": "bezmaksas abām pusēm",
-    "badge": "Bez maksas abām pusēm ✦ Bez komisijas ✦ "
-  },
-  "Index": {
-    "eyebrow": "Zināšanu rādītājs",
-    "title": "Ne tikai kouči.",
-    "titleAccent": "Viss, ko kāds prot.",
-    "lead": "Friziera meistarklase, kokles stunda, matemātikas privātskolotājs, jogas retrīts vai biznesa mentors — viena direktorija visiem, kam pieder zināšanas. Izvēlies nozari, un saraksts zemāk sašaurināsies.",
-    "count": "{count, plural, =0 {vieta pirmajam} one {# profils} other {# profili}}",
-    "topics": "{count, plural, one {# tēma} other {# tēmas}}",
-    "showAll": "Rādīt visus",
-    "label": "Nozares"
+    "statPrice": "bezmaksas abām pusēm"
   },
   "Filters": {
     "searchLabel": "Meklēt",
@@ -114,10 +101,7 @@
     "newBadge": "Jauns",
     "views": "{count, plural, one {# skatījums} other {# skatījumi}}",
     "qualCertified": "Sertificēts",
-    "qualStudying": "Mācās / apgūst",
-    "eyebrow": "Direktorija",
-    "emptySphere": "Šajā nozarē vēl nav neviena. Ja tu to proti — tava vieta ir brīva.",
-    "emptySphereCta": "Pievienot savu profilu"
+    "qualStudying": "Mācās / apgūst"
   },
   "Price": {
     "free": "Bezmaksas",
@@ -141,18 +125,7 @@
     "point2Body": "Mēs tos pārbaudām manuāli. Verificētā zīme nav nopērkama.",
     "point3Title": "Saņem cilvēkus",
     "point3Body": "Viņi raksta tev tieši. Mēs neņemam komisiju.",
-    "cta": "Izveidot profilu",
-    "examplesLabel": "Te jau var būt tu:",
-    "examples": [
-      "friziere ar meistarklasēm",
-      "keramiķis",
-      "matemātikas privātskolotāja",
-      "jogas retrītu vadītājs",
-      "biznesa mentors",
-      "vecmāmiņa ar zaptes recepti",
-      "ģitāras skolotājs",
-      "biškopis"
-    ]
+    "cta": "Izveidot profilu"
   },
   "Footer": {
     "tagline": "Latvijas zināšanu un prasmju direktorija.",

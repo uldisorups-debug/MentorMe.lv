@@ -1,81 +1,62 @@
 import { useTranslations } from 'next-intl'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, BadgeCheck, CalendarCheck, UserPlus } from 'lucide-react'
 import { LinkButton } from '@/components/link-button'
 
-/**
- * Uzaicinājums tiem, kam pieder zināšanas.
- *
- * Piemēru rinda ir svarīgākā daļa: tā vienā skatienā pasaka, ka te
- * vietas ir friziera meistarklasei un vecmāmiņas zaptei tāpat kā
- * biznesa mentoram. Bez tās "Tev pieder zināšanas" cilvēks, kurš sevi
- * nesauc par kouču, var nolasīt kā "tas nav par mani".
- */
 export function ForCoaches() {
   const t = useTranslations('ForCoaches')
-  const examples = t.raw('examples') as string[]
 
   const points = [
-    { title: t('point1Title'), body: t('point1Body') },
-    { title: t('point2Title'), body: t('point2Body') },
-    { title: t('point3Title'), body: t('point3Body') },
+    { icon: UserPlus, title: t('point1Title'), body: t('point1Body') },
+    { icon: BadgeCheck, title: t('point2Title'), body: t('point2Body') },
+    { icon: CalendarCheck, title: t('point3Title'), body: t('point3Body') },
   ]
 
   return (
-    <section id="kouciem" className="scroll-mt-16 border-t border-hairline px-6 py-20 sm:py-28">
+    <section id="kouciem" className="scroll-mt-16 px-6 py-20">
       <div className="mx-auto max-w-6xl">
-        <div className="grid gap-6 lg:grid-cols-[1fr_2.2fr] lg:gap-16">
-          <p className="font-mono text-[11px] tracking-[0.18em] text-mist uppercase">
-            <span className="text-gold">(03)</span> {t('eyebrow')}
-          </p>
+        <div className="relative overflow-hidden rounded-3xl border border-hairline bg-surface p-8 sm:p-12">
+          {/* Korallis kā sadaļas akcents — atšķir no zeltainās pārējās lapas */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -top-24 -right-24 size-72 rounded-full bg-coral/15 blur-3xl"
+          />
 
-          <div>
-            <h2 className="font-display text-4xl leading-[1.05] tracking-tight text-balance sm:text-6xl">
-              {t('title')}
-            </h2>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-mist text-pretty">
-              {t('lead')}
-            </p>
+          <div className="relative grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
+            <div>
+              <p className="text-xs font-medium tracking-widest text-coral uppercase">
+                {t('eyebrow')}
+              </p>
+              <h2 className="mt-3 font-display text-3xl text-balance sm:text-4xl">
+                {t('title')}
+              </h2>
+              <p className="mt-4 leading-relaxed text-mist">{t('lead')}</p>
 
-            <p className="mt-10 font-mono text-[11px] tracking-[0.18em] text-mist uppercase">
-              {t('examplesLabel')}
-            </p>
-            <ul className="mt-4 flex flex-wrap gap-2">
-              {examples.map((example) => (
-                <li
-                  key={example}
-                  className="rounded-full border border-hairline px-4 py-1.5 font-display text-lg text-cream/90 italic"
-                >
-                  {example}
+              <LinkButton
+                href="/auth/login?next=%2Fdashboard%2Fprofile"
+                size="lg"
+                className="mt-8 h-12 gap-2 bg-coral px-6 text-base text-ink hover:bg-coral-soft"
+              >
+                {t('cta')}
+                <ArrowRight className="size-4" />
+              </LinkButton>
+            </div>
+
+            <ul className="flex flex-col gap-6">
+              {points.map((point) => (
+                <li key={point.title} className="flex gap-4">
+                  <span className="grid size-10 shrink-0 place-items-center rounded-xl border border-hairline bg-ink">
+                    <point.icon className="size-5 text-gold" />
+                  </span>
+                  <div>
+                    <h3 className="font-medium">{point.title}</h3>
+                    <p className="mt-1 text-sm leading-relaxed text-mist">
+                      {point.body}
+                    </p>
+                  </div>
                 </li>
               ))}
             </ul>
           </div>
-        </div>
-
-        <ol className="mt-16 grid border-t border-hairline sm:grid-cols-3">
-          {points.map((point, i) => (
-            <li
-              key={point.title}
-              className="border-b border-hairline py-8 sm:border-b-0 sm:border-l sm:px-8 sm:first:border-l-0 sm:first:pl-0"
-            >
-              <span className="font-display text-5xl text-gold italic">
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              <h3 className="mt-4 text-lg font-medium">{point.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-mist">{point.body}</p>
-            </li>
-          ))}
-        </ol>
-
-        <div className="mt-12 flex justify-start lg:justify-end">
-          <LinkButton
-            href="/auth/login?next=%2Fdashboard%2Fprofile"
-            size="lg"
-            className="h-14 gap-2 rounded-full px-8 text-base"
-          >
-            {t('cta')}
-            <ArrowRight className="size-4" />
-          </LinkButton>
         </div>
       </div>
     </section>

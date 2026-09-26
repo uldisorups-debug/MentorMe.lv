@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { Inter, JetBrains_Mono, Playfair_Display } from 'next/font/google'
+import { Inter, Playfair_Display } from 'next/font/google'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server'
 import { publicMessages } from '@/i18n/client-messages'
@@ -17,17 +17,6 @@ const inter = Inter({
 
 const playfair = Playfair_Display({
   variable: '--font-playfair',
-  subsets: ['latin', 'latin-ext', 'cyrillic'],
-  display: 'swap',
-})
-
-/*
- * Monospace metadatiem — numuriem, skaitītājiem, mazajiem virsrakstiem.
- * Serifs virsrakstiem, groteska tekstam, mono tam, ko skaita: trīs balsis,
- * nevis viena, un lapa vairs neizskatās pēc veidnes.
- */
-const mono = JetBrains_Mono({
-  variable: '--font-jetbrains',
   subsets: ['latin', 'latin-ext', 'cyrillic'],
   display: 'swap',
 })
@@ -75,7 +64,7 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
-      className={`${inter.variable} ${playfair.variable} ${mono.variable} h-full antialiased`}
+      className={`${inter.variable} ${playfair.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
         <OrganizationSchema />

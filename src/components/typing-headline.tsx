@@ -74,7 +74,7 @@ export function TypingHeadline({ words }: { words: string[] }) {
   return (
     <span aria-hidden="true" className="text-gold">
       {reduced ? words[0] : state.text}
-      <span className="animate-caret ml-[0.08em] inline-block h-[0.8em] w-[0.05em] min-w-[3px] rounded-full bg-gold align-[-0.06em]" />
+      <span className="animate-caret ml-1 inline-block h-[0.85em] w-[3px] rounded-full bg-gold align-[-0.05em]" />
     </span>
   )
 }

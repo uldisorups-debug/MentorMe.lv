@@ -3,52 +3,6 @@ import { ArrowRight } from 'lucide-react'
 import { LinkButton } from '@/components/link-button'
 import { TypingHeadline } from '@/components/typing-headline'
 
-/**
- * Apaļais zīmogs hero labajā pusē — teksts pa apli, lēni griežas.
- *
- * textLength izstiepj tekstu tieši pa apļa garumu, tāpēc tas sanāk
- * vienmērīgs jebkurā valodā, lai kā atšķirtos teikuma garums.
- * Tikai lieliem ekrāniem: telefonā tam nav vietas, un tur tas būtu
- * troksnis, ne akcents.
- */
-function CircleBadge({ text }: { text: string }) {
-  const r = 62
-  return (
-    <div
-      aria-hidden="true"
-      className="pointer-events-none absolute top-4 right-0 hidden size-44 lg:block"
-    >
-      <svg viewBox="0 0 176 176" className="animate-spin-slow size-full">
-        <defs>
-          <path
-            id="badge-circle"
-            d={`M 88,88 m -${r},0 a ${r},${r} 0 1,1 ${r * 2},0 a ${r},${r} 0 1,1 -${r * 2},0`}
-          />
-        </defs>
-        <text className="fill-mist font-mono text-[11px] uppercase">
-          <textPath href="#badge-circle" textLength={2 * Math.PI * r - 4} lengthAdjust="spacing">
-            {text}
-          </textPath>
-        </text>
-      </svg>
-      <span className="absolute inset-0 grid place-items-center text-2xl text-gold">✦</span>
-    </div>
-  )
-}
-
-/**
- * Sākumlapas galva — kā žurnāla vāks, ne kā veidne.
- *
- * Agrāk viss bija centrēts: virsraksts, divas pogas, trīs skaitļi rindā.
- * Tieši tā izskatās katra otrā lapa, ko uzģenerē rīks, un cilvēks to
- * nolasa kā "vēl viena". Tagad teksts stāv pie kreisās malas, rotējošais
- * vārds ir lapas lielākais elements, un mazos datus nes mono burti.
- *
- * Rotējošie vārdi ir visi atslēgvārdi, ko cilvēki meklē: zināšanas,
- * mentors, koučs, privātskolotājs, kursi, meistarklases, retrīti,
- * pieredzes. Ekrānlasītājs un meklētājs tos saņem visus uzreiz caur
- * sr-only tekstu.
- */
 export function HeroSection({
   coachCount,
   sphereCount,
@@ -59,79 +13,64 @@ export function HeroSection({
   const t = useTranslations('Hero')
   const rotating = t.raw('rotating') as string[]
 
-  const stats = [
-    { value: String(coachCount), label: t('statCoaches', { count: coachCount }) },
-    { value: String(sphereCount), label: t('statFields', { count: sphereCount }) },
-    { value: '0 €', label: t('statPrice') },
-  ]
-
   return (
-    <section className="relative px-6 pt-8 pb-14 sm:pt-12 sm:pb-20">
-      <div className="mx-auto max-w-6xl">
-        <div className="flex items-center justify-between gap-4 border-b border-hairline pb-4 font-mono text-[11px] tracking-[0.18em] text-mist uppercase">
-          <span>{t('kicker')}</span>
-          <span className="hidden md:inline">{t('formats')}</span>
-          <span aria-hidden="true" className="hidden whitespace-nowrap sm:inline">
-            LV · EN · RU
+    <section className="relative overflow-hidden px-6 pt-20 pb-16 sm:pt-28 sm:pb-24">
+      <div className="mx-auto max-w-3xl text-center">
+        <h1 className="font-display text-4xl leading-[1.1] font-medium text-balance sm:text-6xl">
+          {t('greeting')}
+          <br />
+          {/* Rinda ar rotējošo vārdu — min-h tur augstumu, lai teksts zemāk nelēkā */}
+          <span className="mt-2 inline-flex min-h-[1.2em] items-center justify-center">
+            <TypingHeadline words={rotating} />
           </span>
+          <span className="sr-only">
+            {t('greeting')} {rotating.join(' ')}
+          </span>
+        </h1>
+
+        <p className="mx-auto mt-6 max-w-2xl text-lg text-mist text-balance sm:text-xl">
+          {t('subline')}
+        </p>
+
+        <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <LinkButton
+            href="/#kouci"
+            size="lg"
+            className="h-12 w-full gap-2 px-6 text-base shadow-[0_0_40px_-12px_var(--gold)] sm:w-auto"
+          >
+            {t('ctaPrimary')}
+            <ArrowRight className="size-4" />
+          </LinkButton>
+          <LinkButton
+            href="/auth/login?next=%2Fdashboard%2Fprofile"
+            size="lg"
+            variant="outline"
+            className="h-12 w-full px-6 text-base sm:w-auto"
+          >
+            {t('ctaSecondary')}
+          </LinkButton>
         </div>
 
-        <div className="relative">
-          <CircleBadge text={t('badge')} />
-          <h1 className="mt-12 font-display sm:mt-16">
-            <span className="block text-[clamp(1.75rem,4.2vw,3.5rem)] leading-tight text-cream/85">
-              {t('greeting')}
+        <dl className="mt-14 flex flex-wrap items-center justify-center gap-x-10 gap-y-4 text-sm">
+          <div className="flex items-baseline gap-2">
+            <dt className="sr-only">{t('statCoaches', { count: coachCount })}</dt>
+            <dd className="font-display text-2xl text-gold">{coachCount}</dd>
+            <span className="text-mist">
+              {t('statCoaches', { count: coachCount })}
             </span>
-            {/*
-              min-h tur rindas augstumu, lai teksts zemāk nelēkā, kad vārds
-              tiek dzēsts. Izmērs rēķināts no platākā vārda ("мастер-классы?"
-              ir ~7,25 em), lai tas telefonā ietilptu vienā rindā, bet uz lielā
-              ekrāna neaizķertu apaļo zīmogu labajā pusē.
-            */}
-            <span className="mt-1 block min-h-[1.05em] text-[clamp(2rem,calc((100vw-3rem)/7.4),8rem)] leading-[1.05] tracking-[-0.03em] whitespace-nowrap italic">
-              <TypingHeadline words={rotating} />
-            </span>
-            <span className="sr-only">{rotating.join(' ')}</span>
-          </h1>
-        </div>
-
-        <div className="mt-10 grid gap-8 border-t border-hairline pt-8 lg:mt-14 lg:grid-cols-[1.25fr_1fr] lg:items-end">
-          <p className="max-w-xl text-lg leading-relaxed text-mist text-pretty sm:text-xl">
-            {t('subline')}
-          </p>
-
-          <div className="flex flex-col gap-3 sm:flex-row lg:justify-end">
-            <LinkButton
-              href="/#kouci"
-              size="lg"
-              className="h-12 w-full gap-2 rounded-full px-7 text-base sm:w-auto"
-            >
-              {t('ctaPrimary')}
-              <ArrowRight className="size-4" />
-            </LinkButton>
-            <LinkButton
-              href="/auth/login?next=%2Fdashboard%2Fprofile"
-              size="lg"
-              variant="outline"
-              className="h-auto min-h-12 w-full rounded-full border-cream/25 bg-transparent px-7 py-2 text-base whitespace-normal hover:border-cream/60 hover:bg-transparent sm:w-auto"
-            >
-              {t('ctaSecondary')}
-            </LinkButton>
           </div>
-        </div>
-
-        <dl className="mt-12 grid grid-cols-3 border-y border-hairline">
-          {stats.map((stat, i) => (
-            <div
-              key={stat.label}
-              className={`flex flex-col-reverse py-5 ${i > 0 ? 'border-l border-hairline pl-4 sm:pl-8' : 'pr-4'}`}
-            >
-              <dt className="mt-1 font-mono text-[10px] tracking-[0.14em] text-mist uppercase sm:text-[11px]">
-                {stat.label}
-              </dt>
-              <dd className="font-display text-3xl text-cream sm:text-5xl">{stat.value}</dd>
-            </div>
-          ))}
+          <div className="flex items-baseline gap-2">
+            <dt className="sr-only">{t('statFields', { count: sphereCount })}</dt>
+            <dd className="font-display text-2xl text-gold">{sphereCount}</dd>
+            <span className="text-mist">
+              {t('statFields', { count: sphereCount })}
+            </span>
+          </div>
+          <div className="flex items-baseline gap-2">
+            <dt className="sr-only">{t('statPrice')}</dt>
+            <dd className="font-display text-2xl text-gold">0 €</dd>
+            <span className="text-mist">{t('statPrice')}</span>
+          </div>
         </dl>
       </div>
     </section>

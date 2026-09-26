@@ -10,7 +10,6 @@ import type { AbstractIntlMessages } from 'next-intl'
 
 const PUBLIC_GROUPS = [
   'Filters',
-  'Index',
   'Coaches',
   'Price',
   'Reviews',
