@@ -15,9 +15,12 @@ import {
   isNewProfile,
   assembleProfileDetails,
   filtersOnNewSearch,
+  closestCoaches,
+  suggestedSpheres,
   EMPTY_FILTERS,
   type CoachCardData,
 } from '../src/lib/coaches.ts'
+import { normalize, stem, parseQuery } from '../src/lib/search.ts'
 import {
   validateContact,
   buildContactLinks,
@@ -385,6 +388,55 @@ check(
   names({ ...EMPTY_FILTERS, region: 'riga' }),
   ['Andris', 'Mareks']
 )
+
+console.log('Gudrā meklēšana')
+check('bez garumzīmēm', normalize('Grāmatvedība, Rīgā!'), 'gramatvediba riga')
+check('sakne: kokles', stem('kokles'), 'kokl')
+check('sakne: friziera', stem('friziera'), 'frizier')
+check('īsu vārdu negriež', stem('riga'), 'riga')
+check(
+  'izlaiž "skolotājs" un "un"',
+  parseQuery('kokles skolotājs un Rīgā').map((t) => t.raw),
+  ['kokles', 'riga']
+)
+check('locījums: kokles', names({ ...EMPTY_FILTERS, query: 'kokles' }), ['Zaiga'])
+check('lielie burti', names({ ...EMPTY_FILTERS, query: 'KOKLE' }), ['Zaiga'])
+check('bez garumzīmēm', names({ ...EMPTY_FILTERS, query: 'matematika' }), ['Andris'])
+check('viena pārrakstīšanās', names({ ...EMPTY_FILTERS, query: 'matemātka' }), ['Andris'])
+check('vēl raksta: "kok"', names({ ...EMPTY_FILTERS, query: 'kok' }), ['Zaiga'])
+check('"kokles stundas" — stundas neko nesašaurina', names({ ...EMPTY_FILTERS, query: 'kokles stundas' }), ['Zaiga'])
+check('tikai "skolotājs" — der visi', names({ ...EMPTY_FILTERS, query: 'skolotājs' }), ['Zaiga', 'Andris', 'Mareks'])
+check('meistarklase no lauka, ne teksta', names({ ...EMPTY_FILTERS, query: 'meistarklases' }), ['Zaiga'])
+check('attālināti — arī kombinētais', names({ ...EMPTY_FILTERS, query: 'attālināti' }), ['Andris', 'Mareks'])
+check('nekā līdzīga — tukšs', names({ ...EMPTY_FILTERS, query: 'zapte' }), [])
+check(
+  'nozares nosaukums atrod visus tajā',
+  filterCoaches(visi, { ...EMPTY_FILTERS, query: 'mūzikā' }, sphereMap, nicheNames, {
+    muzika: 'Mūzika un skaņa', skola: 'Skola un eksāmeni',
+  }).map((c) => c.full_name),
+  ['Zaiga', 'Mareks']
+)
+const koucs = coach({ full_name: 'Inese', niches: ['kouc-dzive'] })
+check(
+  'sinonīms: coach -> kouč',
+  filterCoaches([koucs, matZoom], { ...EMPTY_FILTERS, query: 'coach' }, sphereMap, {}).map((c) => c.full_name),
+  ['Inese']
+)
+check(
+  'tuvākie: "kokle rīga" — kokle Kurzemē un visi Rīgā',
+  closestCoaches(visi, { ...EMPTY_FILTERS, query: 'kokle rīga' }, sphereMap, nicheNames).map((c) => c.full_name),
+  ['Zaiga', 'Andris', 'Mareks']
+)
+check(
+  'tuvākie: vienam vārdam nav ko piedāvāt',
+  closestCoaches(visi, { ...EMPTY_FILTERS, query: 'zapte' }, sphereMap, nicheNames),
+  []
+)
+const grupas = [{ value: 'kokle', label: 'Kokle', sphere: 'muzika' }]
+const sferas = [{ value: 'muzika', label: 'Mūzika un skaņa' }]
+check('ieteikums: nozare ar kokli', suggestedSpheres('kokles', grupas, sferas, new Set(['muzika'])), ['muzika'])
+check('ieteikums: tukšu nozari neiesaka', suggestedSpheres('kokles', grupas, sferas, new Set()), [])
+
 /* Visa Latvija — kurš brauc uz visurieni, der katram novadam */
 const visurEsosais = coach({
   full_name: 'Ilze', niches: ['kokle'],

@@ -1,3 +1,5 @@
+// Relatīvi ar .ts, ne caur @/: testi (scripts/test-validation.mts) palaiž šo tīrā Node
+import { fieldWords, parseQuery, termMatches, toWords, type QueryTerm } from './search.ts'
 import type {
   CoachProfile,
   ExperienceKind,
@@ -128,25 +130,41 @@ export function qualificationKey(
  * pusi (GIN indeksi nišām un valodām jau ir uzlikti migrācijā).
  */
 /**
- * Viss, kas par cilvēku ir zināms saraksta lapā, vienā virknē.
+ * Viss, kas par cilvēku ir zināms saraksta lapā, kā vārdu saraksts.
  *
  * Meklējot "kokle", cilvēks negrib, lai sakristu tikai vārds vai
- * viena rindiņa — viņš grib, lai sakrīt jebkas: prasme, pilsēta, joma.
+ * viena rindiņa — viņš grib, lai sakrīt jebkas: prasme, nozare,
+ * pilsēta, formāts. Tāpēc klāt ir arī nozares nosaukums ("Mūzika"
+ * atrod ģitāristu) un vārdi no laukiem ("meistarklase", "attālināti",
+ * "bezmaksas"), kas profila tekstā var nebūt.
  */
-function searchHaystack(
+function searchWords(
   coach: CoachCardData,
-  nicheNames: Record<string, string>
-): string {
-  return [
-    coach.full_name,
-    coach.tagline ?? '',
-    coach.city ?? '',
-    coach.region_slug ?? '',
-    ...coach.niches.map((n) => nicheNames[n] ?? n),
-    ...coach.niches,
-  ]
-    .join(' ')
-    .toLowerCase()
+  nicheNames: Record<string, string>,
+  nicheToSphere: Record<string, string>,
+  sphereNames: Record<string, string>
+): string[] {
+  return toWords(
+    [
+      coach.full_name,
+      coach.tagline ?? '',
+      coach.city ?? '',
+      coach.region_slug ?? '',
+      ...coach.niches.map((n) => nicheNames[n] ?? n),
+      ...coach.niches,
+      ...coach.niches.map((n) => sphereNames[nicheToSphere[n]] ?? ''),
+      fieldWords({
+        experienceKinds: coach.experience_kinds,
+        teachingFormat: coach.teaching_format,
+        isFree: coach.price_tier === 'free',
+      }),
+    ].join(' ')
+  )
+}
+
+/** Cik no meklētajiem vārdiem šim cilvēkam atbilst. */
+function matchCount(terms: QueryTerm[], words: string[]): number {
+  return terms.filter((term) => termMatches(term, words)).length
 }
 
 export function filterCoaches(
@@ -155,19 +173,20 @@ export function filterCoaches(
   /** grupas slug -> sfēras slug; vajadzīgs filtram pēc nozares */
   nicheToSphere: Record<string, string> = {},
   /** grupas slug -> nosaukums; vajadzīgs meklēšanai pa tekstu */
-  nicheNames: Record<string, string> = {}
+  nicheNames: Record<string, string> = {},
+  /** sfēras slug -> nosaukums; "Mūzika" atrod arī ģitāristu */
+  sphereNames: Record<string, string> = {}
 ): CoachCardData[] {
-  const query = filters.query.trim().toLowerCase()
   // Katrs vārds jāatrod atsevišķi, lai "kokle Kurzeme" strādā
-  const words = query ? query.split(/\s+/) : []
+  const terms = parseQuery(filters.query)
 
   const budgetFrom = filters.budgetFrom.trim() === '' ? null : Number(filters.budgetFrom)
   const budgetTo = filters.budgetTo.trim() === '' ? null : Number(filters.budgetTo)
 
   return coaches.filter((coach) => {
-    if (words.length > 0) {
-      const haystack = searchHaystack(coach, nicheNames)
-      if (!words.every((word) => haystack.includes(word))) return false
+    if (terms.length > 0) {
+      const words = searchWords(coach, nicheNames, nicheToSphere, sphereNames)
+      if (matchCount(terms, words) < terms.length) return false
     }
 
     if (filters.sphere !== 'all') {
@@ -238,6 +257,61 @@ export function filterCoaches(
 
     return true
   })
+}
+
+/**
+ * Tuvākie rezultāti, kad visiem vārdiem neatbilst neviens.
+ *
+ * "kokles stundas Rīgā" — ja Rīgā kokli nemāca neviens, labāk parādīt
+ * kokles skolotāju Kurzemē un visus Rīgā, nekā tukšu lapu. Pārējie
+ * filtri (formāts, budžets, valoda) paliek spēkā; kārtots pēc tā, cik
+ * vārdu sakrita.
+ */
+export function closestCoaches(
+  coaches: CoachCardData[],
+  filters: CoachFilters,
+  nicheToSphere: Record<string, string> = {},
+  nicheNames: Record<string, string> = {},
+  sphereNames: Record<string, string> = {}
+): CoachCardData[] {
+  const terms = parseQuery(filters.query)
+  if (terms.length < 2) return []
+
+  const rest = filterCoaches(coaches, { ...filters, query: '' }, nicheToSphere, nicheNames, sphereNames)
+  return rest
+    .map((coach) => ({
+      coach,
+      score: matchCount(terms, searchWords(coach, nicheNames, nicheToSphere, sphereNames)),
+    }))
+    .filter((entry) => entry.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .map((entry) => entry.coach)
+}
+
+/**
+ * Nozares, kuru nosaukumā vai tēmās ir meklētais vārds.
+ *
+ * Kad neviens neatbilst, cilvēkam jāredz, kur turpināt: meklēja
+ * "manikīrs" — nozare "Skaistums un stils". Tikai nozares, kurās kāds
+ * ir, citādi ieteikums aizvestu uz vēl vienu tukšu lapu.
+ */
+export function suggestedSpheres(
+  query: string,
+  groups: { value: string; label: string; sphere: string }[],
+  spheres: { value: string; label: string }[],
+  nonEmpty: Set<string>
+): string[] {
+  const terms = parseQuery(query)
+  if (terms.length === 0) return []
+
+  const found = new Set<string>()
+  const consider = (sphere: string, label: string) => {
+    if (!nonEmpty.has(sphere)) return
+    if (terms.some((term) => termMatches(term, toWords(label)))) found.add(sphere)
+  }
+  for (const s of spheres) consider(s.value, s.label)
+  for (const g of groups) consider(g.sphere, `${g.label} ${g.value}`)
+  return [...found].slice(0, 4)
 }
 
 /**

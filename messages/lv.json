@@ -30,6 +30,12 @@
     "statFields": "{count, plural, =0 {nozaru} one {nozare} other {nozares}}",
     "statPrice": "bezmaksas abām pusēm"
   },
+  "Index": {
+    "title": "Ne tikai kouči.",
+    "titleAccent": "Viss, ko kāds prot.",
+    "lead": "Friziera meistarklase, kokles stunda, matemātikas privātskolotājs, jogas retrīts vai biznesa mentors — viena direktorija visiem, kam pieder zināšanas. Izvēlies nozari, un saraksts augšā sašaurināsies.",
+    "label": "Nozares"
+  },
   "Filters": {
     "searchLabel": "Meklēt",
     "searchPlaceholder": "Ko tu gribi iemācīties? Piemēram: kokle, matemātika, zapte",
@@ -101,7 +107,14 @@
     "newBadge": "Jauns",
     "views": "{count, plural, one {# skatījums} other {# skatījumi}}",
     "qualCertified": "Sertificēts",
-    "qualStudying": "Mācās / apgūst"
+    "qualStudying": "Mācās / apgūst",
+    "noMatch": "Pagaidām neviens neatbilst „{query}”.",
+    "suggestLabel": "Varbūt noder:",
+    "showAll": "Rādīt visus",
+    "addOwn": "Tu to proti? Pievieno savu profilu",
+    "closestNotice": "Visiem vārdiem atbilstoša profila nav — rādām tuvākos.",
+    "showMore": "Rādīt vēl {count}",
+    "showingCount": "Rādīti {shown} no {total}"
   },
   "Price": {
     "free": "Bezmaksas",
