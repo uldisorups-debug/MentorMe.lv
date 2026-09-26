@@ -102,8 +102,8 @@ export function CoachDirectory({
       : []
 
   /*
-   * Kvadrātiņš zem saraksta ir jauna doma, tāpat kā meklēšana: citi
-   * filtri tiek notīrīti, un lapa aizved augšā uz sarakstu, lai cilvēks
+   * Klikšķis uz nozares kvadrāta ir jauna doma, tāpat kā meklēšana:
+   * citi filtri tiek notīrīti, un lapa aizved uz sarakstu, lai cilvēks
    * uzreiz redz, kas atrasts.
    */
   function selectSphere(sphere: string) {
@@ -115,6 +115,8 @@ export function CoachDirectory({
 
   return (
     <>
+      <KnowledgeIndex taxonomy={taxonomy} active={filters.sphere} onSelect={selectSphere} />
+
       <section id="kouci" className="scroll-mt-16 px-6">
         <FilterBar
           filters={filters}
@@ -204,7 +206,6 @@ export function CoachDirectory({
         </div>
       </section>
 
-      <KnowledgeIndex taxonomy={taxonomy} active={filters.sphere} onSelect={selectSphere} />
     </>
   )
 }

@@ -115,18 +115,24 @@ export function FilterBar({
     (key) => filters[key] !== EMPTY_FILTERS[key]
   )
 
+  /*
+   * Meklēšana ir galvenais rīks lapā, tāpēc tā izskatās pēc tāda:
+   * lielāks lauks, zelta ietvars un vāja zelta gaisma — tas pats
+   * akcents, kas galvenajai pogai augšā. Agrāk josla bija tik pieticīga,
+   * ka starp kartītēm un kvadrātiem tā pazuda.
+   */
   return (
-    <div className="sticky top-16 z-30 -mx-6 border-y border-hairline bg-ink/80 px-6 py-3 backdrop-blur-lg">
+    <div className="sticky top-16 z-30 -mx-6 border-y border-gold/20 bg-ink/90 px-6 py-4 backdrop-blur-lg">
       <div className="mx-auto flex max-w-6xl flex-col gap-3">
         <div className="relative">
-          <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-mist" />
+          <Search className="pointer-events-none absolute top-1/2 left-4 size-5 -translate-y-1/2 text-gold" />
           <Input
             type="search"
             aria-label={t('searchLabel')}
             placeholder={t('searchPlaceholder')}
             value={filters.query}
             onChange={(event) => onSearch(event.target.value)}
-            className="h-11 bg-surface pl-9"
+            className="h-12 rounded-xl border-gold/40 bg-surface pl-12 text-base shadow-[0_0_40px_-16px_var(--gold)] sm:h-14 sm:text-lg"
           />
         </div>
 
