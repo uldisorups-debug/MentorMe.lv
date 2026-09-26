@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { CookieSettingsLink } from '@/components/cookie-settings-link'
@@ -27,17 +26,6 @@ export function SiteFooter() {
             <span className="text-mist">.lv</span>
           </p>
           <p className="mt-2 max-w-xs text-sm text-mist">{t('tagline')}</p>
-
-          <a
-            href={LINKEDIN_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={t('linkedin')}
-            title={t('linkedin')}
-            className="mt-4 inline-flex size-9 items-center justify-center rounded-lg border border-hairline transition-colors hover:border-gold/40"
-          >
-            <LinkedInIcon className="size-4" />
-          </a>
         </div>
 
         <nav className="flex flex-col gap-2 text-sm sm:items-end">
@@ -56,57 +44,44 @@ export function SiteFooter() {
       </div>
 
       {/*
-        Ģenerālsponsors.
-        rel="sponsored" ir Google prasība atbalstītāju saitēm. Bez tā
-        vienāda saite katrā lapā izskatās pēc pirktas, un no tā zaudē
-        abas puses. Ar to apmeklētājam nemainās nekas.
+        Apakšējā josla: kreisajā malā ALENOR.LV un autortiesības, vidū
+        LinkedIn.
 
-        Logo ir uz gaiša plāksnīša ar nolūku: ALENOR zīmols ir zils uz
-        balta, un uz mūsu tumšā fona tas kļūtu tikko salasāms.
+        ALENOR.LV te ir saitei, ne reklāmai — tāpēc tikai adrese, bez logo
+        un apraksta. Tā paliek redzama un salasāma: Google soda saites, kas
+        paslēptas no cilvēkiem (fona krāsā, mikroskopiskā burtā).
+        rel="sponsored" ir Google prasība atbalstītāju saitēm; bez tā
+        vienāda saite katrā lapā izskatās pēc pirktas.
+
+        LinkedIn — pelēks, ne zīmola zils: kājenē tas ir pieejams, ne
+        izcelts. Uzbraucot kļūst gaišāks.
       */}
-      <div className="mx-auto mt-10 max-w-6xl border-t border-hairline pt-6">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
-          <p className="text-xs tracking-widest text-mist/70 uppercase">
-            {t('sponsorLabel')}
-          </p>
-
+      <div className="mx-auto mt-10 grid max-w-6xl items-center gap-5 border-t border-hairline pt-6 sm:grid-cols-[1fr_auto_1fr]">
+        <div className="flex flex-col gap-1.5 text-xs text-mist/70">
           <a
             href="https://www.alenor.lv"
             target="_blank"
             rel="sponsored noopener noreferrer"
-            aria-label="ALENOR.LV"
-            className="inline-flex w-fit items-center rounded-lg bg-cream px-3 py-2 transition-opacity hover:opacity-80"
+            className="w-fit transition-colors hover:text-mist"
           >
-            {/*
-              Izmēri pēc tā, cik liels tas ir ekrānā, ne pēc faila.
-              Ar 453×111 next/image pieprasītu 1080 pikseļu platu bildi
-              piecdesmit piecu pikseļu vietai.
-            */}
-            <Image
-              src="/brand/alenor.png"
-              alt="ALENOR"
-              width={82}
-              height={20}
-            />
+            ALENOR.LV
           </a>
-
-          <p className="max-w-md text-sm leading-relaxed text-mist">
-            <a
-              href="https://www.alenor.lv"
-              target="_blank"
-              rel="sponsored noopener noreferrer"
-              className="text-gold hover:underline"
-            >
-              ALENOR.LV
-            </a>{' '}
-            — {t('sponsorLine')}
+          <p>
+            © {new Date().getFullYear()} MentorMe.lv. {t('rights')}
           </p>
         </div>
-      </div>
 
-      <p className="mx-auto mt-8 max-w-6xl text-xs text-mist/80">
-        © {new Date().getFullYear()} MentorMe.lv. {t('rights')}
-      </p>
+        <a
+          href={LINKEDIN_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={t('linkedin')}
+          title={t('linkedin')}
+          className="inline-flex size-10 items-center justify-center justify-self-start rounded-lg border border-hairline text-mist/70 transition-colors hover:border-gold/40 hover:text-cream sm:justify-self-center"
+        >
+          <LinkedInIcon className="size-[18px]" monochrome />
+        </a>
+      </div>
     </footer>
   )
 }
