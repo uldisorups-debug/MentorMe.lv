@@ -1,3 +1,4 @@
+import { LINKEDIN_URL } from '@/lib/site-links'
 import { SITE_URL } from '@/lib/supabase/config'
 
 /**
@@ -22,6 +23,8 @@ export function OrganizationSchema() {
         name: 'MentorMe.lv',
         url: SITE_URL,
         logo: `${SITE_URL}/icon.png`,
+        // Tā pati organizācija citur — Google to sasaista ar šo vietni
+        sameAs: [LINKEDIN_URL],
         description:
           'Latvijas zināšanu un prasmju direktorija: mentori, kouči, privātskolotāji, meistari, kursi, meistarklases un retrīti vienuviet.',
         // Par ko organizācija ir — Google un AI rīki to lieto, lai saprastu,

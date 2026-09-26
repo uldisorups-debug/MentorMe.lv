@@ -2,6 +2,8 @@ import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { CookieSettingsLink } from '@/components/cookie-settings-link'
+import { LinkedInIcon } from '@/components/provider-icons'
+import { LINKEDIN_URL } from '@/lib/site-links'
 
 export function SiteFooter() {
   const t = useTranslations('Footer')
@@ -25,6 +27,17 @@ export function SiteFooter() {
             <span className="text-mist">.lv</span>
           </p>
           <p className="mt-2 max-w-xs text-sm text-mist">{t('tagline')}</p>
+
+          <a
+            href={LINKEDIN_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={t('linkedin')}
+            title={t('linkedin')}
+            className="mt-4 inline-flex size-9 items-center justify-center rounded-lg border border-hairline transition-colors hover:border-gold/40"
+          >
+            <LinkedInIcon className="size-4" />
+          </a>
         </div>
 
         <nav className="flex flex-col gap-2 text-sm sm:items-end">
