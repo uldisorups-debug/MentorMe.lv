@@ -345,7 +345,10 @@ export function ProfileEditor({
      * pati pēc minūtes. Kļūdas paziņojums te maldinātu.
      */
     try {
-      await fetch('/api/revalidate-profile', { method: 'POST' })
+      await fetch('/api/revalidate-profile', {
+        method: 'POST',
+        body: JSON.stringify({ ownProfile: true }),
+      })
     } catch (refreshError) {
       console.error('Publiskās lapas atsvaidzināšana:', refreshError)
     }

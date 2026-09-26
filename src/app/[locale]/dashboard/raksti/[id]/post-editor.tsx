@@ -121,7 +121,10 @@ export function PostEditor({ post }: { post: Post }) {
      * pati. Kļūdas paziņojums te liktu domāt, ka pazuda pats raksts.
      */
     try {
-      await fetch('/api/revalidate-profile', { method: 'POST' })
+      await fetch('/api/revalidate-profile', {
+        method: 'POST',
+        body: JSON.stringify({ postId: post.id }),
+      })
     } catch (refreshError) {
       console.error('Publisko lapu atsvaidzināšana:', refreshError)
     }

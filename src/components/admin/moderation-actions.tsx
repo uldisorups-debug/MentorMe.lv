@@ -13,10 +13,16 @@ import { createClient } from '@/lib/supabase/client'
  * Saraksts un profila lapas ir statiskas. Bez šī administratora lēmums
  * parādītos tikai tad, kad kāds attiecīgo valodas versiju atver — un
  * angļu ar krievu atver reti.
+ *
+ * announce — lapa, par kuru paziņot meklētājiem (IndexNow), ja tā pēc
+ * izmaiņas ir publicēta.
  */
-async function refreshPublicPages() {
+async function refreshPublicPages(announce?: { profileId?: string; postId?: string }) {
   try {
-    await fetch('/api/revalidate-profile', { method: 'POST' })
+    await fetch('/api/revalidate-profile', {
+      method: 'POST',
+      body: announce ? JSON.stringify(announce) : undefined,
+    })
   } catch (error) {
     console.error('Publisko lapu atsvaidzināšana:', error)
   }
@@ -50,7 +56,7 @@ export function ProfileActions({
   ) {
     const { error } = await supabase.from('coach_profiles').update(values).eq('id', id)
     if (error) return alert(error.message)
-    await refreshPublicPages()
+    await refreshPublicPages({ profileId: id })
     await logAdminAction({ ...admin, action, table: 'coach_profiles', targetId: id, targetLabel: label })
     router.refresh()
   }
@@ -202,7 +208,7 @@ export function PostActions({
       .update({ hidden_by_admin: false })
       .eq('id', id)
     if (error) return alert(error.message)
-    await refreshPublicPages()
+    await refreshPublicPages({ postId: id })
     await logAdminAction({
       ...admin, action: 'release_post', table: 'posts', targetId: id, targetLabel: label,
     })
