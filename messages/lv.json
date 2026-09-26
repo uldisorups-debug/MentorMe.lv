@@ -39,6 +39,7 @@
     "titleAccent": "Viss, ko kāds prot.",
     "lead": "Friziera meistarklase, kokles stunda, matemātikas privātskolotājs, jogas retrīts vai biznesa mentors — viena direktorija visiem, kam pieder zināšanas. Izvēlies nozari, un saraksts zemāk sašaurināsies.",
     "count": "{count, plural, =0 {vieta pirmajam} one {# profils} other {# profili}}",
+    "topics": "{count, plural, one {# tēma} other {# tēmas}}",
     "showAll": "Rādīt visus",
     "label": "Nozares"
   },

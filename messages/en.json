@@ -39,6 +39,7 @@
     "titleAccent": "Everything someone knows.",
     "lead": "A hairdressing masterclass, a kokle lesson, a maths tutor, a yoga retreat or a business mentor — one directory for everyone who has knowledge. Pick a field and the list below narrows down.",
     "count": "{count, plural, =0 {room for the first} one {# profile} other {# profiles}}",
+    "topics": "{count, plural, one {# topic} other {# topics}}",
     "showAll": "Show all",
     "label": "Fields"
   },

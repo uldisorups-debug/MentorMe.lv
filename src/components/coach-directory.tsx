@@ -79,6 +79,7 @@ export function CoachDirectory({
       <KnowledgeIndex
         taxonomy={taxonomy}
         counts={sphereCounts}
+        total={coaches.length}
         active={filters.sphere}
         onSelect={selectSphere}
       />

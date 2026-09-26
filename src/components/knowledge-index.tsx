@@ -9,6 +9,17 @@ import { cn } from '@/lib/utils'
 const HIDDEN_SPHERES = new Set(['cits'])
 
 /**
+ * No cik profiliem kopā rādām, cik cilvēku ir katrā nozarē.
+ *
+ * Kamēr profilu ir maz, skaitļi stāsta nepareizo stāstu: pusē nozaru
+ * "vieta pirmajam", bet koučingā un biznesā pa septiņiem — tieši tas
+ * "te tikai biznesa kouči" iespaids, ko šī sadaļa ir domāta izkliedēt.
+ * Līdz tam rādām tēmu skaitu: tas parāda nozares plašumu un nekad
+ * neizskatās tukšs.
+ */
+const PROFILE_COUNTS_FROM = 50
+
+/**
  * Visas nozares uzreiz, kā grāmatas satura rādītājs.
  *
  * Agrāk nozares bija paslēptas izkrītošā izvēlnē, un pirmais, ko
@@ -21,30 +32,34 @@ const HIDDEN_SPHERES = new Set(['cits'])
  * piecpadsmit nozares aizņēma trīs ekrānus, un līdz pašiem profiliem
  * neviens nenonāca.
  *
- * Skaitlis ir godīgs: tukšai nozarei rakstām "vieta pirmajam", nevis
- * slēpjam to. Tas ir uzaicinājums, ne trūkums.
+ * Skaitlis stūrī ir tēmu skaits, līdz direktorijā ir PROFILE_COUNTS_FROM
+ * profilu, un pēc tam — profilu skaits nozarē.
  */
 export function KnowledgeIndex({
   taxonomy,
   counts,
+  total,
   active,
   onSelect,
 }: {
   taxonomy: FilterTaxonomy
   /** sfēras slug -> profilu skaits */
   counts: Record<string, number>
+  /** Profilu skaits visā direktorijā */
+  total: number
   active: string
   onSelect: (sphere: string) => void
 }) {
   const t = useTranslations('Index')
 
   const spheres = taxonomy.spheres.filter((s) => !HIDDEN_SPHERES.has(s.value))
+  const topics = (sphere: string) => taxonomy.groups.filter((g) => g.sphere === sphere)
   const examples = (sphere: string) =>
-    taxonomy.groups
-      .filter((g) => g.sphere === sphere)
+    topics(sphere)
       .slice(0, 4)
       .map((g) => g.label)
       .join(' · ')
+  const showProfileCounts = total >= PROFILE_COUNTS_FROM
 
   return (
     <section aria-labelledby="zinasanu-raditajs" className="px-6 py-20 sm:py-28">
@@ -89,9 +104,15 @@ export function KnowledgeIndex({
                 >
                   <span className="flex flex-wrap items-center justify-between gap-x-2 font-mono text-[10px] tracking-[0.14em] uppercase sm:text-[11px]">
                     <span className="text-mist">{String(i + 1).padStart(2, '0')}</span>
-                    <span className={count > 0 ? 'text-gold' : 'text-mist/70'}>
-                      {t('count', { count })}
-                    </span>
+                    {showProfileCounts ? (
+                      <span className={count > 0 ? 'text-gold' : 'text-mist/70'}>
+                        {t('count', { count })}
+                      </span>
+                    ) : (
+                      <span className="text-mist/70">
+                        {t('topics', { count: topics(sphere.value).length })}
+                      </span>
+                    )}
                   </span>
 
                   <span className="flex items-start justify-between gap-3">
