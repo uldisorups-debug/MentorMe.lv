@@ -15,14 +15,23 @@ export const revalidate = 3600
 export function GET() {
   const body = `# MentorMe.lv
 
-> Latvijas zināšanu un prasmju direktorija. Cilvēki ar prasmi — no
-> mentoriem un koučiem līdz amatniekiem un skolotājiem — izveido
-> profilu, paši nosaka cenu, un tos atrod pēc prasmes un atrašanās
-> vietas. Bez maksas abām pusēm.
+> Latvijas zināšanu un prasmju direktorija. Ikviens, kam pieder
+> zināšanas — mentori, kouči, privātskolotāji, skolotāji, amatnieki,
+> meistari un cilvēki ar dzīves pieredzi —, izveido profilu un paši
+> nosaka cenu. Privātstundas, kursi, meistarklases, retrīti un
+> pieredzes, klātienē vai attālināti, visā Latvijā. Bez maksas abām
+> pusēm, bez komisijas.
+
+## Nozares
+
+Koučings un mentorings, psiholoģija, skola un eksāmeni, valodas,
+mūzika, amatniecība un rokdarbi, ēdiens un gatavošana, tautas
+tradīcijas, daba un lauku dzīve, būvniecība un remonts, sports,
+māksla un radošums, tehnoloģijas, bizness un nauda, dzīves pieredze.
 
 ## Galvenais
 
-- [Visi meistari](${SITE_URL}/): pilns saraksts ar filtriem pēc
+- [Visi profili](${SITE_URL}/): pilns saraksts ar filtriem pēc
   nozares, apmācību formas, vietas, budžeta un kvalifikācijas
 - [Kā tas darbojas](${SITE_URL}/ka-tas-darbojas)
 - [Raksti](${SITE_URL}/blog): paši meistari raksta par to, ko prot

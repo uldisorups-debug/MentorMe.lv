@@ -1,6 +1,7 @@
 import { CoachDirectory } from '@/components/coach-directory'
 import { ForCoaches } from '@/components/for-coaches'
 import { HeroSection } from '@/components/hero-section'
+import { SkillsMarquee } from '@/components/skills-marquee'
 import type { CoachCardData } from '@/lib/coaches'
 import { setRequestLocale } from 'next-intl/server'
 import { loadTaxonomy } from '@/lib/taxonomy'
@@ -52,6 +53,32 @@ async function loadDirectory(locale: string) {
   return { taxonomy, coaches: dbCoaches }
 }
 
+/**
+ * Tēmas skrejošajai joslai — pa vienai no katras nozares pēc kārtas.
+ *
+ * Pēc datubāzes secības pirmās desmit būtu koučings, un josla
+ * atkārtotu tieši to iespaidu, ko tā ir domāta izkliedēt. Pārmaiņus
+ * no katras nozares iznāk kokle, matemātika, keramika, joga...
+ */
+const MARQUEE_LIMIT = 36
+
+function marqueeItems(groups: { label: string; sphere: string }[]): string[] {
+  const bySphere = new Map<string, string[]>()
+  for (const group of groups) {
+    if (group.sphere === 'cits') continue
+    bySphere.set(group.sphere, [...(bySphere.get(group.sphere) ?? []), group.label])
+  }
+
+  const columns = [...bySphere.values()]
+  const items: string[] = []
+  for (let row = 0; items.length < MARQUEE_LIMIT; row++) {
+    const next = columns.map((labels) => labels[row]).filter(Boolean)
+    if (next.length === 0) break
+    items.push(...next)
+  }
+  return items.slice(0, MARQUEE_LIMIT)
+}
+
 export default async function HomePage({ params }: PageProps<'/[locale]'>) {
   const { locale } = await params
   setRequestLocale(locale)
@@ -64,6 +91,7 @@ export default async function HomePage({ params }: PageProps<'/[locale]'>) {
         coachCount={coaches.length}
         sphereCount={taxonomy.spheres.length}
       />
+      <SkillsMarquee items={marqueeItems(taxonomy.groups)} />
       <CoachDirectory coaches={coaches} taxonomy={taxonomy} />
       <ForCoaches />
     </>

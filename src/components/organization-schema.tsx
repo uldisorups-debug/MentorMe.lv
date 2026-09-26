@@ -22,7 +22,21 @@ export function OrganizationSchema() {
         name: 'MentorMe.lv',
         url: SITE_URL,
         logo: `${SITE_URL}/icon.png`,
-        description: 'Latvijas zināšanu un prasmju direktorija.',
+        description:
+          'Latvijas zināšanu un prasmju direktorija: mentori, kouči, privātskolotāji, meistari, kursi, meistarklases un retrīti vienuviet.',
+        // Par ko organizācija ir — Google un AI rīki to lieto, lai saprastu,
+        // uz kādiem jautājumiem šī lapa ir atbilde
+        knowsAbout: [
+          'Mentorings',
+          'Koučings',
+          'Privātstundas',
+          'Kursi',
+          'Meistarklases',
+          'Retrīti',
+          'Amatniecība',
+          'Valodu apmācība',
+          'Mūzikas nodarbības',
+        ],
       },
       {
         '@type': 'WebSite',

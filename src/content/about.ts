@@ -63,7 +63,7 @@ export const ABOUT: Record<string, AboutContent> = {
       },
       {
         "title": "Arī koučiem un mentoriem",
-        "body": "Sertificētiem un nesertificētiem. Tiem ar ICF MCC un divi tūkstoši piecsimt stundām, un tiem, kas tikai vāc pirmās prakses stundas. Tā ir viena nozare starp četrpadsmit — ne vairāk, bet arī ne mazāk svarīga par pārējām.",
+        "body": "Sertificētiem un nesertificētiem. Tiem ar ICF MCC un divi tūkstoši piecsimt stundām, un tiem, kas tikai vāc pirmās prakses stundas. Tā ir viena nozare starp daudzām — ne vairāk, bet arī ne mazāk svarīga par pārējām.",
         "emphasis": null
       }
     ],
@@ -120,7 +120,7 @@ export const ABOUT: Record<string, AboutContent> = {
       },
       {
         "title": "And coaches and mentors too",
-        "body": "Certified and not. Those with an ICF MCC and two and a half thousand hours, and those collecting their first practice hours. It's one field among fourteen — no more important than the others, and no less.",
+        "body": "Certified and not. Those with an ICF MCC and two and a half thousand hours, and those collecting their first practice hours. It's one field among many — no more important than the others, and no less.",
         "emphasis": null
       }
     ],
@@ -177,7 +177,7 @@ export const ABOUT: Record<string, AboutContent> = {
       },
       {
         "title": "И коучам с менторами тоже",
-        "body": "Сертифицированным и нет. Тем, у кого ICF MCC и две с половиной тысячи часов, и тем, кто только набирает первые часы практики. Это одна сфера из четырнадцати — не важнее остальных, но и не менее важна.",
+        "body": "Сертифицированным и нет. Тем, у кого ICF MCC и две с половиной тысячи часов, и тем, кто только набирает первые часы практики. Это одна сфера из многих — не важнее остальных, но и не менее важна.",
         "emphasis": null
       }
     ],
