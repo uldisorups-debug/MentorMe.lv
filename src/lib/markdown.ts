@@ -23,12 +23,31 @@ const ALLOWED_TAGS = [
 
 const ALLOWED_ATTR = ['href', 'title', 'rel', 'target']
 
+/*
+ * Domēni, uz kuriem saites rakstos paliek pilnvērtīgas (bez nofollow).
+ * Tikai tā paša īpašnieka vietnes — nekad sveši domēni, citādi te
+ * atgriežas spameru problēma, no kuras nofollow sargā.
+ */
+const TRUSTED_HOSTS = ['alenor.lv']
+
+function isTrustedHost(href: string): boolean {
+  try {
+    const host = new URL(href).hostname.toLowerCase()
+    // Precīzi domēns vai tā apakšdomēns — "alenor.lv.kaut-kas.com" neder
+    return TRUSTED_HOSTS.some((trusted) => host === trusted || host.endsWith(`.${trusted}`))
+  } catch {
+    return false
+  }
+}
+
 /**
  * Ārējām saitēm pievienojam rel="ugc nofollow".
  *
  * Tas nav skopums pret autoriem — tā ir higiēna. Ja katrs, kas
  * reģistrējas, dabū dofollow saites, lapa kļūst par spameru mērķi, un
  * Google soda visu domēnu, arī godīgos autorus.
+ *
+ * Izņēmums — TRUSTED_HOSTS: paša īpašnieka vietnes.
  */
 function hardenLinks(html: string, siteHost: string): string {
   return html.replace(/<a\s+([^>]*?)href="([^"]*)"([^>]*)>/gi, (match, pre, href, post) => {
@@ -44,7 +63,8 @@ function hardenLinks(html: string, siteHost: string): string {
       .replace(/\btarget="[^"]*"/gi, '')
       .trim()
 
-    return `<a ${cleaned} href="${href}" rel="ugc nofollow noopener" target="_blank">`.replace(
+    const rel = isTrustedHost(href) ? 'noopener' : 'ugc nofollow noopener'
+    return `<a ${cleaned} href="${href}" rel="${rel}" target="_blank">`.replace(
       /\s+/g,
       ' '
     )

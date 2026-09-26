@@ -110,6 +110,12 @@ omits('iekšējai nav nofollow', int, 'nofollow')
 
 const own = renderMarkdown('[uz mentorme](https://mentorme.lv/blog)')
 omits('savai lapai nav nofollow', own, 'nofollow')
+const alenor = renderMarkdown('[ALENOR](https://www.alenor.lv/produkti)')
+omits('alenor.lv bez nofollow', alenor, 'nofollow')
+contains('alenor.lv atveras jaunā cilnē', alenor, 'target="_blank"')
+const viltus = renderMarkdown('[x](https://alenor.lv.spams.com)')
+contains('viltus alenor.lv domēns — nofollow', viltus, 'nofollow')
+
 
 console.log('Kopsavilkums un laiks')
 check('īss teksts paliek vesels', autoExcerpt('Īss teksts.'), 'Īss teksts.')

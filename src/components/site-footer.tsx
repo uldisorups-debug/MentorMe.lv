@@ -50,8 +50,11 @@ export function SiteFooter() {
         ALENOR.LV te ir saitei, ne reklāmai — tāpēc tikai adrese, bez logo
         un apraksta. Tā paliek redzama un salasāma: Google soda saites, kas
         paslēptas no cilvēkiem (fona krāsā, mikroskopiskā burtā).
-        rel="sponsored" ir Google prasība atbalstītāju saitēm; bez tā
-        vienāda saite katrā lapā izskatās pēc pirktas.
+        Bez rel="sponsored": ALENOR ir tā paša īpašnieka uzņēmums, neviens
+        trešais par šo vietu nemaksā — tā ir saite starp viena īpašnieka
+        projektiem, ne pirkta reklāma. Tāpēc Google to drīkst skaitīt kā
+        parastu saiti. Ja kādreiz te parādās svešs, maksājošs sponsors,
+        viņa saitei rel="sponsored" ir obligāts.
 
         LinkedIn — pelēks, ne zīmola zils: kājenē tas ir pieejams, ne
         izcelts. Uzbraucot kļūst gaišāks.
@@ -61,7 +64,7 @@ export function SiteFooter() {
           <a
             href="https://www.alenor.lv"
             target="_blank"
-            rel="sponsored noopener noreferrer"
+            rel="noopener"
             className="w-fit transition-colors hover:text-mist"
           >
             ALENOR.LV
