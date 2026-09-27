@@ -6,6 +6,7 @@ import { DeleteAccount } from '@/components/dashboard/delete-account'
 import { LinkButton } from '@/components/link-button'
 import { ProfileEditor } from './profile-editor'
 import { createClient } from '@/lib/supabase/server'
+import { importProviderAvatar } from '@/lib/import-avatar'
 import { createPublicClient } from '@/lib/supabase/public'
 
 export const metadata: Metadata = {
@@ -65,6 +66,16 @@ export default async function DashboardProfilePage() {
     }
 
     coach = created
+  }
+
+  /*
+   * Bilde no LinkedIn vai Google, ja savas vēl nav. LinkedIn,
+   * reģistrējoties, apsola, ka bilde tiks koplietota — cilvēks gaida to
+   * redzēt profilā, nevis meklēt failu telefonā.
+   */
+  if (!coach.avatar_url) {
+    const imported = await importProviderAvatar(supabase, user, coach.id)
+    if (imported) coach = { ...coach, avatar_url: imported }
   }
 
   const { data: contacts } = await supabase
