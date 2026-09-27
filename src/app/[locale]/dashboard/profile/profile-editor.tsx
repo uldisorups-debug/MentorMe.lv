@@ -13,6 +13,7 @@ import {
 } from '@/components/dashboard/contacts-section'
 import { CultureEditor } from '@/components/dashboard/culture-editor'
 import { SeoSection, type SeoDraft } from '@/components/dashboard/seo-section'
+import { TopicSuggest } from '@/components/dashboard/topic-suggest'
 import { Field, Section } from '@/components/dashboard/field'
 import { initials } from '@/components/coach-avatar'
 import { LinkButton } from '@/components/link-button'
@@ -599,6 +600,7 @@ export function ProfileEditor({
             max={MAX_NICHES}
           />
         </Field>
+        <TopicSuggest userId={coach.user_id} />
       </Section>
 
       <Section title={t('sectionWhere')}>

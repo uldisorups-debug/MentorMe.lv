@@ -389,6 +389,28 @@ export type Database = {
         Relationships: []
       }
 
+      topic_suggestions: {
+        Row: {
+          id: string
+          user_id: string
+          text: string
+          status: 'pending' | 'approved' | 'rejected'
+          category_slug: string | null
+          created_at: string
+          handled_at: string | null
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          text: string
+        }
+        Update: {
+          status?: 'pending' | 'approved' | 'rejected'
+          handled_at?: string | null
+        }
+        Relationships: []
+      }
+
       daily_visitors: {
         Row: {
           viewed_on: string
@@ -477,6 +499,15 @@ export type Database = {
       is_admin: {
         Args: Record<string, never>
         Returns: boolean
+      }
+      approve_topic_suggestion: {
+        Args: {
+          suggestion_id: string
+          topic_slug: string
+          topic_name: string
+          sphere: string
+        }
+        Returns: string
       }
       admin_delete_user: {
         Args: {

@@ -413,7 +413,13 @@
     "qualNone": "No certificate",
     "qualStudying": "Studying",
     "qualUnknown": "Not stated",
-    "qualHint": "What people look for when they want a real professional. A certificate is not required — many skills are not measured that way."
+    "qualHint": "What people look for when they want a real professional. A certificate is not required — many skills are not measured that way.",
+    "suggestTitle": "Can't find your topic?",
+    "suggestHint": "Type it here. We'll review it and add it to the list — and straight to your profile.",
+    "suggestPlaceholder": "For example: Microsoft 365, Excel",
+    "suggestSend": "Suggest topic",
+    "suggestSent": "Thanks! Suggestion sent. Once approved, the topic will appear on your profile.",
+    "suggestLimit": "You already have 5 suggestions waiting for review. Please wait until we go through them."
   },
   "Account": {
     "sectionTitle": "Account",

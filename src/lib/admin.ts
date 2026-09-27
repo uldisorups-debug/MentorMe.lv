@@ -46,6 +46,8 @@ export const ACTION_LABELS: Record<string, string> = {
   delete_review: 'Dzēsta atsauksme',
   unpublish_post: 'Raksts noņemts no publikācijas',
   delete_post: 'Dzēsts raksts',
+  approve_topic: 'Apstiprināta ieteiktā tēma',
+  reject_topic: 'Noraidīta ieteiktā tēma',
   grant_admin: 'Piešķirtas administratora tiesības',
   revoke_admin: 'Noņemtas administratora tiesības',
   handle_report: 'Ziņojums apstrādāts',

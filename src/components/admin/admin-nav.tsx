@@ -11,6 +11,7 @@ const TABS = [
   { href: '/admin/uzaicinajumi', label: 'Uzaicinājumi' },
   { href: '/admin/atsauksmes', label: 'Atsauksmes' },
   { href: '/admin/raksti', label: 'Raksti' },
+  { href: '/admin/temas', label: 'Tēmas' },
   { href: '/admin/statistika', label: 'Statistika' },
 ] as const
 

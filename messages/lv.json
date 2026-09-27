@@ -387,7 +387,13 @@
     "qualNone": "Sertifikāta nav",
     "qualStudying": "Mācos / apgūstu",
     "qualUnknown": "Nav norādīts",
-    "qualHint": "Ko cilvēks meklē, gribot atrast īstu profesionāli. Sertifikāts nav obligāts — daudzas prasmes ar tādiem nemaz nemēra."
+    "qualHint": "Ko cilvēks meklē, gribot atrast īstu profesionāli. Sertifikāts nav obligāts — daudzas prasmes ar tādiem nemaz nemēra.",
+    "suggestTitle": "Nevari atrast savu tēmu?",
+    "suggestHint": "Ieraksti to šeit. Pārbaudīsim un pievienosim sarakstam — un uzreiz arī tavam profilam.",
+    "suggestPlaceholder": "Piemēram: Microsoft 365, Excel",
+    "suggestSend": "Ieteikt tēmu",
+    "suggestSent": "Paldies! Ieteikums nosūtīts. Kad to apstiprināsim, tēma parādīsies tavā profilā.",
+    "suggestLimit": "Tev jau ir 5 ieteikumi, kas gaida pārbaudi. Pagaidi, kamēr tos izskatām."
   },
   "Contact": {
     "sendMessage": "Sūtīt ziņu",
