@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import type { EmailOtpType } from '@supabase/supabase-js'
+import { isAuthPKCECodeVerifierMissingError, type EmailOtpType } from '@supabase/supabase-js'
 import { safeNext } from '@/lib/safe-next'
 import { createClient } from '@/lib/supabase/server'
 
@@ -26,6 +26,31 @@ export async function GET(request: Request) {
     : tokenHash && type
       ? await supabase.auth.verifyOtp({ token_hash: tokenHash, type })
       : { data: { user: null }, error: null }
+
+  /*
+   * Reģistrācijas saite atvērta citā pārlūkā, nekā reģistrācija sākta.
+   *
+   * Telefonā tas ir parasts: cilvēks reģistrējas LinkedIn vai Facebook
+   * lietotnes iekšējā pārlūkā, bet saite no Gmail atveras Safari.
+   * Drošības "atslēga" (PKCE) glabājas pirmajā pārlūkā, tāpēc otrajā
+   * sesiju izveidot nevar — bet Supabase e-pastu jau ir apstiprinājis.
+   * Agrāk cilvēks redzēja "Pieteikšanās neizdevās" un domāja, ka
+   * reģistrācija nav notikusi. Tagad — pieteikšanās lapa ar ziņu, ka
+   * adrese apstiprināta, un atliek ienākt ar paroli.
+   *
+   * Tikai reģistrācijas saitei (flow=signup): paroles atjaunošanai vai
+   * Google/LinkedIn šāds paziņojums būtu nepatiess.
+   */
+  if (
+    error &&
+    isAuthPKCECodeVerifierMissingError(error) &&
+    searchParams.get('flow') === 'signup'
+  ) {
+    const login = new URL('/auth/login', origin)
+    login.searchParams.set('confirmed', '1')
+    login.searchParams.set('next', next)
+    return NextResponse.redirect(login.toString())
+  }
 
   if (error || !data.user) {
     console.error('Pieteikšanās neizdevās:', error?.message)

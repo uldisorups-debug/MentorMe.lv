@@ -39,8 +39,11 @@ const PROVIDERS: { id: Provider; icon: typeof GoogleIcon; labelKey: string }[] =
 export function LoginForm({
   next,
   startMode = 'signin',
+  confirmed = false,
 }: {
   next: string
+  /** E-pasts apstiprināts citā pārlūkā — atliek ienākt ar paroli */
+  confirmed?: boolean
   /** Ar ko lapa atveras — to izlemj lapa pēc tā, no kurienes cilvēks nāk */
   startMode?: 'signin' | 'signup'
 }) {
@@ -54,9 +57,11 @@ export function LoginForm({
   const [errorKey, setErrorKey] = useState<AuthErrorKey>(null)
   const [sent, setSent] = useState<Sent | null>(null)
 
-  function callbackUrl(target = next): string {
+  /** flow — lai atgriešanās punkts zina, kāda saite tā bija (sk. callback) */
+  function callbackUrl(target = next, flow?: 'signup'): string {
     const url = new URL('/auth/callback', window.location.origin)
     url.searchParams.set('next', target)
+    if (flow) url.searchParams.set('flow', flow)
     return url.toString()
   }
 
@@ -137,7 +142,7 @@ export function LoginForm({
       const { data, error: signUpError } = await supabase.auth.signUp({
         email: address,
         password,
-        options: { emailRedirectTo: callbackUrl() },
+        options: { emailRedirectTo: callbackUrl(next, 'signup') },
       })
       setPending(null)
 
@@ -210,6 +215,12 @@ export function LoginForm({
 
   return (
     <div className="flex flex-col gap-5">
+      {confirmed && (
+        <div className="rounded-xl border border-gold/30 bg-gold/5 px-4 py-3 text-sm">
+          <p className="font-medium">{t('confirmedTitle')}</p>
+          <p className="mt-1 text-mist">{t('confirmedBody')}</p>
+        </div>
+      )}
       {/*
         Divas vienādi redzamas pogas augšā, ne rindiņa lapas apakšā.
         Agrāk forma vienmēr atvērās uz "Pieteikties", un reģistrācija

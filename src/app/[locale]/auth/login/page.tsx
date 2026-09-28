@@ -26,7 +26,9 @@ export default async function LoginPage({
    * un dabūja "Nepareiza adrese vai parole". Reģistrācija bija maza
    * rindiņa lapas apakšā, un cilvēks tur vienkārši apstājās.
    */
-  const startMode = next.startsWith('/dashboard') ? 'signup' : 'signin'
+  const confirmed = params.confirmed === '1'
+  // Apstiprinātam kontam jāienāk, ne jāreģistrējas vēlreiz
+  const startMode = !confirmed && next.startsWith('/dashboard') ? 'signup' : 'signin'
 
   /*
    * Paskaidrojums atkarīgs no tā, kāpēc cilvēks šeit nonāca.
@@ -52,7 +54,7 @@ export default async function LoginPage({
       <p className="mt-3 text-mist">{lead}</p>
 
       <div className="mt-8">
-        <LoginForm next={next} startMode={startMode} />
+        <LoginForm next={next} startMode={startMode} confirmed={confirmed} />
       </div>
 
       <div className="mt-8 flex gap-3 rounded-xl border border-hairline bg-surface px-4 py-4">

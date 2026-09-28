@@ -269,7 +269,9 @@
     "signUpLead": "Konts vajadzīgs, lai profils paliktu tavs — to varēsi labot un noņemt tikai tu.",
     "tabSignIn": "Man jau ir konts",
     "tabSignUp": "Izveidot kontu",
-    "switchToSignUp": "Izveidot kontu ar šo adresi"
+    "switchToSignUp": "Izveidot kontu ar šo adresi",
+    "confirmedTitle": "E-pasts apstiprināts!",
+    "confirmedBody": "Konts ir gatavs. Ienāc ar savu e-pastu un paroli, ko izvēlējies reģistrējoties."
   },
   "Editor": {
     "title": "Mans profils",

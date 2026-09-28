@@ -269,7 +269,9 @@
     "signUpLead": "An account keeps the profile yours — only you can edit or remove it.",
     "tabSignIn": "I already have an account",
     "tabSignUp": "Create an account",
-    "switchToSignUp": "Create an account with this address"
+    "switchToSignUp": "Create an account with this address",
+    "confirmedTitle": "Email confirmed!",
+    "confirmedBody": "Your account is ready. Sign in with the email and password you chose when registering."
   },
   "Contact": {
     "sendMessage": "Send a message",
