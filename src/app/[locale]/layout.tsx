@@ -5,7 +5,7 @@ import { hasLocale, NextIntlClientProvider } from 'next-intl'
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server'
 import { publicMessages } from '@/i18n/client-messages'
 import { OrganizationSchema } from '@/components/organization-schema'
-import { alternateLanguages, routing } from '@/i18n/routing'
+import { routing } from '@/i18n/routing'
 import { SITE_URL } from '@/lib/supabase/config'
 
 const inter = Inter({
@@ -35,10 +35,12 @@ export async function generateMetadata({
     metadataBase: new URL(SITE_URL),
     title: { default: t('title'), template: '%s — MentorMe.lv' },
     description: t('description'),
-    alternates: {
-      canonical: locale === routing.defaultLocale ? '/' : `/${locale}`,
-      languages: alternateLanguages('/'),
-    },
+    keywords: t('keywords').split(',').map((k) => k.trim()),
+    /*
+     * canonical te apzināti nav. Izkārtojuma alternates manto katra
+     * lapa, kas savu neuzliek, — un tad /kontakti teica "īstā ir /".
+     * Katra lapa to liek pati caur pageAlternates().
+     */
     openGraph: {
       type: 'website',
       locale,

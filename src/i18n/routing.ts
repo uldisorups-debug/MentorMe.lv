@@ -68,3 +68,22 @@ export function alternateLanguages(path: string): Record<string, string> {
     'x-default': path,
   }
 }
+
+/**
+ * canonical + hreflang vienā — metadata.alternates katrai publiskai lapai.
+ *
+ * Agrāk canonical stāvēja izkārtojumā ('/'), un katra lapa, kas savu
+ * neuzlika (kontakti, privātums, noteikumi, sīkdatnes), to mantoja —
+ * tātad teica Google "īstā versija ir sākumlapa". Search Console to
+ * rāda kā "Alternate page with proper canonical tag", un lapa netiek
+ * indeksēta. Tagad izkārtojums canonical neliek vispār, un katra lapa
+ * to saņem no šejienes, norādot uz sevi pašu savā valodā.
+ */
+export function pageAlternates(locale: string, path: string) {
+  const clean = path === '/' ? '' : path
+  return {
+    canonical:
+      locale === routing.defaultLocale ? path : `/${locale}${clean}`,
+    languages: alternateLanguages(path),
+  }
+}

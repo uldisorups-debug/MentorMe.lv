@@ -5,7 +5,7 @@ import { HowItWorksContent } from '@/components/how-it-works-content'
 import { LinkButton } from '@/components/link-button'
 import { ABOUT } from '@/content/about'
 import { HOW_IT_WORKS } from '@/content/how-it-works'
-import { routing } from '@/i18n/routing'
+import { pageAlternates, routing } from '@/i18n/routing'
 
 /**
  * Viena lapa ar abām daļām: vispirms kāpēc, tad kā.
@@ -28,12 +28,10 @@ export async function generateMetadata({
   const { locale } = await params
   const a = about(locale)
   const h = how(locale)
-  const path = locale === routing.defaultLocale ? '/ka-tas-darbojas' : `/${locale}/ka-tas-darbojas`
-
   return {
     title: h.eyebrow,
     description: a.pull,
-    alternates: { canonical: path },
+    alternates: pageAlternates(locale, '/ka-tas-darbojas'),
   }
 }
 

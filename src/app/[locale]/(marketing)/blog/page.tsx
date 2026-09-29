@@ -5,15 +5,20 @@ import { CoachAvatar } from '@/components/coach-avatar'
 import { LinkButton } from '@/components/link-button'
 import { WritePostCta } from '@/components/write-post-cta'
 import { listPublishedPosts } from '@/lib/posts'
+import { pageAlternates } from '@/i18n/routing'
 
 export const revalidate = 60
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<'/[locale]/blog'>): Promise<Metadata> {
+  const { locale } = await params
   const t = await getTranslations('Blog')
   return {
     title: t('title'),
     description: t('metaDescription'),
-    alternates: { canonical: '/blog' },
+    // Agrāk '/blog' visām valodām — /en/blog teica "īstā ir latviešu"
+    alternates: pageAlternates(locale, '/blog'),
   }
 }
 

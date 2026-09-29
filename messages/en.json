@@ -1,7 +1,8 @@
 {
   "Meta": {
     "title": "Mentors, coaches, tutors, courses and retreats — MentorMe.lv",
-    "description": "Find a mentor, coach, private tutor or craftsperson in Latvia. Private lessons, courses, masterclasses and retreats — in person or online. Free."
+    "description": "Find a mentor, coach, private tutor or craftsperson in Riga and across Latvia. Business coaching, private lessons, courses, masterclasses, retreats.",
+    "keywords": "mentor, mentoring, coach, coaching, business coach, business mentor, life coach, executive coaching, private tutor, private lessons, teacher, courses, masterclasses, retreats, consultations, training, psychologist, mentor Riga, coach Riga, mentors Latvia"
   },
   "Nav": {
     "howItWorks": "How it works",
@@ -468,5 +469,31 @@
     "dailyLimit": "One article per day. You can publish the next one tomorrow.",
     "writeAnother": "Write another",
     "unsavedWarning": "What you have written is not saved yet. If you leave now, it will be lost."
+  },
+  "Topics": {
+    "browseTitle": "Topics, fields and places",
+    "spheresLabel": "Fields",
+    "groupsLabel": "Topics",
+    "regionsLabel": "Places",
+    "home": "Home",
+    "breadcrumb": "Breadcrumb",
+    "notFound": "No such topic",
+    "metaTitleTopic": "{topic} — mentors, coaches and courses in Latvia",
+    "metaTitlePlace": "Mentors, coaches and private tutors — {topic}",
+    "metaDescTopic": "{topic}: {count, plural, one {# mentor, coach or tutor} other {# mentors, coaches and tutors}} in Latvia. Private lessons, consultations, courses and masterclasses in person or online. Get in touch for free.",
+    "metaDescPlace": "{topic}: {count, plural, one {# mentor, coach or private tutor} other {# mentors, coaches and private tutors}}. Private lessons, consultations, courses, masterclasses and retreats. Get in touch for free, no commission.",
+    "h1Topic": "{topic}: mentors, coaches and tutors",
+    "h1Place": "Mentors, coaches and tutors — {topic}",
+    "leadTopic": "{topic} in Latvia — {count, plural, one {# person who teaches and shares experience} other {# people who teach and share experience}}. Mentors, coaches, private tutors and craftspeople offer private lessons, one-to-one consultations, courses, masterclasses and retreats — in person in Riga and elsewhere in Latvia, or online. Everyone sets their own price, and you contact them directly, with no middleman and no commission.",
+    "leadPlace": "{topic} — {count, plural, one {# person who teaches and shares experience} other {# people who teach and share experience}}. Mentors, business and life coaches, private tutors and craftspeople: private lessons, consultations, courses, masterclasses and retreats in person or online. Everyone sets their own price, and you contact them directly, with no commission.",
+    "profilesTitle": "{count, plural, one {# profile} other {# profiles}}",
+    "childrenSphere": "Topics in this field",
+    "childrenTopic": "Other topics in this field",
+    "childrenPlace": "Other places",
+    "relatedTitle": "Related topics",
+    "similarTitle": "Similar profiles",
+    "ctaTitle": "Do you know this well?",
+    "ctaBody": "Create a free profile — people looking for exactly what you know will find you.",
+    "ctaButton": "Create a profile"
   }
 }

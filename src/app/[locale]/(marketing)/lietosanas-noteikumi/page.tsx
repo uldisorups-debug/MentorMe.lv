@@ -1,12 +1,19 @@
 import type { Metadata } from 'next'
 import { setRequestLocale } from 'next-intl/server'
+import { pageAlternates } from '@/i18n/routing'
 import { Link } from '@/i18n/navigation'
 import { LegalList, LegalPage, LegalSection } from '@/components/legal-page'
 
-export const metadata: Metadata = {
-  title: 'Lietošanas noteikumi',
-  description:
-    'Kā MentorMe.lv strādā, ko drīkst un ko nedrīkst, un kas atbild par to, kas notiek pēc iepazīšanās.',
+export async function generateMetadata({
+  params,
+}: PageProps<'/[locale]/lietosanas-noteikumi'>): Promise<Metadata> {
+  const { locale } = await params
+  return {
+    title: 'Lietošanas noteikumi',
+    description:
+      'Kā MentorMe.lv strādā, ko drīkst un ko nedrīkst, un kas atbild par to, kas notiek pēc iepazīšanās.',
+    alternates: pageAlternates(locale, '/lietosanas-noteikumi'),
+  }
 }
 
 /**

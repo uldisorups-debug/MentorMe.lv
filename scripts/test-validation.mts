@@ -36,6 +36,13 @@ import {
   type ProfileDraft,
 } from '../src/lib/profile-validation.ts'
 import { authErrorKey, passwordTooShort } from '../src/lib/auth-errors.ts'
+import {
+  buildTopicIndex,
+  decodeSlug,
+  relatedTopics,
+  similarCoaches,
+  topicPath,
+} from '../src/lib/topic-index.ts'
 
 let passed = 0
 let failed = 0
@@ -808,6 +815,60 @@ check('lielie burti netraucē', authErrorKey('INVALID LOGIN CREDENTIALS'), 'errI
 check('septiņas zīmes par īsu', passwordTooShort('1234567'), true)
 check('astoņas zīmes der', passwordTooShort('12345678'), false)
 check('tukša parole par īsu', passwordTooShort(''), true)
+
+
+// ---------- Tēmu lapas ----------
+
+const topicTax = {
+  spheres: [
+    { value: 'koucings', label: 'Koučings' },
+    { value: 'nauda', label: 'Bizness' },
+    { value: 'cits', label: 'Cits' },
+  ],
+  groups: [
+    { value: 'kouc-bizness', label: 'Biznesa koučings', sphere: 'koucings' },
+    { value: 'kouc-dzive', label: 'Dzīves koučings', sphere: 'koucings' },
+    { value: 'finanses', label: 'Finanses', sphere: 'nauda' },
+    { value: 'cits-prasme', label: 'Cita prasme', sphere: 'cits' },
+  ],
+  regions: [
+    { value: 'riga', label: 'Rīga' },
+    { value: 'latgale', label: 'Latgale' },
+  ],
+}
+const tA = coach({ id: 'a', niches: ['kouc-bizness', 'finanses'], region_slug: 'riga' })
+const tB = coach({ id: 'b', niches: ['kouc-bizness', 'cits-prasme'], region_slug: null })
+const tC = coach({ id: 'c', niches: ['finanses'], region_slug: 'riga' })
+const tD = coach({ id: 'd', niches: ['kouc-bizness'], region_slug: 'riga', is_background: true })
+const topicIdx = buildTopicIndex([tA, tB, tC, tD], topicTax)
+
+check(
+  'tēmas ar skaitu, tukšās ārā',
+  topicIdx.groups.map((g) => [g.slug, g.count]),
+  [['kouc-bizness', 3], ['finanses', 2]]
+)
+check(
+  'nozare skaita profilus, ne tēmas',
+  topicIdx.spheres.map((g) => [g.slug, g.count]),
+  [['koucings', 3], ['nauda', 2]]
+)
+check('"Cits" lapu nesaņem', topicIdx.spheres.some((s) => s.slug === 'cits'), false)
+check('tukšs reģions lapu nesaņem', topicIdx.regions.map((r) => r.slug), ['riga'])
+check('tēmas adrese', topicPath('tema', 'kouc-bizness'), '/tema/kouc-bizness')
+check('kodēts slug atkodēts', decodeSlug('val-ang%C4%BCu'), 'val-angļu')
+check('nederīgs kodējums neiet bojā', decodeSlug('%E0%A4%A'), '%E0%A4%A')
+check(
+  'saistītās tēmas bez pašas',
+  relatedTopics([tA, tC], topicIdx, 'finanses').map((r) => r.slug),
+  ['kouc-bizness']
+)
+check(
+  'līdzīgie: kopīga tēma pirms kopīgas vietas, fons pēdējais, sevis nav',
+  similarCoaches(tA, [tA, tB, tC, tD], { 'kouc-bizness': 'koucings', finanses: 'nauda' }).map(
+    (c) => c.id
+  ),
+  ['c', 'b', 'd']
+)
 
 console.log(`\n  ${passed} izturēja, ${failed} kritušas\n`)
 process.exit(failed === 0 ? 0 : 1)

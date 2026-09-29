@@ -1,6 +1,8 @@
 import type { MetadataRoute } from 'next'
 import { listCoachSlugs } from '@/lib/coach-profile'
 import { listPostSlugs } from '@/lib/posts'
+import { loadTopicIndex } from '@/lib/topics'
+import { topicPath } from '@/lib/topic-index'
 import { routing } from '@/i18n/routing'
 import { SITE_URL } from '@/lib/supabase/config'
 
@@ -50,9 +52,10 @@ function entry(
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [coaches, posts] = await Promise.all([
+  const [coaches, posts, topics] = await Promise.all([
     listCoachSlugs(),
     listPostSlugs(),
+    loadTopicIndex(routing.defaultLocale),
   ])
 
   /*
@@ -65,14 +68,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const listsModified = newest > 0 ? new Date(newest) : new Date()
 
   // Statiskās lapas mainās tikai tad, kad mēs pašas tās pārrakstām
-  const staticModified = new Date('2026-09-16')
+  const staticModified = new Date('2026-09-29')
 
   return [
     ...entry('/', 'daily', 1, listsModified),
     ...entry('/blog', 'daily', 0.9, listsModified),
     ...entry('/ka-tas-darbojas', 'monthly', 0.7, staticModified),
+    ...entry('/kontakti', 'monthly', 0.3, staticModified),
     ...coaches.flatMap((coach) =>
       entry(`/${coach.slug}`, 'weekly', 0.8, new Date(coach.updatedAt))
+    ),
+    /*
+     * Tēmu, nozaru un vietu lapas — tikai tās, kurās ir vismaz viens
+     * profils. Tās mainās kopā ar profiliem, tāpēc datums ir sarakstu.
+     */
+    ...[...topics.spheres, ...topics.groups, ...topics.regions].flatMap((topic) =>
+      entry(
+        encodeURI(topicPath(topic.kind, topic.slug)),
+        'weekly',
+        topic.kind === 'tema' ? 0.7 : 0.8,
+        listsModified
+      )
     ),
     ...posts.flatMap((post) =>
       entry(`/blog/${post.slug}`, 'monthly', 0.7, new Date(post.updatedAt))

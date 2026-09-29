@@ -26,6 +26,14 @@ import { assembleProfileDetails, qualificationKey } from '@/lib/coaches'
 import { listCoachSlugs, loadCoachPage } from '@/lib/coach-profile'
 import { loadGroupNames, loadRegionName, loadSphereNames } from '@/lib/taxonomy'
 import { SITE_URL } from '@/lib/supabase/config'
+import { Link } from '@/i18n/navigation'
+import { CoachCard } from '@/components/coach-card'
+import { loadTaxonomy } from '@/lib/taxonomy'
+import { loadPublishedCards } from '@/lib/topics'
+import { nicheToSphereMap, similarCoaches, topicPath } from '@/lib/topic-index'
+
+/** Tēmas un nozares, kurām nav savas lapas — tās ir atkritne, ne joma */
+const NO_TOPIC_PAGE = new Set(['cits', 'cits-prasme'])
 
 export const revalidate = 60
 
@@ -144,16 +152,35 @@ export default async function CoachProfilePage({
 
   if (!page) notFound()
 
-  const [regionName, spheres] = await Promise.all([
+  const [regionName, spheres, allCards, taxonomy] = await Promise.all([
     loadRegionName(page.coach.region_slug, locale),
     loadSphereNames(page.coach.niches, locale),
+    loadPublishedCards(),
+    loadTaxonomy(locale),
   ])
+
+  /*
+   * Līdzīgi profili — lai profils nav strupceļš. Google no šejienes
+   * aiziet uz citiem profiliem, un jauns profils tiek atrasts caur jau
+   * indeksētajiem, negaidot sitemap.
+   */
+  const similar = similarCoaches(
+    page.coach,
+    allCards,
+    nicheToSphereMap(taxonomy)
+  )
+  const regionNames = Object.fromEntries(
+    taxonomy.regions.map((r) => [r.value, r.label])
+  )
 
   const { coach, reviews } = page
   const t = await getTranslations('Coach')
   const tPrice = await getTranslations('Price')
   const tReviews = await getTranslations('Reviews')
   const tCoaches = await getTranslations('Coaches')
+  const tTopics = await getTranslations('Topics')
+  const profileUrl = `${SITE_URL}${localePath(locale, `/${coach.slug}`)}`
+  const mainSphere = spheres.find((s) => !NO_TOPIC_PAGE.has(s.value))
 
   const qualKey = qualificationKey(coach.qualification)
   const priceText =
@@ -180,7 +207,7 @@ export default async function CoachProfilePage({
     mainEntity: {
       '@type': 'Person',
       name: coach.full_name,
-      url: `${SITE_URL}/${coach.slug}`,
+      url: profileUrl,
       ...(coach.tagline ? { jobTitle: coach.tagline } : {}),
       ...(coach.bio ? { description: coach.bio } : {}),
       ...(coach.avatar_url ? { image: coach.avatar_url } : {}),
@@ -214,11 +241,37 @@ export default async function CoachProfilePage({
     },
   }
 
+  /*
+   * Ceļš "Sākums › Nozare › Vārds" — Google to rāda rezultātā adreses
+   * vietā, un tas pats pasaka, kurā jomā šis cilvēks ir.
+   */
+  const crumbs = [
+    { name: tTopics('home'), item: `${SITE_URL}${localePath(locale, '/')}` },
+    ...(mainSphere
+      ? [
+          {
+            name: mainSphere.label,
+            item: `${SITE_URL}${localePath(locale, topicPath('nozare', mainSphere.value))}`,
+          },
+        ]
+      : []),
+    { name: coach.full_name, item: profileUrl },
+  ]
+  const breadcrumbLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: crumbs.map((c, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      ...c,
+    })),
+  }
+
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify([jsonLd, breadcrumbLd]) }}
       />
       <ProfileViewTracker slug={coach.slug} />
 
@@ -260,11 +313,24 @@ export default async function CoachProfilePage({
               )}
 
               <div className="mt-4 flex flex-wrap gap-1.5">
-                {coach.niches.map((niche) => (
-                  <Badge key={niche} variant="outline" className="text-mist">
-                    {categoryNames[niche] ?? niche}
-                  </Badge>
-                ))}
+                {coach.niches.map((niche) =>
+                  NO_TOPIC_PAGE.has(niche) ? (
+                    <Badge key={niche} variant="outline" className="text-mist">
+                      {categoryNames[niche] ?? niche}
+                    </Badge>
+                  ) : (
+                    // Saite uz tēmas lapu — tīkla pamats: katrs profils
+                    // norāda uz savām tēmām, katra tēma uz saviem profiliem
+                    <Link key={niche} href={topicPath('tema', niche)}>
+                      <Badge
+                        variant="outline"
+                        className="text-mist transition-colors hover:border-gold/40 hover:text-cream"
+                      >
+                        {categoryNames[niche] ?? niche}
+                      </Badge>
+                    </Link>
+                  )
+                )}
               </div>
 
               <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
@@ -405,9 +471,21 @@ export default async function CoachProfilePage({
                     {t('sphere')}
                   </dt>
                   <dd className="mt-1">
-                    {spheres
-                      .map((s) => (s.icon ? `${s.icon} ${s.label}` : s.label))
-                      .join(', ')}
+                    {spheres.map((s, i) => (
+                      <span key={s.value}>
+                        {i > 0 && ', '}
+                        {NO_TOPIC_PAGE.has(s.value) ? (
+                          s.icon ? `${s.icon} ${s.label}` : s.label
+                        ) : (
+                          <Link
+                            href={topicPath('nozare', s.value)}
+                            className="underline decoration-hairline underline-offset-4 hover:text-gold"
+                          >
+                            {s.icon ? `${s.icon} ${s.label}` : s.label}
+                          </Link>
+                        )}
+                      </span>
+                    ))}
                   </dd>
                 </div>
               )}
@@ -427,7 +505,16 @@ export default async function CoachProfilePage({
                     {t('place')}
                   </dt>
                   <dd className="mt-1">
-                    {[coach.city, regionName].filter(Boolean).join(', ')}
+                    {coach.city}
+                    {coach.city && regionName && ', '}
+                    {regionName && coach.region_slug && (
+                      <Link
+                        href={topicPath('vieta', coach.region_slug)}
+                        className="underline decoration-hairline underline-offset-4 hover:text-gold"
+                      >
+                        {regionName}
+                      </Link>
+                    )}
                   </dd>
                 </div>
               )}
@@ -466,6 +553,25 @@ export default async function CoachProfilePage({
           </div>
         </aside>
       </div>
+
+      {similar.length > 0 && (
+        <section className="border-t border-hairline px-6 py-12">
+          <div className="mx-auto max-w-5xl">
+            <h2 className="font-display text-2xl">{tTopics('similarTitle')}</h2>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {similar.map((other) => (
+                <div key={other.id} className="grid">
+                  <CoachCard
+                    coach={other}
+                    nicheNames={categoryNames}
+                    regionNames={regionNames}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
     </>
   )
 }

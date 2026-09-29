@@ -35,6 +35,10 @@ māksla un radošums, tehnoloģijas, bizness un nauda, dzīves pieredze.
   nozares, apmācību formas, vietas, budžeta un kvalifikācijas
 - [Kā tas darbojas](${SITE_URL}/ka-tas-darbojas)
 - [Raksti](${SITE_URL}/blog): paši meistari raksta par to, ko prot
+- Nozaru lapas: ${SITE_URL}/nozare/{nozare} — piem. ${SITE_URL}/nozare/koucings
+- Tēmu lapas: ${SITE_URL}/tema/{tema} — piem. ${SITE_URL}/tema/kouc-bizness
+- Vietu lapas: ${SITE_URL}/vieta/{reģions} — piem. ${SITE_URL}/vieta/riga
+- Pilns adrešu saraksts: ${SITE_URL}/sitemap.xml
 
 ## Valodas
 
