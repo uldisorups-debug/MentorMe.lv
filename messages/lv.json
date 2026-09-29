@@ -1,7 +1,8 @@
 {
   "Meta": {
     "title": "Mentori, kouči, privātskolotāji, kursi un retrīti — MentorMe.lv",
-    "description": "Atrodi mentoru, kouču, privātskolotāju vai meistaru Latvijā. Privātstundas, kursi, meistarklases un retrīti — klātienē vai attālināti. Bez maksas."
+    "description": "Atrodi mentoru, kouču, privātskolotāju vai meistaru Rīgā un visā Latvijā. Biznesa koučings, privātstundas, kursi, meistarklases un retrīti. Bez komisijas.",
+    "keywords": "mentors, mentorings, koučs, koučings, biznesa koučs, biznesa mentors, dzīves koučs, vadītāju koučings, privātskolotājs, privātstundas, skolotājs, pasniedzējs, kursi, meistarklases, retrīti, konsultācijas, apmācības, psihologs, mentors Rīgā, koučs Rīgā, mentori Latvijā"
   },
   "Nav": {
     "howItWorks": "Kā tas darbojas",
@@ -468,5 +469,31 @@
     "dailyLimit": "Viens raksts dienā. Nākamo varēsi publicēt rīt.",
     "writeAnother": "Rakstīt nākamo",
     "unsavedWarning": "Ierakstītais vēl nav saglabāts. Ja tagad aizej, tas pazudīs."
+  },
+  "Topics": {
+    "browseTitle": "Tēmas, nozares un vietas",
+    "spheresLabel": "Nozares",
+    "groupsLabel": "Tēmas",
+    "regionsLabel": "Vietas",
+    "home": "Sākums",
+    "breadcrumb": "Atrašanās vieta lapā",
+    "notFound": "Šādas tēmas nav",
+    "metaTitleTopic": "{topic} — mentori, kouči un kursi Latvijā",
+    "metaTitlePlace": "Mentori, kouči un privātskolotāji — {topic}",
+    "metaDescTopic": "{topic}: {count, plural, one {# mentors, koučs vai pasniedzējs} other {# mentori, kouči un pasniedzēji}} Latvijā. Privātstundas, konsultācijas, kursi un meistarklases klātienē vai attālināti. Sazinies bez maksas.",
+    "metaDescPlace": "{topic}: {count, plural, one {# mentors, koučs vai privātskolotājs} other {# mentori, kouči un privātskolotāji}}. Privātstundas, konsultācijas, kursi, meistarklases un retrīti. Sazinies bez maksas un bez komisijas.",
+    "h1Topic": "{topic}: mentori, kouči un pasniedzēji",
+    "h1Place": "Mentori, kouči un pasniedzēji — {topic}",
+    "leadTopic": "{topic} Latvijā — {count, plural, one {# cilvēks, kurš māca un dalās pieredzē} other {# cilvēki, kuri māca un dalās pieredzē}}. Mentori, kouči, privātskolotāji un meistari piedāvā privātstundas, individuālas konsultācijas, kursus, meistarklases un retrītus — klātienē Rīgā un citur Latvijā vai attālināti. Katrs pats nosaka cenu, un sazināties var tieši, bez starpnieka un bez komisijas.",
+    "leadPlace": "{topic} — {count, plural, one {# cilvēks, kurš māca un dalās pieredzē} other {# cilvēki, kuri māca un dalās pieredzē}}. Mentori, biznesa un dzīves kouči, privātskolotāji un meistari: privātstundas, konsultācijas, kursi, meistarklases un retrīti klātienē vai attālināti. Katrs pats nosaka cenu, un sazināties var tieši, bez komisijas.",
+    "profilesTitle": "{count, plural, one {# profils} other {# profili}}",
+    "childrenSphere": "Tēmas šajā nozarē",
+    "childrenTopic": "Citas tēmas šajā nozarē",
+    "childrenPlace": "Citas vietas",
+    "relatedTitle": "Saistītās tēmas",
+    "similarTitle": "Līdzīgi profili",
+    "ctaTitle": "Tev pieder zināšanas par šo?",
+    "ctaBody": "Izveido profilu bez maksas — tevi atradīs cilvēki, kas meklē tieši to, ko tu proti.",
+    "ctaButton": "Izveidot profilu"
   }
 }

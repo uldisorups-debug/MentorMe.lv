@@ -1,13 +1,20 @@
 import type { Metadata } from 'next'
 import { setRequestLocale } from 'next-intl/server'
+import { pageAlternates } from '@/i18n/routing'
 import { Link } from '@/i18n/navigation'
 import { LegalPage, LegalSection } from '@/components/legal-page'
 import { CookieSettingsLink } from '@/components/cookie-settings-link'
 
-export const metadata: Metadata = {
-  title: 'Sīkdatņu politika',
-  description:
-    'Kādas sīkdatnes MentorMe.lv liek pārlūkā, kāpēc, cik ilgi tās dzīvo un kā izvēli mainīt.',
+export async function generateMetadata({
+  params,
+}: PageProps<'/[locale]/sikdatnes'>): Promise<Metadata> {
+  const { locale } = await params
+  return {
+    title: 'Sīkdatņu politika',
+    description:
+      'Kādas sīkdatnes MentorMe.lv liek pārlūkā, kāpēc, cik ilgi tās dzīvo un kā izvēli mainīt.',
+    alternates: pageAlternates(locale, '/sikdatnes'),
+  }
 }
 
 /**

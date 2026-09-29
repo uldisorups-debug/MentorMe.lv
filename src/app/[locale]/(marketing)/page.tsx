@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { CoachDirectory } from '@/components/coach-directory'
 import { ForCoaches } from '@/components/for-coaches'
 import { HeroSection } from '@/components/hero-section'
@@ -5,6 +6,16 @@ import type { CoachCardData } from '@/lib/coaches'
 import { setRequestLocale } from 'next-intl/server'
 import { loadTaxonomy } from '@/lib/taxonomy'
 import { createPublicClient } from '@/lib/supabase/public'
+import { pageAlternates } from '@/i18n/routing'
+import { TopicLinks } from '@/components/topic-links'
+import { buildTopicIndex } from '@/lib/topic-index'
+
+export async function generateMetadata({
+  params,
+}: PageProps<'/[locale]'>): Promise<Metadata> {
+  const { locale } = await params
+  return { alternates: pageAlternates(locale, '/') }
+}
 
 /*
  * Cik profilu sākumlapa ievelk vienā piegājienā.
@@ -65,6 +76,12 @@ export default async function HomePage({ params }: PageProps<'/[locale]'>) {
         sphereCount={taxonomy.spheres.length}
       />
       <CoachDirectory coaches={coaches} taxonomy={taxonomy} />
+      {/*
+        Nozaru kvadrāti augšā ir pogas — tās filtrē pārlūkā, un Google
+        pa tām nekur neaiziet. Šīs ir parastas saites uz tēmu lapām, lai
+        katra tēma, kurā kāds ir, ir sasniedzama no sākumlapas.
+      */}
+      <TopicLinks index={buildTopicIndex(coaches, taxonomy)} />
       <ForCoaches />
     </>
   )

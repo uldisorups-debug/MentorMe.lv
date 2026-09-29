@@ -3,7 +3,7 @@ import { setRequestLocale } from 'next-intl/server'
 import { AlertTriangle, Mail } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { CONTACT_PAGE } from '@/content/contact'
-import { routing } from '@/i18n/routing'
+import { pageAlternates, routing } from '@/i18n/routing'
 
 /** Rekvizīti no SIA "Forge Core" oficiālā dokumenta. Bankas datu šeit nav. */
 const COMPANY = {
@@ -23,7 +23,11 @@ export async function generateMetadata({
 }: PageProps<'/[locale]/kontakti'>): Promise<Metadata> {
   const { locale } = await params
   const c = content(locale)
-  return { title: c.title, description: c.lead }
+  return {
+    title: c.title,
+    description: c.lead,
+    alternates: pageAlternates(locale, '/kontakti'),
+  }
 }
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {

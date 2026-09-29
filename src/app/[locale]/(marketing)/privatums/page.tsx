@@ -1,11 +1,18 @@
 import type { Metadata } from 'next'
 import { setRequestLocale } from 'next-intl/server'
+import { pageAlternates } from '@/i18n/routing'
 import { Link } from '@/i18n/navigation'
 
-export const metadata: Metadata = {
-  title: 'Privātuma politika',
-  description:
-    'Kādus datus MentorMe.lv vāc, kāpēc, cik ilgi glabā un kādas ir tavas tiesības.',
+export async function generateMetadata({
+  params,
+}: PageProps<'/[locale]/privatums'>): Promise<Metadata> {
+  const { locale } = await params
+  return {
+    title: 'Privātuma politika',
+    description:
+      'Kādus datus MentorMe.lv vāc, kāpēc, cik ilgi glabā un kādas ir tavas tiesības.',
+    alternates: pageAlternates(locale, '/privatums'),
+  }
 }
 
 /**
