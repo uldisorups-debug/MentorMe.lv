@@ -1,5 +1,6 @@
 import { marked } from 'marked'
 import sanitizeHtml from 'sanitize-html'
+import { contentLimitError } from './post-validation.ts'
 
 /**
  * Markdown -> drošs HTML.
@@ -59,45 +60,39 @@ const DROP_WITH_CONTENT = [
  */
 const TRUSTED_HOSTS = ['alenor.lv']
 
-function isTrustedHost(href: string): boolean {
-  try {
-    const host = new URL(href).hostname.toLowerCase()
-    // Precīzi domēns vai tā apakšdomēns — "alenor.lv.kaut-kas.com" neder
-    return TRUSTED_HOSTS.some((trusted) => host === trusted || host.endsWith(`.${trusted}`))
-  } catch {
-    return false
-  }
+// Precīzi domēns vai tā apakšdomēns — "alenor.lv.kaut-kas.com" neder
+function isDomainOrSubdomain(host: string, domain: string): boolean {
+  return host === domain || host.endsWith(`.${domain}`)
 }
 
-/**
- * Ārējām saitēm pievienojam rel="ugc nofollow".
+type LinkKind = 'same-origin' | 'own-site' | 'trusted' | 'external'
+
+/*
+ * Kurp saite ved, nosakām tāpat kā pārlūks: ar URL parsētāju attiecībā
+ * pret pašas vietnes adresi, un salīdzinām domēnu, ne tekstu.
  *
- * Tas nav skopums pret autoriem — tā ir higiēna. Ja katrs, kas
- * reģistrējas, dabū dofollow saites, lapa kļūst par spameru mērķi, un
- * Google soda visu domēnu, arī godīgos autorus.
- *
- * Izņēmums — TRUSTED_HOSTS: paša īpašnieka vietnes.
+ * Līdz šim saite skaitījās iekšēja, ja tā sākās ar "/" vai saturēja
+ * "mentorme.lv". Bet "//evil.com" un "/\evil.com" pārlūks atver kā
+ * evil.com, un "https://evil.com/?mentorme.lv" vai
+ * "https://mentorme.lv.evil.com" arī ved prom. Šīs saites palika bez
+ * nofollow un ar autora paša target="_blank" rel="opener", un atvērtā
+ * lapa varēja pārdēvēt lasītāja cilni par viltus pieteikšanās lapu.
+ * URL parsētājs tāpat izmet tabulācijas un jaunas rindas adresē un saprot
+ * "lietotājs@domēns" — tieši kā pārlūks.
  */
-function hardenLinks(html: string, siteHost: string): string {
-  return html.replace(/<a\s+([^>]*?)href="([^"]*)"([^>]*)>/gi, (match, pre, href, post) => {
-    const isInternal =
-      href.startsWith('/') ||
-      href.startsWith('#') ||
-      href.includes(siteHost)
-
-    if (isInternal) return match
-
-    const cleaned = `${pre}${post}`
-      .replace(/\brel="[^"]*"/gi, '')
-      .replace(/\btarget="[^"]*"/gi, '')
-      .trim()
-
-    const rel = isTrustedHost(href) ? 'noopener' : 'ugc nofollow noopener'
-    return `<a ${cleaned} href="${href}" rel="${rel}" target="_blank">`.replace(
-      /\s+/g,
-      ' '
-    )
-  })
+function linkKind(href: string, siteHost: string): LinkKind {
+  const siteOrigin = `https://${siteHost}`
+  let url: URL
+  try {
+    url = new URL(href, `${siteOrigin}/`)
+  } catch {
+    return 'external'
+  }
+  if (url.origin === siteOrigin) return 'same-origin'
+  if (url.protocol !== 'https:' && url.protocol !== 'http:') return 'external'
+  if (isDomainOrSubdomain(url.hostname, siteHost)) return 'own-site'
+  if (TRUSTED_HOSTS.some((trusted) => isDomainOrSubdomain(url.hostname, trusted))) return 'trusted'
+  return 'external'
 }
 
 // javascript: un data: saites neiziet cauri
@@ -110,11 +105,10 @@ const URI_WHITESPACE = /[\u0000-\u0020\u00A0\u1680\u180E\u2000-\u2029\u205F\u300
  * Atribūtu vērtības apgriežam un href pārbaudām tieši tāpat kā līdz šim
  * darīja DOMPurify.
  *
- * Apgriešana nav kosmētika. hardenLinks visas atstarpes tagā pārvērš par
- * parastu atstarpi, tāpēc href ar nedalāmo atstarpi (U+00A0) pirms
- * "javascript:" pēc tā sāktos ar " javascript:", bet parastu atstarpi
- * sākumā pārlūks nomet — saite izpildītu kodu. Turklāt " /profils"
- * bez apgriešanas izskatītos pēc ārējas saites.
+ * Apgriešana nav kosmētika: saitē jāpaliek tieši tai adresei, kuru
+ * linkKind pārbaudīja. Turklāt nedalāmo atstarpi (U+00A0) pirms
+ * "javascript:" URL parsētājs nenomet, bet trim() nomet, un tad shēmas
+ * pārbaude to atpazīst.
  */
 function normalizeAttribs(tagName: string, attribs: sanitizeHtml.Attributes) {
   const result: sanitizeHtml.Attributes = {}
@@ -128,30 +122,115 @@ function normalizeAttribs(tagName: string, attribs: sanitizeHtml.Attributes) {
   return { tagName, attribs: result }
 }
 
+/**
+ * Ārējām saitēm pievienojam rel="ugc nofollow".
+ *
+ * Tas nav skopums pret autoriem — tā ir higiēna. Ja katrs, kas
+ * reģistrējas, dabū dofollow saites, lapa kļūst par spameru mērķi, un
+ * Google soda visu domēnu, arī godīgos autorus.
+ *
+ * Izņēmums — TRUSTED_HOSTS: paša īpašnieka vietnes.
+ *
+ * Autora rel un target paliek tikai saitēm uz to pašu izcelsmi (pašu
+ * vietni pa https). Visur citur tos izmetam vienmēr: rel="opener" ļauj
+ * atvērtajai lapai vadīt lasītāja cilni.
+ *
+ * Tas notiek sanitize-html iekšienē, nevis ar regulāru izteiksmi pār
+ * gatavo HTML. Regulārā izteiksme href meklēja kā tekstu, un title, kas
+ * beidzās ar "href=", saiti salauza.
+ */
+function hardenLink(
+  tagName: string,
+  attribs: sanitizeHtml.Attributes,
+  siteHost: string
+): sanitizeHtml.Tag {
+  // sanitize-html pēc šī palaiž arī '*' pārveidotāju, bet atkārtota
+  // apgriešana neko nemaina. Te tā vajadzīga, lai pārbaudām galīgo adresi.
+  const tag = normalizeAttribs(tagName, attribs)
+  const { href } = tag.attribs
+  const kind = href === undefined ? null : linkKind(href, siteHost)
+  if (kind === 'same-origin') return tag
+
+  delete tag.attribs.rel
+  delete tag.attribs.target
+  // Bez href tā nav saite, bet uz savu vietni — parasta iekšēja saite
+  if (kind === null || kind === 'own-site') return tag
+
+  tag.attribs.rel = kind === 'trusted' ? 'noopener' : 'ugc nofollow noopener'
+  tag.attribs.target = '_blank'
+  return tag
+}
+
 // @types/sanitize-html vēl nepazīst allowedEmptyAttributes, pati bibliotēka to atbalsta
-const SANITIZE_OPTIONS: sanitizeHtml.IOptions & { allowedEmptyAttributes: string[] } = {
-  allowedTags: ALLOWED_TAGS,
-  allowedAttributes: { '*': ALLOWED_ATTR },
-  disallowedTagsMode: 'discard',
-  nonTextTags: DROP_WITH_CONTENT,
-  transformTags: { '*': normalizeAttribs },
-  // Otrā pārbaude pēc normalizeAttribs: sanitize-html pats atšifrē
-  // shēmu un laiž cauri tikai šīs. Relatīvajām adresēm shēmas nav.
-  allowedSchemes: ['http', 'https', 'mailto', 'tel'],
-  allowedSchemesByTag: {},
-  allowedSchemesAppliedToAttributes: ['href'],
-  /*
-   * Tukšu href="" vai title="" atstājam, nevis izmetam: tā bija arī
-   * līdz šim, un hardenLinks sagaida, ka saitei href ir.
-   */
-  nonBooleanAttributes: [],
-  allowedEmptyAttributes: ALLOWED_ATTR,
+type SanitizeOptions = sanitizeHtml.IOptions & { allowedEmptyAttributes: string[] }
+
+function sanitizeOptions(siteHost: string): SanitizeOptions {
+  return {
+    allowedTags: ALLOWED_TAGS,
+    allowedAttributes: { '*': ALLOWED_ATTR },
+    disallowedTagsMode: 'discard',
+    nonTextTags: DROP_WITH_CONTENT,
+    transformTags: {
+      a: (tagName, attribs) => hardenLink(tagName, attribs, siteHost),
+      '*': normalizeAttribs,
+    },
+    // Otrā pārbaude pēc normalizeAttribs: sanitize-html pats atšifrē
+    // shēmu un laiž cauri tikai šīs. Relatīvajām adresēm shēmas nav.
+    allowedSchemes: ['http', 'https', 'mailto', 'tel'],
+    allowedSchemesByTag: {},
+    allowedSchemesAppliedToAttributes: ['href'],
+    // Tukšu href="" vai title="" atstājam, nevis izmetam: tā bija arī līdz šim
+    nonBooleanAttributes: [],
+    allowedEmptyAttributes: ALLOWED_ATTR,
+  }
+}
+
+const HTML_ESCAPES: Record<string, string> = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;',
+}
+
+/*
+ * Rezerves variants, ja markdown apstrādāt nevar: tas pats teksts bez
+ * formatējuma, bet ar rindkopām un rindu pārnesumiem, lai raksts paliek
+ * lasāms. Viss tiek aizsargāts, tāpēc sanitizētājs te nav vajadzīgs.
+ */
+function plainTextHtml(source: string): string {
+  return source
+    .replace(/\r\n?/g, '\n')
+    .split(/\n[ \t]*\n/)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean)
+    .map((paragraph) => {
+      const escaped = paragraph.replace(/[&<>"']/g, (char) => HTML_ESCAPES[char])
+      return `<p>${escaped.replace(/\n/g, '<br />')}</p>`
+    })
+    .join('\n')
 }
 
 export function renderMarkdown(source: string, siteHost = 'mentorme.lv'): string {
-  const raw = marked.parse(source, { async: false, gfm: true, breaks: true })
-  const clean = sanitizeHtml(raw, SANITIZE_OPTIONS)
-  return hardenLinks(clean, siteHost)
+  /*
+   * Tekstu, kas pārsniedz robežas, saglabāt vairs nevar, bet tas var būt
+   * ierakstīts pirms robežām vai tieši datubāzē. marked tādu var
+   * apstrādāt sekundēm ilgi vai nogāzt ar steka pārplūdi.
+   */
+  if (contentLimitError(source) !== null) return plainTextHtml(source)
+
+  /*
+   * Kas paliek, robežu iekšienē nekrīt, bet raksta lapa nedrīkst nokrist
+   * nekādā gadījumā: /blog/[slug] ģenerē būvējot, un viens slikts raksts
+   * apturētu visu `next build`. Arī redaktora priekšskatījums iet šeit.
+   */
+  try {
+    const raw = marked.parse(source, { async: false, gfm: true, breaks: true })
+    return sanitizeHtml(raw, sanitizeOptions(siteHost))
+  } catch (error) {
+    console.error('Raksta markdown neizdevās, rādām kā tekstu:', error)
+    return plainTextHtml(source)
+  }
 }
 
 /** Aptuvenais lasīšanas laiks minūtēs. */

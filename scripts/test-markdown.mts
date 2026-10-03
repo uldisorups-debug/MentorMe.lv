@@ -1,6 +1,7 @@
 // Markdown drošības testi. Palaišana: npm run test:markdown
+import { marked } from 'marked'
 import { renderMarkdown, readingMinutes, autoExcerpt } from '../src/lib/markdown.ts'
-import { validatePost, hasPostErrors } from '../src/lib/post-validation.ts'
+import { validatePost, hasPostErrors, contentLimitError } from '../src/lib/post-validation.ts'
 import { slugify } from '../src/lib/slugify.ts'
 import { jsonLdHtml } from '../src/lib/json-ld.ts'
 
@@ -30,6 +31,18 @@ function omits(name: string, html: string, needle: string) {
   else {
     failed++
     console.log(`  FAIL  ${name}\n        NEDRĪKST saturēt: ${needle}\n        HTML: ${html.slice(0, 200)}`)
+  }
+}
+
+// Robeža ir vaļīga — tā ķer sekundes, nevis milisekundes, lai tests nekristu uz lēnāka datora
+function fast(name: string, run: () => unknown, limitMs: number) {
+  const start = performance.now()
+  run()
+  const ms = performance.now() - start
+  if (ms < limitMs) passed++
+  else {
+    failed++
+    console.log(`  FAIL  ${name}\n        ilga ${ms.toFixed(0)} ms, robeža ${limitMs} ms`)
   }
 }
 
@@ -266,6 +279,93 @@ console.log('Ielīmēts HTML')
   }
 }
 
+/*
+ * Saites, kas izskatās pēc iekšējām, bet ved prom (drošības pārskats
+ * 2026-10-03).
+ *
+ * hardenLinks saiti uzskatīja par iekšēju, ja tā sākās ar "/" vai "#" vai
+ * saturēja "mentorme.lv". Pārlūks "//evil.com" un "/\evil.com" atver kā
+ * evil.com, tāpēc šīs saites palika bez nofollow un ar autora paša
+ * target="_blank" rel="opener" — atvērtā lapa varēja pārslēgt lasītāja
+ * cilni uz viltus pieteikšanās lapu.
+ */
+console.log('Saites — ārējās, kas izskatās pēc iekšējām')
+{
+  const prom = [
+    '//evil.com',
+    '/\\evil.com',
+    '\\\\evil.com',
+    'http:\\\\evil.com',
+    // Tabulāciju un jaunu rindu adresē pārlūks izmet: "/\t/evil.com" ir "//evil.com"
+    '/\t/evil.com',
+    '/&#9;/evil.com',
+    '/&#10;/evil.com',
+    'https://evil.com/?mentorme.lv',
+    'https://evil.com/mentorme.lv',
+    'https://mentorme.lv.evil.com',
+    'https://mentorme.lv@evil.com',
+    'HTTPS://EVIL.COM',
+  ]
+  for (const href of prom) {
+    const html = renderMarkdown(`<a href="${href}" target="_blank" rel="opener">x</a>`)
+    contains(`${JSON.stringify(href)} — nofollow`, html, 'rel="ugc nofollow noopener"')
+    contains(`${JSON.stringify(href)} — jaunā cilnē`, html, 'target="_blank"')
+    omits(`${JSON.stringify(href)} — autora rel="opener" izkrīt`, html, 'rel="opener"')
+  }
+  for (const href of ['//evil.com', 'https://evil.com/?mentorme.lv', 'https://mentorme.lv.evil.com']) {
+    contains(`[x](${href}) — nofollow`, renderMarkdown(`[x](${href})`), 'rel="ugc nofollow noopener"')
+  }
+  // Adrese pati netiek pārrakstīta — mainās tikai rel un target
+  contains('href paliek, kā autors rakstīja', renderMarkdown('[x](//evil.com)'), 'href="//evil.com"')
+}
+
+console.log('Saites — pati vietne un uzticamie domēni')
+{
+  omits('MENTORME.LV ar lielajiem burtiem — sava lapa', renderMarkdown('[x](https://MENTORME.LV/blog)'), 'nofollow')
+  const sava = renderMarkdown('<a href="https://mentorme.lv/blog" target="_self" rel="me">x</a>')
+  contains('pilnai adresei uz sevi target paliek', sava, 'target="_self"')
+  contains('pilnai adresei uz sevi rel paliek', sava, 'rel="me"')
+
+  // Sava vietne, bet cita izcelsme: nofollow nav vajadzīgs, autora rel un target izkrīt
+  for (const href of ['https://www.mentorme.lv/blog', 'http://mentorme.lv/blog', 'https://mentorme.lv:8443/blog']) {
+    const html = renderMarkdown(`<a href="${href}" target="_blank" rel="opener">x</a>`)
+    omits(`${href} — bez nofollow`, html, 'nofollow')
+    omits(`${href} — autora rel izkrīt`, html, 'rel=')
+    omits(`${href} — autora target izkrīt`, html, 'target=')
+  }
+
+  // Relatīvas adreses ir sava lapa, nevis ārēja saite
+  for (const href of ['?lapa=2', 'cits-raksts', '']) {
+    omits(`relatīvā "${href}" — bez nofollow`, renderMarkdown(`<a href="${href}">x</a>`), 'nofollow')
+  }
+
+  const alenor = renderMarkdown('<a href="https://alenor.lv" target="_self" rel="opener">x</a>')
+  contains('alenor.lv — rel="noopener"', alenor, 'rel="noopener"')
+  omits('alenor.lv — autora rel="opener" izkrīt', alenor, 'rel="opener"')
+  contains('alenor.lv — jaunā cilnē', alenor, 'target="_blank"')
+
+  omits('mailto — autora rel="opener" izkrīt', renderMarkdown('<a href="mailto:a@b.lv" rel="opener">x</a>'), 'rel="opener"')
+  const bezAdreses = renderMarkdown('<a target="_blank" rel="opener">x</a>')
+  omits('<a> bez href — autora rel izkrīt', bezAdreses, 'rel=')
+  omits('<a> bez href — autora target izkrīt', bezAdreses, 'target=')
+}
+
+console.log('Saites — title ar "href=" iekšā')
+{
+  /*
+   * hardenLinks bija regulārā izteiksme pār gatavo HTML un href meklēja kā
+   * tekstu. title, kas beidzās ar "href=", saiti salauza: adrese nonāca
+   * title, un href kļuva par " href=".
+   */
+  const html = renderMarkdown('<a title="foo href=" href="https://evil.com">x</a>')
+  contains('title paliek vesels', html, 'title="foo href="')
+  contains('href paliek vesels', html, 'href="https://evil.com"')
+  contains('saitei tomēr ir nofollow', html, 'rel="ugc nofollow noopener"')
+  const md = renderMarkdown('[x](https://evil.com "foo href=")')
+  contains('markdown saite ar tādu title — href vesels', md, 'href="https://evil.com"')
+  contains('markdown saite ar tādu title — title vesels', md, 'title="foo href="')
+}
+
 console.log('Kopsavilkums un laiks')
 check('īss teksts paliek vesels', autoExcerpt('Īss teksts.'), 'Īss teksts.')
 check(
@@ -311,6 +411,168 @@ check(
   'Kopsavilkums nedrīkst pārsniegt 300 rakstzīmes.'
 )
 check('hasPostErrors uz tukša', hasPostErrors({}), false)
+
+/*
+ * Ļoti dziļš ligzdojums un lēni teksti (drošības pārskats 2026-10-03).
+ *
+ * marked dziļus citātus un sarakstus apstrādā rekursīvi: ap 2000 ">" vai
+ * 3000 "- " pēc kārtas steks pārplūda, raksta lapa krita ar RangeError,
+ * un, tā kā /blog/[slug] ģenerē būvējot, varēja krist viss `next build`.
+ * 8000 × "_a " apstrāde ilga 7 sekundes. Tagad tādu tekstu nevar
+ * saglabāt, un renderMarkdown to parāda kā vienkāršu tekstu.
+ */
+console.log('Dziļš ligzdojums un lēni teksti')
+{
+  const sliktie: [string, string][] = [
+    ['2000 × ">"', '>'.repeat(2000) + ' a'],
+    ['3000 × "- "', '- '.repeat(3000) + 'a'],
+    ['3000 × "* "', '* '.repeat(3000) + 'a'],
+    ['8000 × "_a "', '_a '.repeat(8000)],
+    ['30 000 atstarpes starp vārdiem', 'a' + ' '.repeat(30000) + 'b'],
+  ]
+  for (const [name, src] of sliktie) {
+    let html = ''
+    fast(`${name} — renderMarkdown ātri`, () => {
+      try {
+        html = renderMarkdown(src)
+      } catch (error) {
+        html = `IZMESTS: ${error}`
+      }
+    }, 1000)
+    check(`${name} — renderMarkdown nekrīt, rāda tekstu`, html.startsWith('<p>'), true)
+    check(`${name} — saglabāt nevar`, validatePost({ ...okPost, content: src }).content !== undefined, true)
+  }
+
+  const citati = renderMarkdown('>'.repeat(2000) + ' a')
+  contains('citātu zīmes paliek redzamas kā teksts', citati, '&gt;&gt;&gt;')
+  omits('nav neviena <blockquote>', citati, '<blockquote')
+
+  // Rezerves teksts nedrīkst kļūt par XSS caurumu
+  const ar = renderMarkdown('<script>alert(1)</script> <a href="javascript:x">y</a>\n' + '>'.repeat(2000))
+  omits('rezerves tekstā nav <script>', ar, '<script')
+  omits('rezerves tekstā nav <a', ar, '<a ')
+  contains('rezerves tekstā HTML ir redzams kā teksts', ar, '&lt;script&gt;')
+
+  /*
+   * Sliktākais teksts, kas robežas vēl iztur, joprojām iet caur marked —
+   * un pietiekami ātri. Uz izstrādes datora ~0,3 sekundes; līdz robežām
+   * vienas tādas rindkopas apstrāde ilga ilgāk par 15 sekundēm.
+   */
+  const robeza = '*a '.repeat(1632)
+  check('sliktākais atļautais teksts iztur pārbaudi', contentLimitError(robeza), null)
+  fast('sliktākais atļautais teksts — ātri', () => renderMarkdown(robeza), 3000)
+  contains('sliktākais atļautais teksts — iet caur marked', renderMarkdown(robeza), '<p>*a *a')
+}
+
+console.log('Ja marked tomēr nokrīt')
+{
+  /*
+   * Robežu iekšienē marked nekrīt, bet raksta lapai jāiztur arī tas, ko
+   * neparedzējām, piemēram, jauna marked versija. Kļūdu izraisām ar marked
+   * āķi, kas izmet to pašu RangeError, ko steka pārplūde.
+   */
+  let crash = false
+  marked.use({
+    hooks: {
+      preprocess: (src: string) => {
+        if (crash) throw new RangeError('Maximum call stack size exceeded')
+        return src
+      },
+    },
+  })
+  const logged: unknown[] = []
+  const originalError = console.error
+  console.error = (...args: unknown[]) => logged.push(args)
+  crash = true
+  let html = ''
+  try {
+    html = renderMarkdown('Rindkopa ar <b>"pēdiņām"</b> & zīmi\notrā rinda\n\n<script>alert(1)</script>')
+  } catch (error) {
+    html = `IZMESTS: ${error}`
+  }
+  crash = false
+  console.error = originalError
+
+  check(
+    'kļūdas vietā teksts rindkopās, viss aizsargāts',
+    html,
+    '<p>Rindkopa ar &lt;b&gt;&quot;pēdiņām&quot;&lt;/b&gt; &amp; zīmi<br />otrā rinda</p>\n' +
+      '<p>&lt;script&gt;alert(1)&lt;/script&gt;</p>'
+  )
+  check('kļūda tiek ierakstīta žurnālā', logged.length, 1)
+  contains('pēc tam marked strādā kā agrāk', renderMarkdown('**x**'), '<strong>x</strong>')
+}
+
+console.log('Teksta robežas')
+{
+  const content = (text: string) => validatePost({ ...okPost, content: text }).content
+  const GARUMS = 'Teksts nedrīkst pārsniegt 40 000 rakstzīmes.'
+  const DZILI =
+    'Pārāk dziļa atkāpe: rindas sākumā atstarpes, citātu zīmes (>) un saraksta zīmes kopā drīkst būt ne vairāk kā 100.'
+  const ATSTARPES = 'Tekstā ir vairāk nekā 200 atstarpes pēc kārtas.'
+  const ZIMES =
+    'Garās rindkopās ir pārāk daudz formatēšanas zīmju (* _ ~ [). Sadali tekstu īsākās rindkopās ar tukšu rindu starp tām.'
+
+  check('40 000 rakstzīmes drīkst', content('a'.repeat(40000)), undefined)
+  check('40 001 — par garu', content('a'.repeat(40001)), GARUMS)
+  // Datubāze skaita rakstzīmes, ne UTF-16 vienības: emocijzīme ir viena
+  check('40 000 emocijzīmes drīkst', content('🙂'.repeat(40000)), undefined)
+  check('40 001 emocijzīme — par garu', content('🙂'.repeat(40001)), GARUMS)
+
+  check('100 × ">" drīkst', content('>'.repeat(100) + 'a'), undefined)
+  check('101 × ">" — par dziļu', content('>'.repeat(101) + 'a'), DZILI)
+  check('100 × "- " drīkst', content('- '.repeat(100) + 'a'), undefined)
+  check('101 × "- " — par dziļu', content('- '.repeat(101) + 'a'), DZILI)
+  check('101 × "1. " — par dziļu', content('1. '.repeat(101) + 'a'), DZILI)
+  check('101 atstarpe rindas sākumā — par dziļu', content(' '.repeat(101) + 'a'), DZILI)
+  // "> - " ir trīs vienības: ">", atstarpe un "- "
+  check('33 × "> - " drīkst', content('> - '.repeat(33) + 'a'), undefined)
+  check('34 × "> - " — par dziļu', content('> - '.repeat(34) + 'a'), DZILI)
+  // marked vientuļu \r uzskata par jaunu rindu, tāpēc pārbaude arī
+  check('rinda pēc \\r — par dziļu', content('a\r' + '>'.repeat(101)), DZILI)
+  check('rinda pēc \\r\\n — par dziļu', content('a\r\n' + '>'.repeat(101)), DZILI)
+  check(
+    'parasts ligzdots saraksts un citāts drīkst',
+    content('- viens\n  - divi\n    - trīs\n\n        kods saraksta iekšā\n\n> > > sena vēstule'),
+    undefined
+  )
+  check('horizontāla līnija "- - -" drīkst', content('- - - - - - - - - -'), undefined)
+
+  check('200 atstarpes starp vārdiem drīkst', content('a' + ' '.repeat(200) + 'b'), undefined)
+  check('201 atstarpe — par daudz', content('a' + ' '.repeat(201) + 'b'), ATSTARPES)
+
+  // 1632 zīmes × 4896 rakstzīmes = 7 990 272, tieši zem robežas
+  check('"_a " × 1632 vienā rindkopā drīkst', content('_a '.repeat(1632)), undefined)
+  check('"_a " × 1633 — par daudz', content('_a '.repeat(1633)), ZIMES)
+  check(
+    'tie paši 8000 × "_a ", sadalīti rindkopās, drīkst',
+    content(Array.from({ length: 266 }, () => '_a '.repeat(30)).join('\n\n')),
+    undefined
+  )
+  // Tukša rinda ar atstarpēm marked arī beidz rindkopu
+  check(
+    'rindkopas, atdalītas ar atstarpju rindu, drīkst',
+    content(Array.from({ length: 266 }, () => '_a '.repeat(30)).join('\n  \n')),
+    undefined
+  )
+  /*
+   * Saraksta punkts marked vienmēr sāk jaunu bloku, tāpēc garš saraksts bez
+   * tukšām rindām nav viena rindkopa. Bez šī 300 punktu vārdnīca ar
+   * treknrakstu katrā punktā tiktu noraidīta.
+   */
+  const vardnica = Array.from(
+    { length: 300 },
+    (_, i) => `- **Termins ${i}:** skaidrojums ar [saiti](/tema/${i}) un _uzsvaru_`
+  ).join('\n')
+  check('300 punktu saraksts ar formatējumu drīkst', content(vardnica), undefined)
+  // "2." turpretī var turpināt iepriekšējo rindkopu, tāpēc tos nedala
+  check('tas pats ar "2." punktiem — viena rindkopa', content(vardnica.replaceAll('\n- ', '\n2. ')), ZIMES)
+  const garaRindkopa = Array.from(
+    { length: 300 },
+    (_, i) => `Teikums ${i} par karjeru un mērķiem${i % 8 === 0 ? ' ar **svarīgu domu**' : ''}.`
+  ).join('\n')
+  check('gara rindkopa bez tukšām rindām ar treknrakstu drīkst', content(garaRindkopa), undefined)
+}
 
 console.log('Adreses no virsraksta')
 check('latviešu diakritika', slugify('Ātrākais ceļš uz nākamo līmeni'), 'atrakais-cels-uz-nakamo-limeni')
