@@ -188,6 +188,54 @@ contains('saites title', renderMarkdown('[x](/a "Virsraksts")'), 'title="Virsrak
   contains('autora target tiek aizstāts', raw, 'target="_blank"')
 }
 
+console.log('Ārējas saites, kas izliekas par iekšējām')
+{
+  /*
+   * Agrāk iekšēja bija jebkura saite, kas sākas ar "/" vai satur
+   * "mentorme.lv". Šīs visas ved uz svešu lapu, tāpēc tām jābūt ar
+   * nofollow, un autora target/rel nedrīkst palikt.
+   */
+  for (const href of [
+    '//svesa.lv/x',
+    '/\\svesa.lv/x',
+    'https://svesa.lv/?mentorme.lv',
+    'https://mentorme.lv.svesa.lv/',
+    'https://svesa.lv/mentorme.lv',
+    'https://mentorme.lv@svesa.lv/',
+  ]) {
+    const html = renderMarkdown(`<a href="${href}" target="_blank" rel="opener">x</a>`)
+    contains(`${href} — nofollow`, html, 'rel="ugc nofollow noopener"')
+    omits(`${href} — autora rel="opener" izkrīt`, html, 'rel="opener"')
+  }
+
+  for (const href of ['https://www.mentorme.lv/blog', 'https://MENTORME.LV/x', 'http://mentorme.lv/x', 'profils', '?lapa=2']) {
+    omits(`${href} — iekšēja, bez nofollow`, renderMarkdown(`[x](${href})`), 'nofollow')
+  }
+
+  // Regulārā izteiksme agrāk title="...href=" vērtību sajauca ar pašu href
+  const title = renderMarkdown('<a title="xhref=" href="https://svesa.lv">x</a>')
+  contains('title ar "href=" nesalauž saiti', title, 'href="https://svesa.lv"')
+  contains('title ar "href=" paliek', title, 'title="xhref="')
+  contains('title ar "href=" — nofollow', title, 'rel="ugc nofollow noopener"')
+
+  const mailto = renderMarkdown('[raksti](mailto:info@piemers.lv)')
+  contains('mailto paliek', mailto, 'href="mailto:info@piemers.lv"')
+}
+
+console.log('Pārāk dziļa ligzdošana nenogāž lapu')
+{
+  let html = ''
+  let threw = false
+  try {
+    html = renderMarkdown('- '.repeat(3000) + '<script>alert(1)</script> x')
+  } catch {
+    threw = true
+  }
+  check('nemet kļūdu', threw, false)
+  contains('teksts parādās', html, '<p>')
+  omits('rezerves teksts ir aizsargāts', html, '<script')
+}
+
 console.log('Atribūti')
 {
   const p = renderMarkdown(
@@ -311,6 +359,28 @@ check(
   'Kopsavilkums nedrīkst pārsniegt 300 rakstzīmes.'
 )
 check('hasPostErrors uz tukša', hasPostErrors({}), false)
+check('30 000 rakstzīmju drīkst', validatePost({ ...okPost, content: 'a'.repeat(30000) }).content, undefined)
+check(
+  'pāri 30 000 nedrīkst',
+  validatePost({ ...okPost, content: 'a'.repeat(30001) }).content,
+  'Teksts nedrīkst pārsniegt 30000 rakstzīmes. Sadali to vairākos rakstos.'
+)
+check('400 zīmes rindkopā drīkst', validatePost({ ...okPost, content: '_a '.repeat(400) }).content, undefined)
+check(
+  '401 zīme rindkopā nedrīkst',
+  validatePost({ ...okPost, content: '_a '.repeat(401) }).content,
+  'Vienā rindkopā ir vairāk nekā 400 zīmes *, _ vai ~. Sadali tekstu rindkopās ar tukšu rindu.'
+)
+check(
+  'tukša rinda sadala rindkopas',
+  validatePost({ ...okPost, content: '_a '.repeat(300) + '\n\n' + '*a '.repeat(300) }).content,
+  undefined
+)
+check(
+  'saraksta punkti neskaitās',
+  validatePost({ ...okPost, content: Array.from({ length: 600 }, () => '* punkts').join('\n') }).content,
+  undefined
+)
 
 console.log('Adreses no virsraksta')
 check('latviešu diakritika', slugify('Ātrākais ceļš uz nākamo līmeni'), 'atrakais-cels-uz-nakamo-limeni')

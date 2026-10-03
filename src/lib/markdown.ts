@@ -69,6 +69,30 @@ function isTrustedHost(href: string): boolean {
   }
 }
 
+/*
+ * Iekšēja ir tikai saite, kuras galamērķis tiešām ir šī vietne.
+ *
+ * Agrāk pietika ar "sākas ar /" vai "satur mentorme.lv". Tad //svesa.lv,
+ * /\svesa.lv, https://svesa.lv/?mentorme.lv un https://mentorme.lv.svesa.lv
+ * izlikās par iekšējām: palika bez nofollow un ar autora target/rel, un
+ * target="_blank" rel="opener" ļauj svešai lapai pārvirzīt mūsu cilni uz
+ * pikšķerēšanas lapu. Tāpēc adresi atrisinām tāpat kā pārlūks — ar URL
+ * pret mūsu pašu adresi — un salīdzinām hostu.
+ */
+function isInternalLink(href: string, siteHost: string): boolean {
+  if (href.startsWith('#')) return true
+  try {
+    const url = new URL(href, `https://${siteHost}/`)
+    const host = url.hostname.toLowerCase()
+    return (
+      (url.protocol === 'https:' || url.protocol === 'http:') &&
+      (host === siteHost || host.endsWith(`.${siteHost}`))
+    )
+  } catch {
+    return false
+  }
+}
+
 /**
  * Ārējām saitēm pievienojam rel="ugc nofollow".
  *
@@ -77,27 +101,29 @@ function isTrustedHost(href: string): boolean {
  * Google soda visu domēnu, arī godīgos autorus.
  *
  * Izņēmums — TRUSTED_HOSTS: paša īpašnieka vietnes.
+ *
+ * Agrāk to darīja regulāra izteiksme pār jau gatavu HTML. Tā kļūdījās,
+ * ja title vērtība beidzās ar "href=" — saite salūza. Tagad atribūtus
+ * mainām sanitizētājā, pirms HTML vispār ir uzrakstīts.
  */
-function hardenLinks(html: string, siteHost: string): string {
-  return html.replace(/<a\s+([^>]*?)href="([^"]*)"([^>]*)>/gi, (match, pre, href, post) => {
-    const isInternal =
-      href.startsWith('/') ||
-      href.startsWith('#') ||
-      href.includes(siteHost)
+function linkAttribs(siteHost: string): sanitizeHtml.Transformer {
+  return (tagName, attribs) => {
+    const { attribs: normalized } = normalizeAttribs(tagName, attribs)
+    const href = normalized.href
+    if (href === undefined || isInternalLink(href, siteHost)) {
+      return { tagName, attribs: normalized }
+    }
 
-    if (isInternal) return match
-
-    const cleaned = `${pre}${post}`
-      .replace(/\brel="[^"]*"/gi, '')
-      .replace(/\btarget="[^"]*"/gi, '')
-      .trim()
-
-    const rel = isTrustedHost(href) ? 'noopener' : 'ugc nofollow noopener'
-    return `<a ${cleaned} href="${href}" rel="${rel}" target="_blank">`.replace(
-      /\s+/g,
-      ' '
-    )
-  })
+    // Autora rel un target ārējai saitei neatstājam nekad
+    const result: sanitizeHtml.Attributes = {}
+    for (const [name, value] of Object.entries(normalized)) {
+      if (name !== 'rel' && name !== 'target' && name !== 'href') result[name] = value
+    }
+    result.href = href
+    result.rel = isTrustedHost(href) ? 'noopener' : 'ugc nofollow noopener'
+    result.target = '_blank'
+    return { tagName, attribs: result }
+  }
 }
 
 // javascript: un data: saites neiziet cauri
@@ -110,11 +136,10 @@ const URI_WHITESPACE = /[\u0000-\u0020\u00A0\u1680\u180E\u2000-\u2029\u205F\u300
  * Atribūtu vērtības apgriežam un href pārbaudām tieši tāpat kā līdz šim
  * darīja DOMPurify.
  *
- * Apgriešana nav kosmētika. hardenLinks visas atstarpes tagā pārvērš par
- * parastu atstarpi, tāpēc href ar nedalāmo atstarpi (U+00A0) pirms
- * "javascript:" pēc tā sāktos ar " javascript:", bet parastu atstarpi
- * sākumā pārlūks nomet — saite izpildītu kodu. Turklāt " /profils"
- * bez apgriešanas izskatītos pēc ārējas saites.
+ * Apgriešana nav kosmētika: href ar nedalāmo atstarpi (U+00A0) pirms
+ * "javascript:" pārbaudi izietu tikai tāpēc, ka sākas ar atstarpi, un
+ * jebkas, kas vēlāk atstarpes vienādo, to pārvērstu par saiti, kas
+ * izpilda kodu. Turklāt " /profils" bez apgriešanas nebūtu iekšēja saite.
  */
 function normalizeAttribs(tagName: string, attribs: sanitizeHtml.Attributes) {
   const result: sanitizeHtml.Attributes = {}
@@ -134,24 +159,54 @@ const SANITIZE_OPTIONS: sanitizeHtml.IOptions & { allowedEmptyAttributes: string
   allowedAttributes: { '*': ALLOWED_ATTR },
   disallowedTagsMode: 'discard',
   nonTextTags: DROP_WITH_CONTENT,
-  transformTags: { '*': normalizeAttribs },
+  // transformTags liek renderMarkdown — saišu noteikumiem vajag siteHost
   // Otrā pārbaude pēc normalizeAttribs: sanitize-html pats atšifrē
   // shēmu un laiž cauri tikai šīs. Relatīvajām adresēm shēmas nav.
   allowedSchemes: ['http', 'https', 'mailto', 'tel'],
   allowedSchemesByTag: {},
   allowedSchemesAppliedToAttributes: ['href'],
-  /*
-   * Tukšu href="" vai title="" atstājam, nevis izmetam: tā bija arī
-   * līdz šim, un hardenLinks sagaida, ka saitei href ir.
-   */
+  // Tukšu href="" vai title="" atstājam, nevis izmetam: tā bija arī līdz šim
   nonBooleanAttributes: [],
   allowedEmptyAttributes: ALLOWED_ATTR,
 }
 
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+}
+
+/*
+ * Ja marked nespēj tekstu apstrādāt, rādām to kā vienkāršu tekstu.
+ *
+ * marked ir rekursīvs: pāris tūkstoši ligzdotu saraksta zīmju ("- - - ...")
+ * izsit RangeError. Bez šī viens tāds raksts nogāztu savu lapu un, tā kā
+ * raksti tiek ģenerēti būvējot, arī visa vietnes build. Labāk neformatēts
+ * raksts nekā kritusi vietne.
+ */
+function plainTextHtml(source: string): string {
+  return source
+    .split(/\n[ \t]*\n/)
+    .map((block) => block.trim())
+    .filter(Boolean)
+    .map((block) => `<p>${escapeHtml(block).replace(/\n/g, '<br />')}</p>`)
+    .join('\n')
+}
+
 export function renderMarkdown(source: string, siteHost = 'mentorme.lv'): string {
-  const raw = marked.parse(source, { async: false, gfm: true, breaks: true })
-  const clean = sanitizeHtml(raw, SANITIZE_OPTIONS)
-  return hardenLinks(clean, siteHost)
+  let raw: string
+  try {
+    raw = marked.parse(source, { async: false, gfm: true, breaks: true })
+  } catch (error) {
+    console.error('Markdown neizdevās apstrādāt, rādām kā tekstu:', error)
+    return plainTextHtml(source)
+  }
+  return sanitizeHtml(raw, {
+    ...SANITIZE_OPTIONS,
+    transformTags: { a: linkAttribs(siteHost), '*': normalizeAttribs },
+  })
 }
 
 /** Aptuvenais lasīšanas laiks minūtēs. */
