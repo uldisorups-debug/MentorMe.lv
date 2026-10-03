@@ -5,6 +5,7 @@ import { Link } from '@/i18n/navigation'
 import { localePath, pageAlternates } from '@/i18n/routing'
 import { CoachCard } from '@/components/coach-card'
 import { LinkButton } from '@/components/link-button'
+import { jsonLdHtml } from '@/lib/json-ld'
 import { SITE_URL } from '@/lib/supabase/config'
 import {
   decodeSlug,
@@ -148,7 +149,7 @@ export async function TopicLanding({
     <div className="mx-auto max-w-6xl px-6 py-14">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdHtml(jsonLd) }}
       />
 
       <nav aria-label={t('breadcrumb')} className="text-sm text-mist">

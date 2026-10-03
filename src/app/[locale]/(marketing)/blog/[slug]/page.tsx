@@ -6,6 +6,7 @@ import { ArrowLeft, Eye } from 'lucide-react'
 import { CoachAvatar } from '@/components/coach-avatar'
 import { LinkButton } from '@/components/link-button'
 import { PostViewTracker } from '@/components/post-view-tracker'
+import { jsonLdHtml } from '@/lib/json-ld'
 import { renderMarkdown, readingMinutes } from '@/lib/markdown'
 import { listPostSlugs, loadPost } from '@/lib/posts'
 
@@ -79,7 +80,7 @@ export default async function PostPage({ params }: PageProps<'/[locale]/blog/[sl
       <PostViewTracker slug={post.slug} />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdHtml(jsonLd) }}
       />
 
       <article className="mx-auto max-w-2xl px-6 py-16">
@@ -127,7 +128,7 @@ export default async function PostPage({ params }: PageProps<'/[locale]/blog/[sl
         </div>
 
         {/*
-          Saturs nāk no lietotāja, tāpēc tas ir izgājis cauri DOMPurify
+          Saturs nāk no lietotāja, tāpēc tas ir izgājis cauri sanitize-html
           renderMarkdown() iekšienē. Neapstrādātu HTML te likt nedrīkst.
         */}
         <div

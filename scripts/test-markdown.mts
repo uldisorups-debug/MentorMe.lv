@@ -2,6 +2,7 @@
 import { renderMarkdown, readingMinutes, autoExcerpt } from '../src/lib/markdown.ts'
 import { validatePost, hasPostErrors } from '../src/lib/post-validation.ts'
 import { slugify } from '../src/lib/slugify.ts'
+import { jsonLdHtml } from '../src/lib/json-ld.ts'
 
 let passed = 0
 let failed = 0
@@ -117,6 +118,154 @@ const viltus = renderMarkdown('[x](https://alenor.lv.spams.com)')
 contains('viltus alenor.lv domēns — nofollow', viltus, 'nofollow')
 
 
+/*
+ * Sanitizētāja maiņa: DOMPurify -> sanitize-html (2026-10-03).
+ *
+ * DOMPurify serverī vilka līdzi jsdom, kas Vercel funkcijās krita jau
+ * ielādē, un /blog ar jauniem rakstiem vairs nepārģenerējās. Jaunais
+ * sanitizētājs strādā citādi (parsē virkni, nevis būvē DOM), tāpēc šie
+ * testi tur pie vārda, ka rakstu drošība un izskats palika tādi paši.
+ */
+console.log('Drošība — apslēptas javascript: un data: saites')
+{
+  const evil = [
+    'javascript:alert(1)',
+    'JaVaScRiPt:alert(1)',
+    ' javascript:alert(1)',
+    'java\tscript:alert(1)',
+    '&#106;avascript:alert(1)',
+    '&#x6A;avascript:alert(1)',
+    '&#0000106avascript:alert(1)',
+    'javascript&colon;alert(1)',
+    'javascript&#58;alert(1)',
+    'jav&#x09;ascript:alert(1)',
+    '&#14;javascript:alert(1)',
+    'data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==',
+    'DATA:text/html,<b>x</b>',
+    'vbscript:msgbox(1)',
+  ]
+  for (const url of evil) {
+    omits(`<a href> ${url}`, renderMarkdown(`<a href="${url}">x</a>`), 'href')
+    omits(`[x](${url})`, renderMarkdown(`[x](${url})`), 'href')
+  }
+  omits('jaunā rinda shēmā', renderMarkdown('<a href="java\nscript:alert(1)">x</a>'), 'href')
+
+  /*
+   * Unicode atstarpes pirms "javascript:". Pašas par sevi tās saiti padara
+   * nekaitīgu, bet hardenLinks tās pārvērš par parastu atstarpi, ko pārlūks
+   * adreses sākumā nomet. Tāpēc saitei jāpazūd jau sanitizētājā.
+   */
+  for (const code of [0x00a0, 0x1680, 0x2000, 0x2028, 0x202f, 0x205f, 0x3000, 0xfeff]) {
+    const name = `U+${code.toString(16).toUpperCase().padStart(4, '0')} pirms javascript:`
+    const ws = String.fromCharCode(code)
+    omits(name, renderMarkdown(`<a href="${ws}javascript:alert(1)">x</a>`), 'javascript:')
+    omits(`${name} (entītija)`, renderMarkdown(`<a href="&#${code};javascript:alert(1)">x</a>`), 'javascript:')
+    omits(`${name} (markdown)`, renderMarkdown(`[x](${ws}javascript:alert(1))`), 'javascript:')
+  }
+}
+
+console.log('Atļautās saites paliek')
+contains('mailto', renderMarkdown('[raksti](mailto:info@piemers.lv)'), 'href="mailto:info@piemers.lv"')
+contains('tel', renderMarkdown('[zvani](tel:+37120000000)'), 'href="tel:+37120000000"')
+contains('enkurs', renderMarkdown('[uz sadaļu](#sadala)'), 'href="#sadala"')
+contains(
+  'relatīvā ar vaicājumu',
+  renderMarkdown('[pieslēgties](/auth/login?next=%2Fdashboard%2Fprofile)'),
+  'href="/auth/login?next=%2Fdashboard%2Fprofile"'
+)
+contains('& adresē', renderMarkdown('[x](https://x.lv/?a=1&b=2)'), 'href="https://x.lv/?a=1&amp;b=2"')
+contains('saites title', renderMarkdown('[x](/a "Virsraksts")'), 'title="Virsraksts"')
+{
+  // Atstarpes ap adresi nogriežam — citādi iekšēja saite izskatās pēc ārējas
+  const atstarpes = renderMarkdown('<a href=" /profils ">x</a>')
+  contains('atstarpes ap iekšējo saiti nogrieztas', atstarpes, 'href="/profils"')
+  omits('iekšējā saite ar atstarpēm bez nofollow', atstarpes, 'nofollow')
+}
+{
+  const raw = renderMarkdown('<a href="https://manalapa.lv" rel="dofollow" target="_self">x</a>')
+  contains('autora rel tiek aizstāts', raw, 'rel="ugc nofollow noopener"')
+  omits('autora dofollow izkrīt', raw, 'dofollow')
+  contains('autora target tiek aizstāts', raw, 'target="_blank"')
+}
+
+console.log('Atribūti')
+{
+  const p = renderMarkdown(
+    '<p class="x" style="color:red" id="z" onclick="f()" data-x="1" lang="lv" title="T">teksts</p>'
+  )
+  contains('title paliek', p, 'title="T"')
+  for (const attr of ['class=', 'style=', 'id=', 'onclick', 'data-x', 'lang=']) {
+    omits(`${attr} izkrīt`, p, attr)
+  }
+  const a = renderMarkdown('<a href="/x" class="btn" id="i" name="n" rel="me" target="_self">saite</a>')
+  contains('iekšējai saitei rel paliek', a, 'rel="me"')
+  contains('iekšējai saitei target paliek', a, 'target="_self"')
+  omits('a class izkrīt', a, 'class=')
+  omits('a name izkrīt', a, 'name=')
+}
+
+console.log('Entītijas un speciālās zīmes')
+contains('& tekstā', renderMarkdown('AT&T un Tom & Jerry'), 'AT&amp;T un Tom &amp; Jerry')
+contains('< un > tekstā', renderMarkdown('a < b > c'), 'a &lt; b &gt; c')
+contains('pēdiņas paliek pēdiņas', renderMarkdown('"Kultūras kods" un \'citāts\''), '"Kultūras kods" un \'citāts\'')
+contains('nosauktā entītija', renderMarkdown('&copy; 2026'), '© 2026')
+contains(
+  'HTML kodā paliek teksts',
+  renderMarkdown('`<script>alert(1)</script>`'),
+  '<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>'
+)
+{
+  const bloks = renderMarkdown('```html\n<b>x</b>\n```')
+  contains('koda bloks', bloks, '<pre><code>&lt;b&gt;x&lt;/b&gt;')
+  omits('koda valodas klase izkrīt', bloks, 'class=')
+}
+
+console.log('Tabulas un saraksti')
+{
+  const tabula = renderMarkdown(
+    '| Rīks | Kad |\n|:--|--:|\n| Excel | **aprēķini** |\n| Lists | [kopīgi](/tema/m365) |'
+  )
+  contains('tabula', tabula, '<table>')
+  contains('galvas šūna', tabula, '<thead>\n<tr>\n<th>Rīks</th>')
+  contains('treknraksts šūnā', tabula, '<td><strong>aprēķini</strong></td>')
+  contains('saite šūnā', tabula, '<td><a href="/tema/m365">kopīgi</a></td>')
+  omits('align izkrīt', tabula, 'align=')
+
+  const saraksts = renderMarkdown('- viens\n  - iekšā\n    - dziļāk\n- divi\n\n1. pirmais\n2. otrais\n   1. apakšpunkts')
+  contains('ligzdots saraksts', saraksts, '<li>viens<ul>\n<li>iekšā<ul>\n<li>dziļāk</li>')
+  contains('numurēts ligzdots', saraksts, '<li>otrais<ol>\n<li>apakšpunkts</li>')
+  contains('jauna rinda kļūst par <br>', renderMarkdown('rinda\nnākamā'), 'rinda<br')
+}
+
+console.log('Ielīmēts HTML')
+{
+  // Nepabeigts dokuments: bez </head> un </body> raksts tomēr nedrīkst pazust
+  const nepabeigts = renderMarkdown(
+    '<html><head><title>Lapas nosaukums</title><meta charset="utf-8"><body><p>Teksts paliek</p>'
+  )
+  contains('teksts pēc neaizvērtas head', nepabeigts, '<p>Teksts paliek</p>')
+  omits('title no neaizvērtas head', nepabeigts, 'Lapas nosaukums')
+
+  const word = renderMarkdown(
+    '<!--[if gte mso 9]><xml><o:OfficeDocumentSettings></o:OfficeDocumentSettings></xml><![endif]-->' +
+      '<p class="MsoNormal"><span style="font-size:12pt">Word teksts</span><o:p></o:p></p>'
+  )
+  contains('Word teksts paliek', word, '<p>Word teksts</p>')
+  omits('Word komentārs izkrīt', word, 'mso')
+
+  const ietinums = renderMarkdown('<div><b>Trekns</b> <span>un</span> <h1>virsraksts</h1></div>')
+  contains('neatļautu tagu teksts paliek', ietinums, 'Trekns un virsraksts')
+  omits('div izkrīt', ietinums, '<div')
+
+  const kods = renderMarkdown(
+    '<noscript>ns</noscript><template>tmpl</template><svg><text>svgteksts</text></svg>' +
+      '<iframe>ifr</iframe><math><mi>formula</mi></math>'
+  )
+  for (const t of ['ns', 'tmpl', 'svgteksts', 'ifr', 'formula']) {
+    omits(`${t} saturs izkrīt`, kods, `>${t}<`)
+  }
+}
+
 console.log('Kopsavilkums un laiks')
 check('īss teksts paliek vesels', autoExcerpt('Īss teksts.'), 'Īss teksts.')
 check(
@@ -170,6 +319,15 @@ check('atstarpes malās', slugify('   Atstarpes   malās   '), 'atstarpes-malas'
 check('pieturzīmes izkrīt', slugify('Kas, kā un kāpēc?!'), 'kas-ka-un-kapec')
 check('cipari paliek', slugify('9. klases eksāmens'), '9-klases-eksamens')
 check('tikai simboli', slugify('!!!'), '')
+
+console.log('Strukturētie dati (JSON-LD)')
+{
+  const title = '</script><script>alert(1)</script>'
+  const html = jsonLdHtml({ headline: title })
+  omits('virsraksts neaizver <script>', html, '</script')
+  omits('nav neviena "<"', html, '<')
+  check('JSON nozīme nemainās', JSON.parse(html), { headline: title })
+}
 
 console.log(`\n  ${passed} izturēja, ${failed} kritušas\n`)
 process.exit(failed === 0 ? 0 : 1)

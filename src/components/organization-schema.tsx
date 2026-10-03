@@ -1,3 +1,4 @@
+import { jsonLdHtml } from '@/lib/json-ld'
 import { LINKEDIN_URL } from '@/lib/site-links'
 import { SITE_URL } from '@/lib/supabase/config'
 
@@ -55,7 +56,7 @@ export function OrganizationSchema() {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+      dangerouslySetInnerHTML={{ __html: jsonLdHtml(data) }}
     />
   )
 }
