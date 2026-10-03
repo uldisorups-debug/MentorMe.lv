@@ -26,6 +26,7 @@ import { assembleProfileDetails, qualificationKey } from '@/lib/coaches'
 import { listCoachSlugs, loadCoachPage } from '@/lib/coach-profile'
 import { loadGroupNames, loadRegionName, loadSphereNames } from '@/lib/taxonomy'
 import { SITE_URL } from '@/lib/supabase/config'
+import { jsonLdHtml } from '@/lib/json-ld'
 import { Link } from '@/i18n/navigation'
 import { CoachCard } from '@/components/coach-card'
 import { loadTaxonomy } from '@/lib/taxonomy'
@@ -271,7 +272,7 @@ export default async function CoachProfilePage({
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify([jsonLd, breadcrumbLd]) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdHtml([jsonLd, breadcrumbLd]) }}
       />
       <ProfileViewTracker slug={coach.slug} />
 
