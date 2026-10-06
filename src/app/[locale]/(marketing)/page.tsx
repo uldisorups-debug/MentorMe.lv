@@ -28,7 +28,8 @@ export async function generateMetadata({
 const DIRECTORY_LIMIT = 500
 
 // ISR — lapa tiek pārbūvēta ne biežāk kā reizi minūtē.
-export const revalidate = 60
+// Stunda, ne minūte: izmaiņas atsvaidzina revalidatePublicPages() uzreiz
+export const revalidate = 3600
 
 async function loadDirectory(locale: string) {
   const supabase = createPublicClient()

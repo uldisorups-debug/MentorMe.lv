@@ -5,6 +5,9 @@ import { hasLocale, NextIntlClientProvider } from 'next-intl'
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server'
 import { publicMessages } from '@/i18n/client-messages'
 import { OrganizationSchema } from '@/components/organization-schema'
+import { SiteCode } from '@/components/site-code'
+import { loadSiteCode } from '@/lib/site-code'
+import { extractMetaTags, withoutMetaTags } from '@/lib/site-code-meta'
 import { routing } from '@/i18n/routing'
 import { SITE_URL } from '@/lib/supabase/config'
 
@@ -61,7 +64,7 @@ export default async function LocaleLayout({
   // Bez šī statiskā ģenerēšana krīt atpakaļ uz dinamisko renderēšanu
   setRequestLocale(locale)
 
-  const messages = await getMessages()
+  const [messages, siteCode] = await Promise.all([getMessages(), loadSiteCode()])
 
   return (
     <html
@@ -70,6 +73,15 @@ export default async function LocaleLayout({
     >
       <body className="flex min-h-full flex-col">
         <OrganizationSchema />
+        {/* Domēna verifikācijas meta tagi no admin → Kods. React tos pārceļ uz <head>. */}
+        {extractMetaTags(siteCode.head).map((tag, i) => (
+          <meta key={i} {...tag} />
+        ))}
+        <SiteCode
+          head={withoutMetaTags(siteCode.head)}
+          body={siteCode.body}
+          needsConsent={siteCode.needsConsent}
+        />
         <NextIntlClientProvider messages={publicMessages(messages)}>
           {children}
         </NextIntlClientProvider>

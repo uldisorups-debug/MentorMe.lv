@@ -51,4 +51,5 @@ export const ACTION_LABELS: Record<string, string> = {
   grant_admin: 'Piešķirtas administratora tiesības',
   revoke_admin: 'Noņemtas administratora tiesības',
   handle_report: 'Ziņojums apstrādāts',
+  update_site_code: 'Mainīts vietnes kods',
 }

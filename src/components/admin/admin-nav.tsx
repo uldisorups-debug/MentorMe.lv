@@ -13,6 +13,7 @@ const TABS = [
   { href: '/admin/raksti', label: 'Raksti' },
   { href: '/admin/temas', label: 'Tēmas' },
   { href: '/admin/statistika', label: 'Statistika' },
+  { href: '/admin/kods', label: 'Kods' },
 ] as const
 
 export function AdminNav() {

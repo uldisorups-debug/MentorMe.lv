@@ -13,8 +13,7 @@ import {
   type TopicEntry,
   type TopicKind,
 } from '@/lib/topic-index'
-import { loadTopicIndex, loadTopicPage } from '@/lib/topics'
-import { routing } from '@/i18n/routing'
+import { loadTopicPage } from '@/lib/topics'
 
 /**
  * Tēmas, nozares un vietas lapa — viena veidne visām trim.
@@ -26,13 +25,16 @@ import { routing } from '@/i18n/routing'
  * lapas veidotu tīklu, ne salu.
  */
 
-export async function topicStaticParams(kind: TopicKind) {
-  const index = await loadTopicIndex(routing.defaultLocale)
-  const list =
-    kind === 'tema' ? index.groups : kind === 'nozare' ? index.spheres : index.regions
-  return routing.locales.flatMap((locale) =>
-    list.map((e) => ({ locale, slug: e.slug }))
-  )
+/**
+ * Tukšs saraksts ar nolūku: neviena tēmu lapa netiek būvēta izvietošanas
+ * brīdī. Katra tiek uzbūvēta pirmajā apmeklējumā un tad glabājas kešā.
+ *
+ * Agrāk katrs izvietojums (arī katrs priekšskatījums) pārbūvēja visas
+ * ~150 tēmu lapas — katra ir ISR ieraksts, un Vercel bezmaksas plānā to
+ * ir 200 000 mēnesī. Lapas, ko neviens neatver, tagad neko nemaksā.
+ */
+export async function topicStaticParams(): Promise<{ locale: string; slug: string }[]> {
+  return []
 }
 
 export async function topicMetadata(
