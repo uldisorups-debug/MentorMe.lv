@@ -30,5 +30,10 @@ export function revalidatePublicPages(): void {
   revalidatePath('/[locale]/blog', 'page')
   revalidatePath('/[locale]/blog/[slug]', 'page')
 
+  // Tēmu lapas rāda tos pašus profilus — jauns profils tur jāparādās uzreiz
+  revalidatePath('/[locale]/tema/[slug]', 'page')
+  revalidatePath('/[locale]/nozare/[slug]', 'page')
+  revalidatePath('/[locale]/vieta/[slug]', 'page')
+
   revalidatePath('/sitemap.xml')
 }

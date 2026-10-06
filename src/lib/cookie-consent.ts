@@ -107,7 +107,8 @@ export function clearAnalyticsCookies() {
 
   for (const row of document.cookie.split('; ')) {
     const name = row.split('=')[0]
-    if (!name.startsWith('_ga')) continue
+    // _ga* — Google Analytics, _cl* — Microsoft Clarity (_clck, _clsk)
+    if (!name.startsWith('_ga') && !name.startsWith('_cl')) continue
     for (const domain of domains) {
       document.cookie = `${name}=; Path=/; Max-Age=0${domain}`
     }

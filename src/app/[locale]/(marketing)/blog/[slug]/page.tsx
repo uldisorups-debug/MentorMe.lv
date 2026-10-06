@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { alternateLanguages, localePath, routing } from '@/i18n/routing'
+import { alternateLanguages, localePath } from '@/i18n/routing'
 import { notFound } from 'next/navigation'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { ArrowLeft, Eye } from 'lucide-react'
@@ -8,16 +8,14 @@ import { LinkButton } from '@/components/link-button'
 import { PostViewTracker } from '@/components/post-view-tracker'
 import { jsonLdHtml } from '@/lib/json-ld'
 import { renderMarkdown, readingMinutes } from '@/lib/markdown'
-import { listPostSlugs, loadPost } from '@/lib/posts'
+import { loadPost } from '@/lib/posts'
 
-export const revalidate = 60
+// Diena — raksta publicēšana un labošana atsvaidzina uzreiz (revalidatePublicPages)
+export const revalidate = 86400
 
-export async function generateStaticParams() {
-  const posts = await listPostSlugs()
-  // Katrs slug reiz katrā valodā — citādi /en/... krīt uz dinamisko
-  return routing.locales.flatMap((locale) =>
-    posts.map(({ slug }) => ({ locale, slug }))
-  )
+// Būvējam pirmajā apmeklējumā, ne katrā izvietojumā — sk. profila lapu
+export async function generateStaticParams(): Promise<{ locale: string; slug: string }[]> {
+  return []
 }
 
 export async function generateMetadata({

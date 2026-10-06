@@ -389,6 +389,27 @@ export type Database = {
         Relationships: []
       }
 
+      site_code: {
+        Row: {
+          id: number
+          head_html: string
+          body_html: string
+          needs_consent: boolean
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          id?: number
+        }
+        Update: {
+          head_html?: string
+          body_html?: string
+          needs_consent?: boolean
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       topic_suggestions: {
         Row: {
           id: string

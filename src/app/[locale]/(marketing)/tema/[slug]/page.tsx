@@ -6,10 +6,11 @@ import {
   topicStaticParams,
 } from '@/components/topic-landing'
 
-export const revalidate = 600
+// Svaigumu nodrošina revalidatePublicPages() pie katras izmaiņas; laiks — tikai drošības tīkls
+export const revalidate = 86400
 
 export function generateStaticParams() {
-  return topicStaticParams('tema')
+  return topicStaticParams()
 }
 
 export async function generateMetadata({

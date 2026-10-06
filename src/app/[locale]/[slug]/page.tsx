@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { alternateLanguages, localePath, routing } from '@/i18n/routing'
+import { alternateLanguages, localePath } from '@/i18n/routing'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import {
   BadgeCheck,
@@ -23,7 +23,7 @@ import { ReviewList } from '@/components/review-list'
 import { StarRating } from '@/components/star-rating'
 import { Badge } from '@/components/ui/badge'
 import { assembleProfileDetails, qualificationKey } from '@/lib/coaches'
-import { listCoachSlugs, loadCoachPage } from '@/lib/coach-profile'
+import { loadCoachPage } from '@/lib/coach-profile'
 import { loadGroupNames, loadRegionName, loadSphereNames } from '@/lib/taxonomy'
 import { SITE_URL } from '@/lib/supabase/config'
 import { jsonLdHtml } from '@/lib/json-ld'
@@ -36,14 +36,23 @@ import { nicheToSphereMap, similarCoaches, topicPath } from '@/lib/topic-index'
 /** Tēmas un nozares, kurām nav savas lapas — tās ir atkritne, ne joma */
 const NO_TOPIC_PAGE = new Set(['cits', 'cits-prasme'])
 
-export const revalidate = 60
+/*
+ * Diena, ne minūte. Agrāk katra profila lapa tika pārbūvēta ik pēc 60
+ * sekundēm, ja to kāds (arī Google vai cits robots) atvēra, — katra
+ * pārbūve ir ISR ieraksts Vercel, un bezmaksas plānā to ir 200 000
+ * mēnesī. Svaigums tagad nāk no revalidatePublicPages(): profila
+ * saglabāšana, atsauksme, publicēšana atsvaidzina uzreiz. Diena ir tikai
+ * drošības tīkls tam, kas mainās bez mūsu ziņas (skatījumu skaitītājs).
+ */
+export const revalidate = 86400
 
-export async function generateStaticParams() {
-  const coaches = await listCoachSlugs()
-  // Katrs slug reiz katrā valodā — citādi /en/... krīt uz dinamisko
-  return routing.locales.flatMap((locale) =>
-    coaches.map(({ slug }) => ({ locale, slug }))
-  )
+/*
+ * Tukšs saraksts: profili netiek būvēti izvietošanas brīdī, bet pirmajā
+ * apmeklējumā. Agrāk katrs izvietojums pārbūvēja visus profilus visās
+ * trīs valodās, un aktīvas izstrādes dienā tas bija tūkstoši ierakstu.
+ */
+export async function generateStaticParams(): Promise<{ locale: string; slug: string }[]> {
+  return []
 }
 
 export async function generateMetadata({

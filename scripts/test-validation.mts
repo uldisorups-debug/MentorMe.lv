@@ -36,6 +36,7 @@ import {
   type ProfileDraft,
 } from '../src/lib/profile-validation.ts'
 import { authErrorKey, passwordTooShort } from '../src/lib/auth-errors.ts'
+import { extractMetaTags, withoutMetaTags } from '../src/lib/site-code-meta.ts'
 import {
   buildTopicIndex,
   decodeSlug,
@@ -868,6 +869,36 @@ check(
     (c) => c.id
   ),
   ['c', 'b', 'd']
+)
+
+
+// ---------- Vietnes kods ----------
+
+const clarity = `<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "yt4ixc7t53");
+</script>`
+check('Clarity kodā meta tagu nav', extractMetaTags(clarity), [])
+check('Clarity kods paliek neskarts', withoutMetaTags(clarity), clarity)
+check(
+  'Google verifikācija izvilkta',
+  extractMetaTags('<meta name="google-site-verification" content="abc123" />'),
+  [{ name: 'google-site-verification', content: 'abc123' }]
+)
+check(
+  'Facebook property ar vienpēdiņām',
+  extractMetaTags("<meta property='fb:app_id' content='42'>"),
+  [{ property: 'fb:app_id', content: '42' }]
+)
+check('meta bez content ignorēts', extractMetaTags('<meta name="x">'), [])
+check('meta charset ignorēts', extractMetaTags('<meta charset="utf-8">'), [])
+check(
+  'meta izņemts, skripts paliek',
+  withoutMetaTags('<meta name="a" content="b">\n<script>x()</script>'),
+  '<script>x()</script>'
 )
 
 console.log(`\n  ${passed} izturēja, ${failed} kritušas\n`)

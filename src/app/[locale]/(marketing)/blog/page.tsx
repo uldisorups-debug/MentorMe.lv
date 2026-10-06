@@ -7,7 +7,8 @@ import { WritePostCta } from '@/components/write-post-cta'
 import { listPublishedPosts } from '@/lib/posts'
 import { pageAlternates } from '@/i18n/routing'
 
-export const revalidate = 60
+// Stunda, ne minūte: izmaiņas atsvaidzina revalidatePublicPages() uzreiz
+export const revalidate = 3600
 
 export async function generateMetadata({
   params,
