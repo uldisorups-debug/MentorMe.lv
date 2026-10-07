@@ -428,7 +428,9 @@
     "missingNiches": "at least one topic",
     "missingLanguages": "a session language",
     "missingContact": "a contact (email, WhatsApp etc. with consent)",
-    "draftSavedMissing": "Saved as a draft, but your profile is NOT published yet. To publish, add: {list}."
+    "draftSavedMissing": "Saved as a draft, but your profile is NOT published yet. To publish, add: {list}.",
+    "missingConsent": "the consent tick for showing your contacts",
+    "draftSavedNote": "Saved as a draft. To publish, still add: {list}."
   },
   "Account": {
     "sectionTitle": "Account",

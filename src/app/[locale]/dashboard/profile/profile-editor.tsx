@@ -248,6 +248,7 @@ export function ProfileEditor({
           ['niches', 'missingNiches'],
           ['session_languages', 'missingLanguages'],
           ['has_contact', 'missingContact'],
+          ['consent_given', 'missingConsent'],
         ] as const
       )
         .filter(([key]) => key in found)
@@ -266,9 +267,19 @@ export function ProfileEditor({
        * Zaļkalna, 4. okt.). Tagad, ja melnrakstam kļūdu nav, saglabājam
        * to un tikai publicēšanu atliekam.
        */
+      /*
+       * Arī kontakti bez piekrišanas atzīmes nedrīkst aizturēt pārējo:
+       * tie tiek saglabāti, bet publiski nerādās (consent_at paliek null).
+       *
+       * Tikai profilam, kas vēl nav publisks. Publicētu profilu klusi
+       * pārvērst melnrakstā, jo kāds izdzēsa īso aprakstu, būtu sliktāk —
+       * tur kļūda aptur saglabāšanu, kā līdz šim.
+       */
       const draftOk =
-        requested &&
-        !hasErrors(validateProfile({ ...checked, is_published: false }))
+        !coach.is_published &&
+        !hasErrors(
+          validateProfile({ ...checked, is_published: false, contacts_filled: false })
+        )
 
       if (!draftOk) {
         setSaveError(
@@ -284,7 +295,9 @@ export function ProfileEditor({
       willPublish = false
       blockedNotice =
         missing.length > 0
-          ? t('draftSavedMissing', { list: missing.join(', ') })
+          ? t(requested ? 'draftSavedMissing' : 'draftSavedNote', {
+              list: missing.join(', '),
+            })
           : t('publishBlocked')
     }
 
