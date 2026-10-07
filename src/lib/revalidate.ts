@@ -12,28 +12,20 @@ import { revalidatePath } from 'next/cache'
  * visas ir vairāk vietu, kur kļūdīties.
  */
 export function revalidatePublicPages(): void {
-  revalidatePath('/[locale]/[slug]', 'page')
-  revalidatePath('/[locale]', 'page')
-
   /*
-   * Arī sitemap. Tam ir stundas logs, un bez šī jauns profils Google
-   * kartē nonāca tikai pēc stundas — publicēts, redzams lapā, bet
-   * meklētājam vēl neesošs. Stunda nav traģēdija, bet tā ir stunda
-   * velti tieši tajā brīdī, kad cilvēks visvairāk grib, lai viņu atrod.
+   * Viss zem saknes izkārtojuma: sākumlapa, profili, blogs, tēmu lapas,
+   * sitemap — visās valodās.
+   *
+   * Agrāk te bija atsevišķi ceļi ('/[locale]', '/[locale]/blog', ...), bet
+   * sākumlapa, blogs un tēmu lapas dzīvo mapē (marketing), un Next.js
+   * maršruta grupu prasa ceļā: '/[locale]', 'page' neatbilda nevienai
+   * lapai. Kamēr lapas pašas atjaunojās ik minūti, to neviens nemanīja;
+   * kad logs kļuva stunda (ISR taupīšana), jauns profils sarakstā
+   * parādījās tikai pēc stundas. '/' + 'layout' aptver visu un nav
+   * atkarīgs no mapju nosaukumiem.
+   *
+   * Tas neko nepārbūvē uzreiz — lapa tiek uzbūvēta no jauna tikai tad,
+   * kad kāds to atver. Neatvērtas lapas ISR ierakstus netērē.
    */
-  /*
-   * Arī blogs. Raksta publicēšana līdz šim neatsvaidzināja neko: redaktors
-   * sauca router.refresh(), un tas atjauno tikai to lapu, uz kuras cilvēks
-   * stāv, ne publiskās. Autors redzēja "Publicēts", bet sarakstā raksta
-   * nebija.
-   */
-  revalidatePath('/[locale]/blog', 'page')
-  revalidatePath('/[locale]/blog/[slug]', 'page')
-
-  // Tēmu lapas rāda tos pašus profilus — jauns profils tur jāparādās uzreiz
-  revalidatePath('/[locale]/tema/[slug]', 'page')
-  revalidatePath('/[locale]/nozare/[slug]', 'page')
-  revalidatePath('/[locale]/vieta/[slug]', 'page')
-
-  revalidatePath('/sitemap.xml')
+  revalidatePath('/', 'layout')
 }

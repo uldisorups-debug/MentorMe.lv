@@ -396,7 +396,12 @@
     "suggestPlaceholder": "Piemēram: Microsoft 365, Excel",
     "suggestSend": "Ieteikt tēmu",
     "suggestSent": "Paldies! Ieteikums nosūtīts. Kad to apstiprināsim, tēma parādīsies tavā profilā.",
-    "suggestLimit": "Tev jau ir 5 ieteikumi, kas gaida pārbaudi. Pagaidi, kamēr tos izskatām."
+    "suggestLimit": "Tev jau ir 5 ieteikumi, kas gaida pārbaudi. Pagaidi, kamēr tos izskatām.",
+    "publishMissing": "Profils vēl NAV publicēts. Lai publicētu, trūkst: {list}.",
+    "missingTagline": "īsais apraksts",
+    "missingNiches": "vismaz viena joma/tēma",
+    "missingLanguages": "nodarbību valoda",
+    "missingContact": "kontakts (e-pasts, WhatsApp u.c. ar piekrišanu)"
   },
   "Contact": {
     "sendMessage": "Sūtīt ziņu",
