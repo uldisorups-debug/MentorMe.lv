@@ -427,7 +427,10 @@
     "missingTagline": "краткое описание",
     "missingNiches": "хотя бы одна тема",
     "missingLanguages": "язык занятий",
-    "missingContact": "контакт (e-mail, WhatsApp и т.д. с согласием)"
+    "missingContact": "контакт (e-mail, WhatsApp и т.д. с согласием)",
+    "draftSavedMissing": "Сохранено как черновик, но профиль ещё НЕ опубликован. Для публикации не хватает: {list}.",
+    "missingConsent": "отметка согласия на показ контактов",
+    "draftSavedNote": "Сохранено как черновик. Для публикации ещё не хватает: {list}."
   },
   "Account": {
     "sectionTitle": "Аккаунт",

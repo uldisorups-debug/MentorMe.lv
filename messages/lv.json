@@ -401,7 +401,10 @@
     "missingTagline": "īsais apraksts",
     "missingNiches": "vismaz viena joma/tēma",
     "missingLanguages": "nodarbību valoda",
-    "missingContact": "kontakts (e-pasts, WhatsApp u.c. ar piekrišanu)"
+    "missingContact": "kontakts (e-pasts, WhatsApp u.c. ar piekrišanu)",
+    "draftSavedMissing": "Saglabāts kā melnraksts, bet profils vēl NAV publicēts. Lai publicētu, trūkst: {list}.",
+    "missingConsent": "ķeksītis pie piekrišanas, ka kontaktus drīkst rādīt",
+    "draftSavedNote": "Saglabāts kā melnraksts. Lai publicētu, vēl trūkst: {list}."
   },
   "Contact": {
     "sendMessage": "Sūtīt ziņu",
