@@ -6,6 +6,8 @@
 export type AboutStory = { title: string; body: string; emphasis: string | null }
 
 export type AboutContent = {
+  /** Galvenā doma vienā teikumā — lapas pašā augšā, lieliem burtiem */
+  mission: string
   eyebrow: string
   headline: string
   intro: string[]
@@ -21,6 +23,7 @@ export type AboutContent = {
 
 export const ABOUT: Record<string, AboutContent> = {
   "lv": {
+    "mission": "Mērķtiecīgiem cilvēkiem, kuri meklē izaugsmes iespējas, mēs piedāvājam MentorMe.lv — zināšanu un prasmju tirgus laukumu (marketplace), kur vienuviet atrast un sazināties ar mentoriem, meistariem, privātskolotājiem un treneriem, kā arī atrast kursus, pieredzes, meistarklases un retrītus, ietaupot laiku un vieglāk atrodot sev piemērotāko attīstības iespēju un pakalpojuma sniedzēju, nevis meklējot pa neskaitāmām atsevišķām mājaslapām.",
     "eyebrow": "Mūsu mērķis",
     "headline": "Zināšanas nemirst pašas. Tās mirst tad, kad tām nav, kam pāriet.",
     "intro": [
@@ -78,6 +81,7 @@ export const ABOUT: Record<string, AboutContent> = {
     "ctaFind": "Meklēt to, kas zina"
   },
   "en": {
+    "mission": "For driven people looking to grow, we offer MentorMe.lv — a knowledge and skills marketplace where you can find and contact mentors, craftspeople, private tutors and coaches in one place, and discover courses, experiences, masterclasses and retreats — saving time and finding the development opportunity and provider that suit you best, instead of searching through countless separate websites.",
     "eyebrow": "Our purpose",
     "headline": "Knowledge doesn't die on its own. It dies when there's no one left to pass it to.",
     "intro": [
@@ -135,6 +139,7 @@ export const ABOUT: Record<string, AboutContent> = {
     "ctaFind": "Find someone who knows"
   },
   "ru": {
+    "mission": "Целеустремлённым людям, которые ищут возможности для роста, мы предлагаем MentorMe.lv — площадку знаний и навыков (маркетплейс), где в одном месте можно найти менторов, мастеров, репетиторов и тренеров и связаться с ними, а также найти курсы, опыт, мастер-классы и ретриты — экономя время и легче находя подходящую возможность для развития и специалиста, вместо поиска по бесчисленным отдельным сайтам.",
     "eyebrow": "Наша цель",
     "headline": "Знания не умирают сами. Они умирают, когда им некому перейти.",
     "intro": [

@@ -54,8 +54,22 @@ export default async function HowItWorksPage({
 
   return (
     <div className="mx-auto max-w-4xl px-6 py-20">
+      {/*
+        Galvenā doma vienā teikumā — pirms visa pārējā. Cilvēks, kurš
+        tālāk nelasa, vismaz zina, kas šī vieta ir un kāpēc tā ir ērtāka
+        par meklēšanu pa atsevišķām mājaslapām.
+      */}
+      <p className="border-l-4 border-gold pl-6 font-display text-2xl leading-snug text-balance text-cream sm:text-4xl sm:leading-tight">
+        {a.mission.split('MentorMe.lv').map((part, i) => (
+          <span key={i}>
+            {i > 0 && <span className="text-gold">MentorMe.lv</span>}
+            {part}
+          </span>
+        ))}
+      </p>
+
       {/* ---- Kāpēc ---- */}
-      <div className="max-w-2xl">
+      <div className="mt-20 max-w-2xl">
         <p className="text-xs font-medium tracking-widest text-gold uppercase">
           {a.eyebrow}
         </p>
