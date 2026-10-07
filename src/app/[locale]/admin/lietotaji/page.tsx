@@ -58,9 +58,18 @@ export default async function AdminUsersPage() {
                 badges={
                   <>
                     {p.is_admin && <Badge>Administrators</Badge>}
+                    {/*
+                      Arī "nav publicēts" jāredz: agrāk zīmes nebija vispār,
+                      un nebija skaidrs, vai profils ir sarakstā vai ne.
+                    */}
                     {coach?.is_published && (
                       <Badge variant="outline" className="text-mist">
                         Publicēts
+                      </Badge>
+                    )}
+                    {coach && !coach.is_published && (
+                      <Badge variant="outline" className="border-coral/40 text-coral">
+                        Nav publicēts
                       </Badge>
                     )}
                   </>
