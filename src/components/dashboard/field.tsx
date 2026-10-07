@@ -23,7 +23,11 @@ export function Field({
       </label>
       {hint && <p className="-mt-1 text-xs leading-relaxed text-mist">{hint}</p>}
       {children}
-      {error && <p className="text-xs text-coral">{error}</p>}
+      {error && (
+        <p data-field-error className="text-xs text-coral">
+          {error}
+        </p>
+      )}
     </div>
   )
 }

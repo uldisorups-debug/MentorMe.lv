@@ -234,7 +234,34 @@ export function ProfileEditor({
     const found = validateProfile(checked)
     setErrors(found)
     if (hasErrors(found)) {
-      setSaveError(willPublish ? t('publishBlocked') : null)
+      /*
+       * Konkrēti, ko trūkst — ne "aizpildi laukus ar kļūdu". Kļūdas ir
+       * augstāk garā formā, un poga ir apakšā: cilvēks agrāk nospieda
+       * "Publicēt", neko neredzēja un domāja, ka profils ir publicēts.
+       */
+      const missing = (
+        [
+          ['tagline', 'missingTagline'],
+          ['niches', 'missingNiches'],
+          ['session_languages', 'missingLanguages'],
+          ['has_contact', 'missingContact'],
+        ] as const
+      )
+        .filter(([key]) => key in found)
+        .map(([, label]) => t(label))
+      setSaveError(
+        willPublish
+          ? missing.length > 0
+            ? t('publishMissing', { list: missing.join(', ') })
+            : t('publishBlocked')
+          : null
+      )
+      // Uz pirmo kļūdu, lai to var uzreiz izlabot
+      requestAnimationFrame(() => {
+        document
+          .querySelector('[data-field-error]')
+          ?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      })
       return
     }
 
@@ -336,6 +363,12 @@ export function ProfileEditor({
     setMusic(cleanMusic)
     setSavedAt(Date.now())
     setDirty(false)
+    /*
+     * Statuss mainās tikai tad, kad datubāze to tiešām saglabājusi. Agrāk
+     * poga to pārslēdza jau pirms pārbaudes — ja trūka lauku, profils
+     * palika melnrakstā, bet ekrānā rakstīja "Publicēts".
+     */
+    setDraft((current) => ({ ...current, is_published: willPublish }))
 
     /*
      * Publiskā lapa ir statiska ar ISR. Bez šī izmaiņas tur parādītos
@@ -775,17 +808,16 @@ export function ProfileEditor({
               variant="outline"
               className="h-10"
               disabled={saving}
-              onClick={() => {
-                set('is_published', false)
-                void save(false)
-              }}
+              onClick={() => void save(false)}
             >
               {t('unpublish')}
             </Button>
           )}
 
           {errors.has_contact && (
-            <p className="w-full text-xs text-coral">{errors.has_contact}</p>
+            <p data-field-error className="w-full text-xs text-coral">
+              {errors.has_contact}
+            </p>
           )}
         </div>
       </Section>
@@ -813,10 +845,7 @@ export function ProfileEditor({
               type="button"
               className="h-11 gap-2 px-6"
               disabled={saving}
-              onClick={() => {
-                set('is_published', true)
-                void save(true)
-              }}
+              onClick={() => void save(true)}
             >
               <Save className="size-4" />
               {saving ? t('saving') : t('saveAndPublish')}

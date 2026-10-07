@@ -422,7 +422,12 @@
     "suggestPlaceholder": "For example: Microsoft 365, Excel",
     "suggestSend": "Suggest topic",
     "suggestSent": "Thanks! Suggestion sent. Once approved, the topic will appear on your profile.",
-    "suggestLimit": "You already have 5 suggestions waiting for review. Please wait until we go through them."
+    "suggestLimit": "You already have 5 suggestions waiting for review. Please wait until we go through them.",
+    "publishMissing": "Your profile is NOT published yet. To publish, add: {list}.",
+    "missingTagline": "a short description",
+    "missingNiches": "at least one topic",
+    "missingLanguages": "a session language",
+    "missingContact": "a contact (email, WhatsApp etc. with consent)"
   },
   "Account": {
     "sectionTitle": "Account",
