@@ -205,7 +205,10 @@ export function ProfileEditor({
    * paliktu melnrakstā, kaut cilvēks nospieda "Publicēt".
    */
   async function save(publishNow?: boolean) {
-    const willPublish = publishNow ?? draft.is_published
+    const requested = publishNow ?? draft.is_published
+    // Var kļūt false, ja publicēt vēl nevar — tad saglabājam melnrakstu
+    let willPublish = requested
+    let blockedNotice: string | null = null
     // Kontaktu klātbūtne nav atsevišķs lauks formā — to aprēķinām no
     // ievadītā tieši pirms pārbaudes, lai stāvoklis nenovecotu
     const contactValues = {
@@ -225,7 +228,7 @@ export function ProfileEditor({
 
     const checked = {
       ...draft,
-      is_published: willPublish,
+      is_published: requested,
       has_contact: reachable,
       contacts_filled: contactsFilled,
       consent_given: consent,
@@ -249,20 +252,40 @@ export function ProfileEditor({
       )
         .filter(([key]) => key in found)
         .map(([, label]) => t(label))
-      setSaveError(
-        willPublish
-          ? missing.length > 0
-            ? t('publishMissing', { list: missing.join(', ') })
-            : t('publishBlocked')
-          : null
-      )
       // Uz pirmo kļūdu, lai to var uzreiz izlabot
       requestAnimationFrame(() => {
         document
           .querySelector('[data-field-error]')
           ?.scrollIntoView({ behavior: 'smooth', block: 'center' })
       })
-      return
+
+      /*
+       * Publicēt nevar, bet tas nenozīmē, ka nedrīkst saglabāt. Agrāk
+       * šeit bija return, un viss uzrakstītais palika tikai pārlūkā —
+       * cilvēks aizvēra lapu, atgriezās, un profils bija tukšs (Inta
+       * Zaļkalna, 4. okt.). Tagad, ja melnrakstam kļūdu nav, saglabājam
+       * to un tikai publicēšanu atliekam.
+       */
+      const draftOk =
+        requested &&
+        !hasErrors(validateProfile({ ...checked, is_published: false }))
+
+      if (!draftOk) {
+        setSaveError(
+          requested
+            ? missing.length > 0
+              ? t('publishMissing', { list: missing.join(', ') })
+              : t('publishBlocked')
+            : null
+        )
+        return
+      }
+
+      willPublish = false
+      blockedNotice =
+        missing.length > 0
+          ? t('draftSavedMissing', { list: missing.join(', ') })
+          : t('publishBlocked')
     }
 
     setSaving(true)
@@ -363,6 +386,7 @@ export function ProfileEditor({
     setMusic(cleanMusic)
     setSavedAt(Date.now())
     setDirty(false)
+    if (blockedNotice) setSaveError(blockedNotice)
     /*
      * Statuss mainās tikai tad, kad datubāze to tiešām saglabājusi. Agrāk
      * poga to pārslēdza jau pirms pārbaudes — ja trūka lauku, profils

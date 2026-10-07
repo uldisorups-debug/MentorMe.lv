@@ -427,7 +427,8 @@
     "missingTagline": "a short description",
     "missingNiches": "at least one topic",
     "missingLanguages": "a session language",
-    "missingContact": "a contact (email, WhatsApp etc. with consent)"
+    "missingContact": "a contact (email, WhatsApp etc. with consent)",
+    "draftSavedMissing": "Saved as a draft, but your profile is NOT published yet. To publish, add: {list}."
   },
   "Account": {
     "sectionTitle": "Account",
