@@ -57,7 +57,7 @@ export async function importProviderAvatar(
     const path = buildStoragePath(user.id, file, crypto.randomUUID())
     const { error: uploadError } = await supabase.storage
       .from(rule.bucket)
-      .upload(path, body, { contentType: type, cacheControl: '3600', upsert: false })
+      .upload(path, body, { contentType: type, cacheControl: '31536000', upsert: false })
     if (uploadError) {
       console.error('Avatāra imports — augšupielāde:', uploadError.message)
       return null

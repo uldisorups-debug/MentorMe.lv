@@ -32,7 +32,7 @@ export async function uploadFile(
   const supabase = createClient()
   const { error } = await supabase.storage
     .from(rule.bucket)
-    .upload(path, file, { cacheControl: '3600', upsert: false })
+    .upload(path, file, { cacheControl: '31536000', upsert: false })
 
   if (error) {
     console.error(`Augšupielāde ${rule.bucket} neizdevās:`, error.message)

@@ -194,7 +194,7 @@ export function PostActions({
       .update({ status: 'draft', hidden_by_admin: true })
       .eq('id', id)
     if (error) return alert(error.message)
-    await refreshPublicPages()
+    await refreshPublicPages({ postId: id })
     await logAdminAction({
       ...admin, action: 'unpublish_post', table: 'posts', targetId: id, targetLabel: label,
     })

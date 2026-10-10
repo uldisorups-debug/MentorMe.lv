@@ -418,7 +418,17 @@ export function ProfileEditor({
     try {
       await fetch('/api/revalidate-profile', {
         method: 'POST',
-        body: JSON.stringify({ ownProfile: true }),
+        body: JSON.stringify({
+          ownProfile: true,
+          // Iepriekšējais stāvoklis no servera — lai atjaunotos arī lapas,
+          // no kurām profils tikko pazuda (cita tēma, vieta vai adrese)
+          wasPublished: coach.is_published,
+          previous: {
+            slug: coach.slug,
+            niches: coach.niches,
+            region_slug: coach.region_slug,
+          },
+        }),
       })
     } catch (refreshError) {
       console.error('Publiskās lapas atsvaidzināšana:', refreshError)

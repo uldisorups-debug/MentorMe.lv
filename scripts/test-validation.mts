@@ -37,6 +37,7 @@ import {
 } from '../src/lib/profile-validation.ts'
 import { authErrorKey, passwordTooShort } from '../src/lib/auth-errors.ts'
 import { extractMetaTags, withoutMetaTags } from '../src/lib/site-code-meta.ts'
+import { parsePrevious, profilePaths } from '../src/lib/revalidate-paths.ts'
 import {
   buildTopicIndex,
   decodeSlug,
@@ -777,12 +778,12 @@ console.log('Jaunie profili priekšgalā')
 }
 
 console.log('Bilžu samazināšana')
-check('4000x3000 -> 640 pa garāko malu', fitWithin(4000, 3000), { width: 640, height: 480 })
-check('vertikāla bilde griežas pareizi', fitWithin(1080, 1920), { width: 360, height: 640 })
-check('kvadrāts paliek kvadrāts', fitWithin(2000, 2000), { width: 640, height: 640 })
-check('mazu bildi nepalielinām', fitWithin(320, 200), { width: 320, height: 200 })
-check('tieši uz robežas nemainās', fitWithin(640, 400), { width: 640, height: 400 })
-check('ļoti šaura josla nesarūk līdz nullei', fitWithin(5000, 3), { width: 640, height: 1 })
+check('4000x3000 -> 320 pa garāko malu', fitWithin(4000, 3000), { width: 320, height: 240 })
+check('vertikāla bilde griežas pareizi', fitWithin(1080, 1920), { width: 180, height: 320 })
+check('kvadrāts paliek kvadrāts', fitWithin(2000, 2000), { width: 320, height: 320 })
+check('mazu bildi nepalielinām', fitWithin(200, 120), { width: 200, height: 120 })
+check('tieši uz robežas nemainās', fitWithin(320, 200), { width: 320, height: 200 })
+check('ļoti šaura josla nesarūk līdz nullei', fitWithin(5000, 3), { width: 320, height: 1 })
 
 check('nosaukums maina paplašinājumu', renameFor('IMG_1234.HEIC', 'image/webp'), 'IMG_1234.webp')
 check('jpeg atkāpšanās variants', renameFor('bilde.png', 'image/jpeg'), 'bilde.jpg')
@@ -899,6 +900,38 @@ check(
   'meta izņemts, skripts paliek',
   withoutMetaTags('<meta name="a" content="b">\n<script>x()</script>'),
   '<script>x()</script>'
+)
+
+
+// ---------- Mērķētā atsvaidzināšana ----------
+
+check(
+  'profila lapas: pats, sākumlapa, tēmas, vieta, nozares',
+  profilePaths([{ slug: 'inesestade', niches: ['kouc-bizness', 'bizness'], region_slug: 'riga' }], ['koucings', 'nauda']),
+  ['/', '/inesestade', '/tema/kouc-bizness', '/tema/bizness', '/vieta/riga', '/nozare/koucings', '/nozare/nauda']
+)
+check(
+  'vecā un jaunā adrese bez dublikātiem',
+  profilePaths(
+    [
+      { slug: 'jauna', niches: ['finanses'], region_slug: null },
+      { slug: 'veca', niches: ['finanses', 'karjera'], region_slug: null },
+    ],
+    []
+  ),
+  ['/', '/jauna', '/tema/finanses', '/veca', '/tema/karjera']
+)
+check(
+  'bīstams slug netiek atsvaidzināts',
+  profilePaths([{ slug: '../admin', niches: ['a/b'], region_slug: '' }], []),
+  ['/']
+)
+check('latviešu burti slugā der', profilePaths([{ slug: 'x', niches: ['val-angļu'], region_slug: null }], []), ['/', '/x', '/tema/val-angļu'])
+check('iepriekšējais — nederīgs', parsePrevious('x'), null)
+check(
+  'iepriekšējais — tēmas tikai virknes, līdz 10',
+  parsePrevious({ slug: 'a', niches: ['x', 5, 'y'], region_slug: 3 }),
+  { slug: 'a', niches: ['x', 'y'], region_slug: null }
 )
 
 console.log(`\n  ${passed} izturēja, ${failed} kritušas\n`)
