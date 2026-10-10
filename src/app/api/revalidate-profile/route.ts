@@ -1,6 +1,12 @@
 import { after, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { revalidatePublicPages } from '@/lib/revalidate'
+import {
+  revalidatePost,
+  revalidateProfile,
+  revalidatePublicPages,
+  type ProfileFootprint,
+} from '@/lib/revalidate'
+import { parsePrevious } from '@/lib/revalidate-paths'
 import { allLocaleUrls, submitToIndexNow } from '@/lib/indexnow'
 
 /**
@@ -14,6 +20,10 @@ import { allLocaleUrls, submitToIndexNow } from '@/lib/indexnow'
  */
 type Body = {
   ownProfile?: boolean
+  /** Vai profils bija publisks pirms šīs saglabāšanas (noņemšanai no saraksta) */
+  wasPublished?: boolean
+  /** Iepriekšējā adrese, tēmas un vieta — lai vecās lapas arī atjaunotos */
+  previous?: unknown
   profileId?: string
   postId?: string
 }
@@ -55,7 +65,11 @@ export async function POST(request: Request) {
    * palika ar veco skaitu, līdz kāds tās atvēra — un tās atver reti.
    */
   const [{ data: coach }, { data: profile }, body] = await Promise.all([
-    supabase.from('coach_profiles').select('id, slug, is_published').eq('user_id', user.id).maybeSingle(),
+    supabase
+      .from('coach_profiles')
+      .select('id, slug, is_published, niches, region_slug')
+      .eq('user_id', user.id)
+      .maybeSingle(),
     supabase.from('profiles').select('is_admin').eq('id', user.id).maybeSingle(),
     readBody(request),
   ])
@@ -65,7 +79,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false }, { status: 404 })
   }
 
-  revalidatePublicPages()
+  await revalidateTargets(supabase, body, user.id, coach, isAdmin)
 
   const paths = await pathsToAnnounce(supabase, body, user.id, coach, isAdmin)
 
@@ -79,6 +93,63 @@ export async function POST(request: Request) {
   }
 
   return NextResponse.json({ ok: true, slug: coach?.slug ?? null })
+}
+
+/**
+ * Atsvaidzina tikai to, ko izmaiņa skar.
+ *
+ * Melnraksta saglabāšana (profils nav un nebija publisks) neatsvaidzina
+ * neko — tas nav nevienā publiskā lapā. Agrāk katra saglabāšana pārbūvēja
+ * visu vietni, un tas iztērēja Vercel ISR limitu.
+ *
+ * Ja nav skaidrs, ko izmaiņa skar (piem., tēmas apstiprināšana vai
+ * dzēsts profils, ko vairs nevar atrast), atsvaidzinām visu.
+ */
+async function revalidateTargets(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  body: Body,
+  userId: string,
+  coach: ProfileFootprint & { id: string; is_published: boolean } | null,
+  isAdmin: boolean
+): Promise<void> {
+  const footprints: ProfileFootprint[] = []
+  let handled = false
+
+  if (body.ownProfile && coach) {
+    handled = true
+    if (coach.is_published || body.wasPublished === true) {
+      footprints.push(coach)
+      const previous = parsePrevious(body.previous)
+      if (previous) footprints.push(previous)
+    }
+  }
+
+  if (typeof body.profileId === 'string') {
+    const { data } = await supabase
+      .from('coach_profiles')
+      .select('slug, niches, region_slug, user_id')
+      .eq('id', body.profileId)
+      .maybeSingle()
+    if (data && (isAdmin || data.user_id === userId)) {
+      handled = true
+      footprints.push(data)
+    }
+  }
+
+  if (typeof body.postId === 'string') {
+    const { data } = await supabase
+      .from('posts')
+      .select('slug')
+      .eq('id', body.postId)
+      .maybeSingle()
+    if (data) {
+      handled = true
+      revalidatePost(data.slug)
+    }
+  }
+
+  if (footprints.length > 0) await revalidateProfile(...footprints)
+  if (!handled) revalidatePublicPages()
 }
 
 /**

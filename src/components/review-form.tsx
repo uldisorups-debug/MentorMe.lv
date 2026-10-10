@@ -155,7 +155,7 @@ export function ReviewForm({
 
     // Vispirms serverim jāpārbūvē lapa, tikai tad ir vērts to pārlādēt.
     // Otrādi sanāktu pārlādēt tieši to pašu veco versiju.
-    await refreshAfterReview()
+    await refreshAfterReview(coachId)
     router.refresh()
   }
 

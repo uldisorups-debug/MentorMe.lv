@@ -15,8 +15,15 @@
  *    zem tā, ka mēs zinām viņa mājas adresi.
  */
 
-/** Garākā mala pēc samazināšanas. Avatārs lapā tiek rādīts līdz 96 px. */
-export const MAX_DIMENSION = 640
+/**
+ * Garākā mala pēc samazināšanas. Avatārs lapā tiek rādīts līdz 96 px —
+ * 320 der arī trīskāršas blīvuma ekrānam (96 × 3 = 288).
+ *
+ * Bija 640. Kopš bildes vairs neiet caur Vercel optimizāciju (sk.
+ * next.config.ts), pārlūks lejuplādē tieši šo failu, tāpēc mazāks fails
+ * nozīmē ātrāku lapu, īpaši telefonā ar 30 kartītēm.
+ */
+export const MAX_DIMENSION = 320
 
 /** Cik lielu failu vispār pieņemam pirms atkodēšanas. */
 export const MAX_INPUT_BYTES = 25 * 1024 * 1024

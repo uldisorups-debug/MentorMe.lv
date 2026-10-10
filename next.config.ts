@@ -42,6 +42,17 @@ const nextConfig: NextConfig = {
   },
 
   images: {
+    /*
+     * Bildes rādām tieši no Supabase, bez Vercel pārveidošanas.
+     *
+     * Vercel bezmaksas plānā ir 5000 pārveidojumu mēnesī, un Next.js 16
+     * optimizēto bildi kešo tikai 4 stundas — pēc tam katru avatāru katrā
+     * izmērā pārveido no jauna. Ar 30 profiliem limits beidzās 10. oktobrī;
+     * ar tūkstošiem profilu tas beigtos dienā. Avatāri jau augšupielādējot
+     * tiek samazināti pārlūkā (image-resize.ts), tāpēc otra pārveidošana
+     * serverī daudz nedod.
+     */
+    unoptimized: true,
     remotePatterns: [
       // Supabase Storage — avatāri un galerijas
       {
