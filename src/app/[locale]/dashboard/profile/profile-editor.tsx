@@ -486,10 +486,8 @@ export function ProfileEditor({
           userId={userId}
           value={avatarUrl}
           fallback={initials(draft.full_name || '?')}
-          onChange={(url) => {
-            setAvatarUrl(url)
-            markChanged()
-          }}
+          // Bilde jau saglabāta profilā (AvatarUpload) — forma nav "mainīta"
+          onChange={(url) => setAvatarUrl(url)}
         />
 
         <Field label={t('fullName')} htmlFor="full_name" error={errors.full_name}>

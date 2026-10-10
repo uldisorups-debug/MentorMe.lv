@@ -9,6 +9,37 @@ import { removeStoredFile, uploadFile } from '@/lib/upload-client'
 import { UPLOAD_RULES } from '@/lib/uploads'
 import { shrinkImage } from '@/lib/image-resize'
 import { useUploadError } from '@/components/dashboard/use-upload-error'
+import { createClient } from '@/lib/supabase/client'
+
+/**
+ * Bildi ierakstām profilā uzreiz, ne tikai pie "Saglabāt".
+ *
+ * Agrāk vecais fails tika izdzēsts uzreiz pēc augšupielādes, bet jaunā
+ * adrese profilā nonāca tikai ar visas formas saglabāšanu. Ja saglabāšana
+ * neizdevās vai cilvēks aizvēra lapu, profils norādīja uz izdzēstu failu —
+ * bilde bija salauzta (Inta Zaļkalna, 5. okt.). Tagad: augšupielāde →
+ * ieraksts profilā → tikai tad vecā faila dzēšana.
+ */
+async function persistAvatar(userId: string, url: string | null): Promise<boolean> {
+  const { error } = await createClient()
+    .from('coach_profiles')
+    .update({ avatar_url: url })
+    .eq('user_id', userId)
+  if (error) {
+    console.error('Bildes saglabāšana profilā neizdevās:', error.message)
+    return false
+  }
+  // Publiskam profilam bilde redzama sarakstā un lapā — atsvaidzinām tās
+  try {
+    await fetch('/api/revalidate-profile', {
+      method: 'POST',
+      body: JSON.stringify({ ownProfile: true }),
+    })
+  } catch (refreshError) {
+    console.error('Publiskās lapas atsvaidzināšana:', refreshError)
+  }
+  return true
+}
 
 export function AvatarUpload({
   userId,
@@ -51,7 +82,15 @@ export function AvatarUpload({
       return
     }
 
-    // Veco bildi noņemam tikai pēc tam, kad jaunā ir vietā
+    if (!(await persistAvatar(userId, result.url))) {
+      // Profils joprojām rāda veco bildi — jauno, neizmantoto, noņemam
+      await removeStoredFile('avatar', result.url)
+      setError(describe({ code: 'failed' }))
+      setBusy(false)
+      return
+    }
+
+    // Veco bildi noņemam tikai tad, kad profils jau rāda jauno
     if (value) await removeStoredFile('avatar', value)
     onChange(result.url)
     setBusy(false)
@@ -60,6 +99,11 @@ export function AvatarUpload({
   async function clear() {
     if (!value) return
     setBusy(true)
+    if (!(await persistAvatar(userId, null))) {
+      setError(describe({ code: 'failed' }))
+      setBusy(false)
+      return
+    }
     await removeStoredFile('avatar', value)
     onChange(null)
     setBusy(false)
