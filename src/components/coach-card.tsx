@@ -121,7 +121,7 @@ export function CoachCard({
         <div className="min-w-0 flex-1">
           <h3 className="flex items-center gap-1.5 font-display text-lg leading-tight">
             {/* Visa kartīte kļūst klikšķināma caur šo pseido-elementu */}
-            <Link
+            <Link prefetch={false}
               href={`/${coach.slug}`}
               className="after:absolute after:inset-0 after:rounded-2xl focus-visible:outline-none"
             >

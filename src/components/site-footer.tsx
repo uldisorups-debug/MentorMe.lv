@@ -30,7 +30,7 @@ export function SiteFooter() {
 
         <nav className="flex flex-col gap-2 text-sm sm:items-end">
           {links.map((link) => (
-            <Link
+            <Link prefetch={false}
               key={link.href}
               href={link.href}
               className="text-mist transition-colors hover:text-cream"

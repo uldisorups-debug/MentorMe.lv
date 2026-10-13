@@ -30,7 +30,7 @@ export function LinkButton({
     <Button
       {...props}
       nativeButton={false}
-      render={<Link href={href} target={target} rel={rel} />}
+      render={<Link prefetch={false} href={href} target={target} rel={rel} />}
     >
       {children}
     </Button>

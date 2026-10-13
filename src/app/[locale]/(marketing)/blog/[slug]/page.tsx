@@ -11,7 +11,8 @@ import { renderMarkdown, readingMinutes } from '@/lib/markdown'
 import { loadPost } from '@/lib/posts'
 
 // Diena — raksta publicēšana un labošana atsvaidzina uzreiz (revalidatePublicPages)
-export const revalidate = 86400
+// Nedēļa: izmaiņas atsvaidzina revalidateProfile/revalidatePost uzreiz
+export const revalidate = 604800
 
 // Būvējam pirmajā apmeklējumā, ne katrā izvietojumā — sk. profila lapu
 export async function generateStaticParams(): Promise<{ locale: string; slug: string }[]> {

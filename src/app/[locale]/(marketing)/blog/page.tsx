@@ -8,7 +8,7 @@ import { listPublishedPosts } from '@/lib/posts'
 import { pageAlternates } from '@/i18n/routing'
 
 // Stunda, ne minūte: izmaiņas atsvaidzina revalidatePublicPages() uzreiz
-export const revalidate = 3600
+export const revalidate = 86400
 
 export async function generateMetadata({
   params,
@@ -69,7 +69,7 @@ export default async function BlogPage({
 
                 <div className="min-w-0 flex-1">
                   <h2 className="font-display text-xl leading-snug">
-                    <Link
+                    <Link prefetch={false}
                       href={`/blog/${post.slug}`}
                       className="after:absolute after:inset-0 after:rounded-2xl focus-visible:outline-none"
                     >

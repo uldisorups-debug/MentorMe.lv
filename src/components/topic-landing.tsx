@@ -67,7 +67,7 @@ function ChipList({ entries }: { entries: TopicEntry[] }) {
     <ul className="mt-3 flex flex-wrap gap-2">
       {entries.map((e) => (
         <li key={`${e.kind}-${e.slug}`}>
-          <Link
+          <Link prefetch={false}
             href={topicPath(e.kind, e.slug)}
             className="inline-flex items-center gap-1.5 rounded-full border border-hairline px-3 py-1 text-sm text-mist transition-colors hover:border-gold/40 hover:text-cream"
           >
@@ -162,7 +162,7 @@ export async function TopicLanding({
               {i === crumbs.length - 1 ? (
                 <span className="text-cream">{c.name}</span>
               ) : (
-                <Link href={c.path} className="hover:text-cream">
+                <Link prefetch={false} href={c.path} className="hover:text-cream">
                   {c.name}
                 </Link>
               )}
