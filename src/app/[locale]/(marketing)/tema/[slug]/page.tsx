@@ -7,7 +7,8 @@ import {
 } from '@/components/topic-landing'
 
 // Svaigumu nodrošina revalidatePublicPages() pie katras izmaiņas; laiks — tikai drošības tīkls
-export const revalidate = 86400
+// Nedēļa: izmaiņas atsvaidzina revalidateProfile/revalidatePost uzreiz
+export const revalidate = 604800
 
 export function generateStaticParams() {
   return topicStaticParams()

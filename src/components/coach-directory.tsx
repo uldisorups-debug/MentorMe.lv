@@ -16,7 +16,6 @@ import {
   type CoachCardData,
   type CoachFilters,
 } from '@/lib/coaches'
-import { cn } from '@/lib/utils'
 
 /*
  * Cik profilu rādīt uzreiz. Pārējie — pēc pogas "Rādīt vēl".
@@ -176,9 +175,15 @@ export function CoachDirectory({
               {isClosest && <p className="mb-6 text-sm text-mist">{t('closestNotice')}</p>}
 
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {list.map((coach, i) => (
+                {/*
+                  Tikai redzamās kartītes. Agrāk visas bija HTML (slēptas), un
+                  sākumlapa auga ~6 KB uz katru profilu — Vercel ISR rakstījumi
+                  un datu plūsma auga līdzi. Profilu saites Google atrod tēmu
+                  lapās un sitemap.
+                */}
+                {list.slice(0, limit).map((coach) => (
                   // grid, lai kartīte izstieptos visā rindas augstumā
-                  <div key={coach.id} className={cn('grid', i >= limit && 'hidden')}>
+                  <div key={coach.id} className="grid">
                     <CoachCard
                       coach={coach}
                       nicheNames={nicheNames}

@@ -44,7 +44,8 @@ const NO_TOPIC_PAGE = new Set(['cits', 'cits-prasme'])
  * saglabāšana, atsauksme, publicēšana atsvaidzina uzreiz. Diena ir tikai
  * drošības tīkls tam, kas mainās bez mūsu ziņas (skatījumu skaitītājs).
  */
-export const revalidate = 86400
+// Nedēļa: izmaiņas atsvaidzina revalidateProfile/revalidatePost uzreiz
+export const revalidate = 604800
 
 /*
  * Tukšs saraksts: profili netiek būvēti izvietošanas brīdī, bet pirmajā
@@ -331,7 +332,7 @@ export default async function CoachProfilePage({
                   ) : (
                     // Saite uz tēmas lapu — tīkla pamats: katrs profils
                     // norāda uz savām tēmām, katra tēma uz saviem profiliem
-                    <Link key={niche} href={topicPath('tema', niche)}>
+                    <Link prefetch={false} key={niche} href={topicPath('tema', niche)}>
                       <Badge
                         variant="outline"
                         className="text-mist transition-colors hover:border-gold/40 hover:text-cream"
@@ -487,7 +488,7 @@ export default async function CoachProfilePage({
                         {NO_TOPIC_PAGE.has(s.value) ? (
                           s.icon ? `${s.icon} ${s.label}` : s.label
                         ) : (
-                          <Link
+                          <Link prefetch={false}
                             href={topicPath('nozare', s.value)}
                             className="underline decoration-hairline underline-offset-4 hover:text-gold"
                           >
@@ -518,7 +519,7 @@ export default async function CoachProfilePage({
                     {coach.city}
                     {coach.city && regionName && ', '}
                     {regionName && coach.region_slug && (
-                      <Link
+                      <Link prefetch={false}
                         href={topicPath('vieta', coach.region_slug)}
                         className="underline decoration-hairline underline-offset-4 hover:text-gold"
                       >
