@@ -19,6 +19,7 @@ import {
   Scissors,
   Sparkles,
   Sprout,
+  Sun,
   type LucideIcon,
 } from 'lucide-react'
 import type { FilterTaxonomy } from '@/components/filter-bar'
@@ -49,6 +50,7 @@ const ICONS: Record<string, LucideIcon> = {
   koucings: Compass,
   nauda: Briefcase,
   pieredze: Globe,
+  garigums: Sun,
 }
 
 /**
