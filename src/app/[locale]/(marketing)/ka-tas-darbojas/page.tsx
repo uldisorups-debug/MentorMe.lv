@@ -5,6 +5,8 @@ import { HowItWorksContent } from '@/components/how-it-works-content'
 import { LinkButton } from '@/components/link-button'
 import { ABOUT } from '@/content/about'
 import { HOW_IT_WORKS } from '@/content/how-it-works'
+import { FAQ } from '@/content/faq'
+import { jsonLdHtml } from '@/lib/json-ld'
 import { pageAlternates, routing } from '@/i18n/routing'
 
 /**
@@ -51,6 +53,7 @@ export default async function HowItWorksPage({
 
   const a = about(locale)
   const h = how(locale)
+  const faq = FAQ[locale] ?? FAQ[routing.defaultLocale]
 
   return (
     <div className="mx-auto max-w-4xl px-6 py-20">
@@ -132,6 +135,33 @@ export default async function HowItWorksPage({
           <HowItWorksContent c={h} />
         </div>
       </div>
+
+      {/* ---- BUJ: īsas, tiešas atbildes — tās citē Google un AI meklētāji ---- */}
+      <section className="mt-20 border-t border-hairline pt-16">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: jsonLdHtml({
+              '@context': 'https://schema.org',
+              '@type': 'FAQPage',
+              mainEntity: faq.items.map((item) => ({
+                '@type': 'Question',
+                name: item.q,
+                acceptedAnswer: { '@type': 'Answer', text: item.a },
+              })),
+            }),
+          }}
+        />
+        <h2 className="rule-gold font-display text-3xl">{faq.title}</h2>
+        <dl className="mt-10 flex max-w-2xl flex-col gap-8">
+          {faq.items.map((item) => (
+            <div key={item.q}>
+              <dt className="font-display text-lg text-cream">{item.q}</dt>
+              <dd className="mt-2 leading-relaxed text-mist">{item.a}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
 
       {/* ---- Aicinājums ---- */}
       <div className="mt-16 rounded-2xl border border-gold/30 bg-gradient-to-br from-gold/10 to-coral/5 p-8">
