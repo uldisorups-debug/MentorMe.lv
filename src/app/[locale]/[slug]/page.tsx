@@ -238,17 +238,12 @@ export default async function CoachProfilePage({
             },
           }
         : {}),
-      ...(coach.avg_rating !== null && coach.review_count > 0
-        ? {
-            aggregateRating: {
-              '@type': 'AggregateRating',
-              ratingValue: coach.avg_rating,
-              reviewCount: coach.review_count,
-              bestRating: 5,
-              worstRating: 1,
-            },
-          }
-        : {}),
+      /*
+       * aggregateRating te apzināti nav. Google atsauksmju fragmenti
+       * (zvaigznītes) Person tipam nav atļauti — Search Console to
+       * atzīmēja kā kritisku kļūdu "Invalid object type for field
+       * <parent_node>". Vērtējums paliek redzams lapā, tikai ne shēmā.
+       */
     },
   }
 
