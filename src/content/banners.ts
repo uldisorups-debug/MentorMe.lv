@@ -25,7 +25,7 @@ function badge(id: string, file: string): Banner {
     src,
     width: 190,
     height: 60,
-    code: `<div style="display:inline-block;padding:10px"><a href="${SITE}/" target="_blank" rel="noopener" title="${TITLE}" style="display:block;text-decoration:none;text-align:center;margin:0;font-size:11px;color:#777;font-family:sans-serif"><img width="190" height="60" alt="${ALT}" src="${SITE}${src}" loading="lazy" style="display:block;margin:0 auto 3px;border:0"/>Atrodi savu mentoru</a></div>`,
+    code: `<div style="display:inline-block;padding:10px"><a href="${SITE}/" target="_blank" rel="noopener" title="${TITLE}" style="display:block;line-height:0"><img width="190" height="60" alt="${ALT}" src="${SITE}${src}" loading="lazy" style="display:block;border:0"/></a></div>`,
   }
 }
 
