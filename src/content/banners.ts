@@ -32,13 +32,6 @@ function badge(id: string, file: string): Banner {
 export const BANNERS: Banner[] = [
   badge('badge-dark', 'mentorme-190x60-tumss.webp'),
   badge('badge-light', 'mentorme-190x60-gaiss.webp'),
-  {
-    id: 'skyscraper',
-    src: '/baneri/mentorme-160x600.webp',
-    width: 160,
-    height: 600,
-    code: `<a href="${SITE}/" target="_blank" rel="noopener" title="${TITLE}" style="display:inline-block"><img width="160" height="600" alt="${ALT}" src="${SITE}/baneri/mentorme-160x600.webp" loading="lazy" style="display:block;border:0"/></a>`,
-  },
 ]
 
 type Copy = {
@@ -57,7 +50,6 @@ export const BANNERS_PAGE: Record<string, Copy> = {
     names: {
       'badge-dark': 'Poga 190×60 — tumša',
       'badge-light': 'Poga 190×60 — gaiša',
-      skyscraper: 'Sānu baneris 160×600',
     },
     copy: 'Kopēt kodu',
     copied: 'Nokopēts',
@@ -69,7 +61,6 @@ export const BANNERS_PAGE: Record<string, Copy> = {
     names: {
       'badge-dark': 'Button 190×60 — dark',
       'badge-light': 'Button 190×60 — light',
-      skyscraper: 'Side banner 160×600',
     },
     copy: 'Copy code',
     copied: 'Copied',
@@ -81,7 +72,6 @@ export const BANNERS_PAGE: Record<string, Copy> = {
     names: {
       'badge-dark': 'Кнопка 190×60 — тёмная',
       'badge-light': 'Кнопка 190×60 — светлая',
-      skyscraper: 'Боковой баннер 160×600',
     },
     copy: 'Копировать код',
     copied: 'Скопировано',
