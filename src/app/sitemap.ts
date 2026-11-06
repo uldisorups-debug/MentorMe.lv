@@ -75,6 +75,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...entry('/blog', 'daily', 0.9, listsModified),
     ...entry('/ka-tas-darbojas', 'monthly', 0.7, staticModified),
     ...entry('/kontakti', 'monthly', 0.3, staticModified),
+    ...entry('/baneri', 'monthly', 0.2, staticModified),
     ...coaches.flatMap((coach) =>
       entry(`/${coach.slug}`, 'weekly', 0.8, new Date(coach.updatedAt))
     ),

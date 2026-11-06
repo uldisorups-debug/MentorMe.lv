@@ -12,6 +12,7 @@ export function SiteFooter() {
     { href: '/ka-tas-darbojas', label: tNav('howItWorks') },
     { href: '/auth/login?next=%2Fdashboard%2Fprofile', label: t('addProfile') },
     { href: '/kontakti', label: t('contact') },
+    { href: '/baneri', label: t('banners') },
     { href: '/privatums', label: t('privacy') },
     { href: '/lietosanas-noteikumi', label: t('terms') },
     { href: '/sikdatnes', label: t('cookies') },
