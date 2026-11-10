@@ -1,5 +1,5 @@
 /**
- * Unikāls teksts svarīgākajām tēmu, nozaru un vietu lapām.
+ * Unikāls teksts tēmu, nozaru un vietu lapām.
  *
  * Bez tā visas ~70 tēmu lapas atšķīrās tikai ar vienu vārdu virsrakstā
  * un trim kartītēm. Search Console (2026. gada novembris): "biznesa
@@ -158,6 +158,239 @@ export const TOPIC_GUIDES: Record<string, TopicGuide> = {
       ['Cik maksā privātstunda Rīgā?', 'MentorMe.lv profilos privātstunda visbiežāk maksā no 15 līdz 50 eiro. Rīgā cenas parasti ir augstākas nekā reģionos.'],
       ['Kur Rīgā atrast biznesa kouču?', 'Šajā lapā atlasi tēmu "Biznesa koučings". Katrā profilā redzama cena un tas, vai koučs tiekas klātienē.'],
       ['Vai var tikties klātienē?', 'Jā. Profilā ir norādīts, vai cilvēks strādā klātienē, attālināti vai abējādi. Par vietu vienojaties savā starpā.'],
+    ],
+    posts: [CENAS_STUNDAS, CENAS_KOUCS],
+  },
+  'tema/marketings': {
+    title: 'Mārketinga mentori un apmācības',
+    body: [
+      'Mārketinga tēmā ir cilvēki, kas ikdienā veido reklāmas, saturu un pārdošanas piltuves un māca to citiem. Pie viņiem nāk mazo uzņēmumu īpašnieki, kuri mārketingu dara paši, un mārketinga speciālisti, kuri grib augt.',
+      'Visvairāk dod nodarbība, kurā strādājat ar tavu uzņēmumu: tavu mājaslapu, tavām reklāmām un taviem skaitļiem. Pirms raksti, sagatavo, cik šobrīd tērē un cik klientu tas atnes. Ar to mentors var sākt uzreiz.',
+    ],
+    faq: [
+      ['Ar ko sākt mārketingu mazam uzņēmumam?', 'Ar vienu kanālu, kurā jau ir tavi klienti, un vienu skaidru piedāvājumu. Mentors palīdz izvēlēties kanālu un nesadalīt budžetu pa pieciem uzreiz.'],
+      ['Vai mārketingu var iemācīties pats?', 'Pamatus jā. Mentors saīsina ceļu, jo parāda, kuras kļūdas tavā nozarē maksā visdārgāk.'],
+      ['Vai ir mārketinga apmācības komandai?', 'Jā. Vairāki pasniedzēji vada apmācības uzņēmumos. Par saturu un cenu vienojies tieši ar pasniedzēju.'],
+    ],
+    posts: [CENAS_KOUCS],
+  },
+  'tema/pardosana': {
+    title: 'Pārdošanas apmācības un kursi',
+    body: [
+      'Pārdošanu nevar iemācīties no grāmatas. To iemācās sarunās ar klientiem un ar cilvēku, kurš pēc tam pasaka, kur saruna nogāja greizi. Šajā lapā ir pārdošanas treneri un vadītāji, kas māca individuāli un vada apmācības komandām.',
+      'Uzņēmumiem apmācības parasti veido pēc reālām situācijām: aukstie zvani, sarunas par cenu, iebildumi, darījuma noslēgšana. Individuāli strādā ar vienu cilvēku un viņa klientiem.',
+    ],
+    faq: [
+      ['Cik ilgas ir pārdošanas apmācības?', 'No vienas dienas semināra līdz vairāku mēnešu programmai ar regulārām nodarbībām. Paliekošu rezultātu dod programma, kurā starp nodarbībām jāpielieto iemācītais.'],
+      ['Vai pārdošanas apmācības var pielāgot nozarei?', 'Jā. Pirms apmācībām pasniedzējs noskaidro, ko pārdodat un kam, un piemērus ņem no jūsu ikdienas.'],
+      ['Kā izvēlēties pārdošanas treneri?', 'Pajautā, ko viņš pats ir pārdevis un kādā nozarē. Labs treneris pārdošanu ir darījis, ne tikai mācījis.'],
+    ],
+  },
+  'tema/finanses': {
+    title: 'Finanšu konsultanti un mentori',
+    body: [
+      'Finanšu tēmā ir cilvēki, kas palīdz saprast uzņēmuma naudas plūsmu, budžetu un cenu veidošanu, kā arī sakārtot personīgās finanses. Uzņēmējam tas visbiežāk nozīmē atbildi uz jautājumu, kāpēc apgrozījums aug, bet kontā naudas nav.',
+      'Uz pirmo sarunu paņem līdzi pēdējo mēnešu ieņēmumus un izdevumus. Bez skaitļiem saruna paliek vispārīga. Ieguldījumu ieteikumus Latvijā drīkst sniegt tikai licencēti konsultanti, tāpēc noskaidro, ar ko tieši cilvēks strādā.',
+    ],
+    faq: [
+      ['Ko dara finanšu mentors uzņēmumam?', 'Palīdz izveidot budžetu, saprast peļņu pa produktiem un plānot naudas plūsmu, lai nodokļu un algu dienā nav pārsteigumu.'],
+      ['Vai finanšu konsultants ir tas pats, kas grāmatvedis?', 'Nē. Grāmatvedis uzskaita to, kas jau noticis. Finanšu konsultants palīdz plānot, kas notiks.'],
+      ['Cik maksā finanšu konsultācija?', 'MentorMe.lv profilos biznesa un finanšu konsultācija maksā no 29 eiro, visbiežāk ap 90 līdz 100 eiro.'],
+    ],
+    posts: [CENAS_KOUCS],
+  },
+  'tema/gramatvediba': {
+    title: 'Grāmatvedības konsultācijas un apmācības',
+    body: [
+      'Grāmatvedības konsultācija noder, kad sāc saimniecisko darbību vai uzņēmumu un gribi saprast, kādi nodokļi būs jāmaksā un kādi dokumenti jākārto. Viena saruna sākumā pasargā no kļūdām, kuras vēlāk labot ir dārgi.',
+      'Šeit ir grāmatveži, kas ne tikai kārto uzskaiti, bet arī izskaidro to saprotamā valodā un iemāca lietot uzskaites programmas pašam.',
+    ],
+    faq: [
+      ['Vai mazam uzņēmumam vajag grāmatvedi?', 'Uzskaite ir jākārto jebkurā gadījumā. Vienkāršākajos gadījumos to var darīt pats, ja kāds sākumā parāda, kā.'],
+      ['Ko pajautāt grāmatvedim pirms uzņēmuma dibināšanas?', 'Kāda uzņēmējdarbības forma un nodokļu režīms der tavam plānotajam apgrozījumam un vai būs jāreģistrējas PVN.'],
+      ['Vai grāmatvedību var iemācīties individuāli?', 'Jā. Individuālās nodarbībās var apgūt gan pamatus, gan konkrētu uzskaites programmu.'],
+    ],
+    posts: [['ka-sakt-biznesu-latvija-biznesa-mentors', 'Kā sākt biznesu Latvijā: 7 jautājumi mentoram']],
+  },
+  'tema/karjera': {
+    title: 'Karjeras konsultanti un mentori',
+    body: [
+      'Karjeras mentors palīdz trīs brīžos: kad meklē pirmo darbu, kad gribi mainīt nozari un kad esi iestrēdzis vienā amatā. Viņš paskatās uz tavu CV un pieredzi ar darba devēja acīm un pasaka, kas tajā trūkst.',
+      'Konkrētas nozares mentors ir vērtīgāks par vispārīgu padomu: viņš zina, ko tajā nozarē tiešām prasa un kurp pieteikties. Karjeras koučs noder, ja vēl nezini, ko gribi darīt.',
+    ],
+    faq: [
+      ['Kā mainīt profesiju?', 'Sāc ar sarunu ar cilvēku, kurš jau strādā nozarē, uz kuru gribi pāriet. Viņš pateiks, kuras tavas prasmes der un ko vēl jāapgūst.'],
+      ['Vai karjeras konsultants palīdz ar CV un darba interviju?', 'Jā. Daudzi piedāvā CV pārskatīšanu un izmēģinājuma interviju ar atgriezenisko saiti.'],
+      ['Cik sarunu vajag?', 'CV un intervijai pietiek ar vienu vai divām. Profesijas maiņai rēķinies ar vairākām sarunām dažu mēnešu laikā.'],
+    ],
+    posts: [['ka-atrast-mentoru', 'Kā atrast mentoru: 7 soļi']],
+  },
+  'tema/uznemuma-sakums': {
+    title: 'Mentori sava uzņēmuma sākšanai',
+    body: [
+      'Sākot uzņēmumu, visdārgākās ir kļūdas pirmajos mēnešos: nepareiza cena, produkts, ko neviens nepērk, vai līgums, kas neaizsargā. Mentors, kurš pats ir sācis uzņēmumu, šīs vietas redz uzreiz.',
+      'Uz sarunu nāc ar ideju vienā teikumā un atbildi uz jautājumu, kas un kāpēc par to maksās. Ja atbildes vēl nav, tieši par to arī būs pirmā saruna.',
+    ],
+    faq: [
+      ['Ar ko sākt, ja ir biznesa ideja?', 'Ar sarunām ar iespējamiem klientiem un vienu mentoru, kurš pazīst nozari. Uzņēmumu reģistrēt var vēlāk, kad ir pirmie pircēji.'],
+      ['Vai mentors palīdz ar biznesa plānu?', 'Viņš neuzrakstīs to tavā vietā, bet pateiks, kuri pieņēmumi nav reāli un ko pārbaudīt vispirms.'],
+      ['Vai ir bezmaksas mentori iesācējiem?', 'Jā. Daļa mentoru pirmo sarunu vai visu sadarbību piedāvā bez maksas. Sarakstā tos var atlasīt ar budžeta filtru.'],
+    ],
+    posts: [['ka-sakt-biznesu-latvija-biznesa-mentors', 'Kā sākt biznesu Latvijā: 7 jautājumi mentoram'], CENAS_KOUCS],
+  },
+  'tema/web': {
+    title: 'Mājaslapu izstrādes mentori un pasniedzēji',
+    body: [
+      'Šeit ir izstrādātāji, kas iemāca uzbūvēt mājaslapu pašam: no vienkāršas vizītkartes lapas līdz interneta veikalam. Daļa māca programmēt, citi parāda, kā strādāt ar gataviem rīkiem bez koda.',
+      'Ātrākais ceļš ir būvēt savu īsto lapu nodarbību laikā. Pēc dažām reizēm lapa ir gatava, un tu proti to arī uzturēt.',
+    ],
+    faq: [
+      ['Vai mājaslapu var izveidot bez programmēšanas?', 'Jā. Vienkāršai lapai vai nelielam veikalam pietiek ar gatavu platformu. Pasniedzējs palīdz izvēlēties rīku un iekārtot to pareizi.'],
+      ['Cik ilgi jāmācās, lai izveidotu savu lapu?', 'Vienkāršu lapu ar pasniedzēja palīdzību var uzbūvēt dažās nodarbībās.'],
+      ['Cik maksā nodarbība?', 'MentorMe.lv profilos nodarbība tehnoloģiju jomā maksā no 25 eiro, visbiežāk ap 40 eiro.'],
+    ],
+    posts: [CENAS_STUNDAS],
+  },
+  'tema/programmesana': {
+    title: 'Programmēšanas privātstundas un mentori',
+    body: [
+      'Programmēšanas mentors ir cilvēks, kurš kodu raksta ikdienā un palīdz tev tikt pāri vietām, kur pats iestrēgsti. Iesācējam viņš sakārto, ko mācīties un kādā secībā. Pieredzējušam pārskata kodu un parāda, kā to raksta komandā.',
+      'Skolēniem privātstundas palīdz ar informātiku un sagatavo olimpiādēm. Pieaugušie visbiežāk nāk ar mērķi mainīt profesiju vai automatizēt savu darbu.',
+    ],
+    faq: [
+      ['Ar kuru programmēšanas valodu sākt?', 'Atkarīgs no mērķa. Mājaslapām sāk ar HTML, CSS un JavaScript, datu apstrādei un automatizācijai ar Python. Mentors palīdz izvēlēties pēc tā, ko gribi uzbūvēt.'],
+      ['Vai programmēt var iemācīties attālināti?', 'Jā. Ar kopīgu ekrānu tas darbojas tikpat labi kā klātienē.'],
+      ['Cik maksā programmēšanas privātstunda?', 'MentorMe.lv profilos no 25 eiro, visbiežāk ap 40 eiro par nodarbību.'],
+    ],
+    posts: [CENAS_STUNDAS],
+  },
+  'tema/digitalie-riki': {
+    title: 'Digitālo rīku apmācības darbam',
+    body: [
+      'Excel, Microsoft 365, Google rīki, projektu vadības un automatizācijas programmas: lielākā daļa cilvēku izmanto nelielu daļu no tā, ko šie rīki prot. Pasniedzējs parāda tieši to daļu, kas ietaupa laiku tavā darbā.',
+      'Uzņēmumiem apmācības veido pēc komandas ikdienas uzdevumiem. Individuāli var atnākt ar savu tabulu vai procesu un sakārtot to nodarbības laikā.',
+    ],
+    faq: [
+      ['Vai var iemācīties Excel individuāli?', 'Jā. Individuālā nodarbībā strādā ar tavām tabulām un tavā līmenī, tāpēc sanāk ātrāk nekā grupā.'],
+      ['Vai ir apmācības uzņēmuma darbiniekiem?', 'Jā. Par saturu, ilgumu un cenu vienojies tieši ar pasniedzēju.'],
+      ['Ar ko sākt, ja komanda strādā neefektīvi?', 'Ar vienu procesu, kas aizņem visvairāk laika. Pasniedzējs palīdz izvēlēties rīku un iemāca to lietot.'],
+    ],
+    posts: [['microsoft-lists-vai-excel', 'Excel vai MS Lists kopīgam sarakstam']],
+  },
+  'tema/mental': {
+    title: 'Atbalsts mentālajai veselībai',
+    body: [
+      'Šajā tēmā ir kouči, psihologi un citi speciālisti, kas palīdz ar stresu, izdegšanu, pašvērtējumu un ieradumiem. Katrā profilā ir redzama izglītība un sertifikācija, un pēc tās var saprast, ar ko cilvēks drīkst strādāt.',
+      'Koučs strādā ar mērķiem un ikdienas ieradumiem. Ar ilgstošu trauksmi, nomāktību vai miega traucējumiem jāvēršas pie psihologa, psihoterapeita vai ārsta. Ja situācija ir akūta, zvani 113 vai krīzes tālrunim 116123.',
+    ],
+    faq: [
+      ['Kad iet pie kouča un kad pie psihologa?', 'Pie kouča, ja spēka pietiek, bet trūkst virziena. Pie psihologa, ja grūtības traucē ikdienu: miegu, darbu, attiecības.'],
+      ['Vai konsultācijas notiek attālināti?', 'Jā, lielākā daļa speciālistu strādā arī tiešsaistē. Formāts ir redzams profilā.'],
+      ['Kā izvēlēties speciālistu?', 'Paskaties izglītību un sertifikāciju profilā un sarunā iepazīšanās sarunu. Svarīgi, lai ar šo cilvēku jūties droši.'],
+    ],
+    posts: [['izdegsana-darba-kouc-vai-psihologs', 'Kad palīdzēs koučs un kad vajag psihologu'], ['disciplina-mentala-gariga-fiziska-veseliba', 'Disciplīna un veselība']],
+  },
+  'tema/garigs': {
+    title: 'Garīgās izaugsmes pavadītāji',
+    body: [
+      'Garīgā izaugsme katram nozīmē ko citu: meditāciju, pašizziņu, vērtību sakārtošanu vai klusuma retrītu. Šeit ir cilvēki, kas šo ceļu ir gājuši paši un pavada citus individuāli, grupās un retrītos.',
+      'Pirms izvēlies, izlasi, kā cilvēks pats apraksta savu pieeju, un sarunā īsu iepazīšanos. Šajā jomā svarīgāk par sertifikātu ir tas, vai viņa valoda un vērtības tev ir tuvas.',
+    ],
+    faq: [
+      ['Ar ko sākt garīgo praksi?', 'Ar vienu vienkāršu ieradumu, piemēram, desmit minūtēm klusuma dienā, un cilvēku, kurš palīdz to noturēt.'],
+      ['Kas notiek retrītā?', 'Vairākas dienas ārpus ikdienas ar vadītām praksēm, klusumu un sarunām. Programma un noteikumi katram retrītam ir savi.'],
+      ['Vai var strādāt attālināti?', 'Jā, individuālas sarunas bieži notiek tiešsaistē. Retrīti un grupu prakses parasti ir klātienē.'],
+    ],
+    posts: [['retriti-un-mastermind-grupas', 'Retrīti un mastermind grupas']],
+  },
+  'tema/parmainas': {
+    title: 'Atbalsts dzīves pārmaiņās',
+    body: [
+      'Darba zaudēšana, šķiršanās, pārcelšanās, bērna ienākšana ģimenē vai aiziešana pensijā: pārmaiņās visvairāk palīdz cilvēks, kurš ko līdzīgu ir piedzīvojis vai profesionāli pavada citus. Šeit ir gan kouči, gan cilvēki ar savu dzīves pieredzi.',
+      'Saruna nepieņems lēmumu tavā vietā. Tā palīdz ieraudzīt izvēles, kuras vienatnē neredzi, un nepalikt ar tām vienam.',
+    ],
+    faq: [
+      ['Kā saprast, vai man vajag kouču?', 'Ja vienu un to pašu jautājumu galvā griez jau mēnešiem un netiec uz priekšu, saruna ar kouču parasti izkustina.'],
+      ['Vai var runāt ar cilvēku, kurš pats to piedzīvojis?', 'Jā. Tēmā ir arī cilvēki, kas dalās tieši ar savu pieredzi, nevis ar metodi.'],
+      ['Cik sarunu vajag?', 'Dažiem pietiek ar vienu, lai ieraudzītu nākamo soli. Lielākām pārmaiņām parasti tiekas vairākus mēnešus.'],
+    ],
+    posts: [['pieredzes-prakse-macities-no-pieredzes', 'Kāpēc no pieredzes iemācās ātrāk']],
+  },
+  'tema/dzive': {
+    title: 'Mācīties no cita cilvēka dzīves pieredzes',
+    body: [
+      'Ne visas zināšanas ir diplomā. Cilvēks, kurš uzcēlis māju, izaudzinājis piecus bērnus, emigrējis un atgriezies vai trīsdesmit gadus vadījis saimniecību, zina lietas, ko nekur citur neuzzināsi.',
+      'Šeit šādi cilvēki piedāvā sarunu, padomu vai pieredzes dienu. Uzraksti konkrētu jautājumu, un saņemsi atbildi no cilvēka, kurš to ir darījis pats.',
+    ],
+    faq: [
+      ['Ko nozīmē pieredzes diena?', 'Tu pavadi dienu kopā ar cilvēku viņa darbā vai saimniecībā un redzi, kā tas notiek īstenībā.'],
+      ['Vai par to jāmaksā?', 'Katrs cenu nosaka pats. Daļa cilvēku ar pieredzi dalās bez maksas.'],
+      ['Vai arī es varu dalīties ar savu pieredzi?', 'Jā. Profils ir bez maksas, un nekāda izglītība vai sertifikāts nav vajadzīgs.'],
+    ],
+    posts: [['pieredzes-prakse-macities-no-pieredzes', 'Pieredzes prakse: kāpēc no pieredzes iemācās ātrāk']],
+  },
+  'tema/radosa': {
+    title: 'Radošuma nodarbības un mentori',
+    body: [
+      'Radošumu var trenēt tāpat kā muskuli. Šajā tēmā ir mākslinieki, dizaineri un radošo profesiju cilvēki, kas vada nodarbības, meistarklases un individuālas sarunas gan iesācējiem, gan profesionāļiem.',
+      'Iesācējam nodarbība dod drosmi sākt un pirmās prasmes. Profesionālim mentors dod skatu no malas uz portfolio un padomu, kā ar savu darbu pelnīt.',
+    ],
+    faq: [
+      ['Vai vajag talantu, lai sāktu?', 'Nē. Zīmēšanu, rakstīšanu un citas radošās prasmes var iemācīties ar regulāru praksi un labu skolotāju.'],
+      ['Kas ir meistarklase?', 'Viena nodarbība, kurā meistara vadībā izveido konkrētu darbu no sākuma līdz galam.'],
+      ['Vai ir nodarbības pieaugušajiem?', 'Jā, lielākā daļa nodarbību šajā tēmā ir domātas pieaugušajiem.'],
+    ],
+    posts: [['kursi-un-meistarklases-latvija', 'Kursi un meistarklases Latvijā: kā izvēlēties']],
+  },
+  'nozare/psihologija': {
+    title: 'Psihologi un terapeiti',
+    body: [
+      'Šajā lapā ir psihologi, terapeiti un konsultanti, kas strādā ar emocionālām grūtībām, attiecībām, stresu un izdegšanu. Katrā profilā ir redzama izglītība un sertifikācija.',
+      'Pirmajā konsultācijā parasti pārrunā, kas tevi atvedis un ko gribi mainīt. Pēc tās abi saprot, vai un kā strādāt tālāk. Akūtā situācijā zvani 113 vai krīzes tālrunim 116123.',
+    ],
+    faq: [
+      ['Cik maksā psihologa konsultācija?', 'MentorMe.lv profilos konsultācija maksā no 40 līdz 120 eiro.'],
+      ['Vai psihologa konsultācija var notikt attālināti?', 'Jā, daudzi speciālisti strādā arī tiešsaistē. Formāts ir redzams profilā.'],
+      ['Ar ko psihologs atšķiras no kouča?', 'Psihologs strādā ar emocionālām grūtībām un to cēloņiem. Koučs strādā ar mērķiem un to sasniegšanu.'],
+    ],
+    posts: [['izdegsana-darba-kouc-vai-psihologs', 'Kad palīdzēs koučs un kad vajag psihologu']],
+  },
+  'nozare/pieredze': {
+    title: 'Dzīves un pieredzes zināšanas',
+    body: [
+      'Šī nozare ir cilvēkiem, kuru zināšanas nāk no dzīves, nevis no skolas: pārmaiņas, ģimene, pārcelšanās, saimniecība, ceļošana. Viņi piedāvā sarunas, padomu un pieredzes dienas.',
+      'Ja meklē atbildi uz jautājumu, ko nevar atrast grāmatā, uzraksti cilvēkam, kurš to ir piedzīvojis. Par cenu un formu vienojaties savā starpā.',
+    ],
+    faq: [
+      ['Kas var dalīties ar pieredzi?', 'Ikviens. Profilam nevajag izglītību vai sertifikātu, vajag pieredzi, ko vari godīgi aprakstīt.'],
+      ['Kā notiek pieredzes saruna?', 'Tu uzraksti cilvēkam tieši, un vienojaties par laiku. Saruna var notikt klātienē vai tiešsaistē.'],
+      ['Vai tas ir bez maksas?', 'Katrs cenu nosaka pats. Daļa piedāvā sarunu bez maksas.'],
+    ],
+    posts: [['pieredzes-prakse-macities-no-pieredzes', 'Pieredzes prakse: kāpēc no pieredzes iemācās ātrāk']],
+  },
+  'nozare/maksla': {
+    title: 'Mākslas un radošās nodarbības',
+    body: [
+      'Šeit ir mākslinieki, dizaineri, fotogrāfi un citi radošo profesiju cilvēki, kas māca individuāli, vada kursus un meistarklases. Nodarbības ir gan bērniem, gan pieaugušajiem, gan iesācējiem, gan tiem, kas gatavojas iestājeksāmeniem.',
+      'Praktiskas prasmes, piemēram, gleznošanu vai keramiku, vislabāk mācīties klātienē. Dizainu, fotogrāfijas apstrādi un portfolio veidošanu daudzi māca arī attālināti.',
+    ],
+    faq: [
+      ['Cik maksā mākslas nodarbība?', 'MentorMe.lv profilos nodarbība maksā no 20 eiro, visbiežāk ap 50 eiro. Meistarklasēm un kursiem cena ir par visu programmu.'],
+      ['Vai var mācīties bez priekšzināšanām?', 'Jā. Lielākā daļa pasniedzēju strādā arī ar pilnīgiem iesācējiem.'],
+      ['Vai ir sagatavošana mākslas skolas iestājeksāmeniem?', 'Pajautā pasniedzējam tieši. Vairāki palīdz sagatavot portfolio un iestājdarbus.'],
+    ],
+    posts: [['kursi-un-meistarklases-latvija', 'Kursi un meistarklases Latvijā: kā izvēlēties'], CENAS_STUNDAS],
+  },
+  'vieta/visa-latvija': {
+    title: 'Mentori un skolotāji visā Latvijā',
+    body: [
+      'Šajā lapā ir cilvēki, kas strādā attālināti vai brauc pie klientiem pa visu Latviju. Tev nav jādzīvo Rīgā, lai mācītos pie laba kouča, mentora vai privātskolotāja.',
+      'Attālināti labi darbojas sarunas, valodas, matemātika, programmēšana un konsultācijas. Amatus, mūziku un visu, kur vajag rokas, labāk mācīties klātienē, un tad meklē pēc sava reģiona.',
+    ],
+    faq: [
+      ['Vai attālināta nodarbība ir tikpat laba kā klātienē?', 'Sarunām un teorētiskiem priekšmetiem jā, ja abiem ir kamera un kopīgs ekrāns.'],
+      ['Vai attālināti ir lētāk?', 'Bieži jā, jo neviens netērē laiku ceļā.'],
+      ['Kā atrast kādu savā pilsētā?', 'Izmanto vietas filtru sākumlapā vai atver sava reģiona lapu.'],
     ],
     posts: [CENAS_STUNDAS, CENAS_KOUCS],
   },
