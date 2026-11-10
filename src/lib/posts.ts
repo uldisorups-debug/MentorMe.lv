@@ -20,6 +20,7 @@ export type PostSummary = {
 
 export type PostDetail = PostSummary & {
   content: string
+  updated_at: string
   status: PostStatus
 }
 
@@ -76,7 +77,7 @@ export async function loadPost(slug: string): Promise<PostDetail | null> {
   const { data, error } = await supabase
     .from('posts')
     .select(
-      `id, slug, title, excerpt, content, published_at, view_count, status, ${AUTHOR_SELECT}`
+      `id, slug, title, excerpt, content, published_at, updated_at, view_count, status, ${AUTHOR_SELECT}`
     )
     .eq('slug', slug)
     .eq('status', 'published')
@@ -92,6 +93,7 @@ export async function loadPost(slug: string): Promise<PostDetail | null> {
     excerpt: data.excerpt?.trim() || autoExcerpt(data.content),
     content: data.content,
     published_at: data.published_at,
+    updated_at: data.updated_at,
     view_count: data.view_count,
     status: data.status,
     author: firstAuthor(data.coach_profiles),

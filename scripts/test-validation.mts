@@ -38,6 +38,8 @@ import {
 import { authErrorKey, passwordTooShort } from '../src/lib/auth-errors.ts'
 import { extractMetaTags, withoutMetaTags } from '../src/lib/site-code-meta.ts'
 import { parsePrevious, profilePaths } from '../src/lib/revalidate-paths.ts'
+import { isNovemberSeason } from '../src/lib/season.ts'
+import { firstFitting, titleWithBrand, ogLocale } from '../src/lib/seo-title.ts'
 import {
   buildTopicIndex,
   decodeSlug,
@@ -933,6 +935,37 @@ check(
   parsePrevious({ slug: 'a', niches: ['x', 5, 'y'], region_slug: 3 }),
   { slug: 'a', niches: ['x', 'y'], region_slug: null }
 )
+
+const fmt = (p: string) => `Liene Busele — ${p}`
+check(
+  'virsraksts: īsa tagline paliek',
+  firstFitting(fmt, ['Biznesa koučs', 'Koučings, Rīga'], 46),
+  'Liene Busele — Biznesa koučs'
+)
+check(
+  'virsraksts: gara tagline → tēma un pilsēta',
+  firstFitting(fmt, ['Palīdzu īpašniekiem un vadītājiem pelnīt vairāk', 'Biznesa koučings, Rīga', 'Sertificēts'], 46),
+  'Liene Busele — Biznesa koučings, Rīga'
+)
+check(
+  'virsraksts: tukšas daļas izlaiž',
+  firstFitting(fmt, [null, '  ', 'Koučings'], 46),
+  'Liene Busele — Koučings'
+)
+check(
+  'virsraksts: nekas neietilpst → pēdējais',
+  firstFitting(fmt, ['x'.repeat(60), 'y'.repeat(60)], 46),
+  fmt('y'.repeat(60))
+)
+check('zīmols: īsam virsrakstam sufikss', titleWithBrand('Raksti'), 'Raksti')
+check('zīmols: garam bez sufiksa', titleWithBrand('x'.repeat(50)), { absolute: 'x'.repeat(50) })
+check('og locale', [ogLocale('lv'), ogLocale('ru'), ogLocale('xx')], ['lv_LV', 'ru_RU', 'lv_LV'])
+
+check('novembris: 10. datumā rāda', isNovemberSeason(new Date('2026-11-10T12:00:00Z')), true)
+check('novembris: 24. vakarā vēl rāda', isNovemberSeason(new Date('2026-11-24T21:30:00Z')), true)
+check('novembris: 25. pēc Rīgas laika vairs ne', isNovemberSeason(new Date('2026-11-24T22:30:00Z')), false)
+check('novembris: oktobra beigās pēc UTC, bet Rīgā jau 1. nov.', isNovemberSeason(new Date('2026-10-31T22:30:00Z')), true)
+check('novembris: decembrī ne', isNovemberSeason(new Date('2026-12-01T12:00:00Z')), false)
 
 console.log(`\n  ${passed} izturēja, ${failed} kritušas\n`)
 process.exit(failed === 0 ? 0 : 1)

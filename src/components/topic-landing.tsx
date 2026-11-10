@@ -1,3 +1,4 @@
+import { ogLocale } from '@/lib/seo-title'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
@@ -58,7 +59,18 @@ export async function topicMetadata(
     title,
     description,
     alternates: pageAlternates(locale, topicPath(kind, slug)),
-    openGraph: { title, description, type: 'website' },
+    /*
+     * openGraph objekts lapā aizstāj izkārtojuma objektu pilnībā, un
+     * līdz ar to pazuda arī bilde — kopīgojot tēmu lapu, priekšskatījums
+     * bija tukšs. Liekam vietnes vispārējo bildi atpakaļ.
+     */
+    openGraph: {
+      title,
+      description,
+      type: 'website',
+      locale: ogLocale(locale),
+      images: [{ url: `/${locale}/opengraph-image`, width: 1200, height: 630 }],
+    },
   }
 }
 

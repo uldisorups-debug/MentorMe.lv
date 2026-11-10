@@ -9,6 +9,8 @@ import { PostViewTracker } from '@/components/post-view-tracker'
 import { jsonLdHtml } from '@/lib/json-ld'
 import { renderMarkdown, readingMinutes } from '@/lib/markdown'
 import { loadPost } from '@/lib/posts'
+import { ogLocale, titleWithBrand } from '@/lib/seo-title'
+import { SITE_URL } from '@/lib/supabase/config'
 
 // Diena — raksta publicēšana un labošana atsvaidzina uzreiz (revalidatePublicPages)
 // Nedēļa: izmaiņas atsvaidzina revalidateProfile/revalidatePost uzreiz
@@ -29,7 +31,7 @@ export async function generateMetadata({
   if (!post) return { title: t('notFound') }
 
   return {
-    title: post.title,
+    title: titleWithBrand(post.title),
     description: post.excerpt,
     // Katra valoda norāda uz sevi — skat. profila lapu
     alternates: {
@@ -38,9 +40,11 @@ export async function generateMetadata({
     },
     openGraph: {
       type: 'article',
+      locale: ogLocale(locale),
       title: post.title,
       description: post.excerpt,
       publishedTime: post.published_at ?? undefined,
+      modifiedTime: post.updated_at,
       authors: post.author ? [post.author.full_name] : undefined,
     },
   }
@@ -62,16 +66,40 @@ export default async function PostPage({ params }: PageProps<'/[locale]/blog/[sl
   const html = renderMarkdown(post.content)
   const minutes = readingMinutes(post.content)
 
-  // Strukturētie dati — bez tiem Google neredz, ka šis ir raksts ar autoru
+  /*
+   * Strukturētie dati — bez tiem Google neredz, ka šis ir raksts ar autoru.
+   * Attēls, izdevējs un labošanas datums ir tas, ko Google Article
+   * ieteikumos prasa; autors ar saiti uz profilu sasaista rakstu ar
+   * cilvēku (E-E-A-T: kurš to raksta un kāpēc viņam var ticēt).
+   */
+  const postUrl = `${SITE_URL}${localePath(locale, `/blog/${post.slug}`)}`
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'Article',
+    '@type': 'BlogPosting',
     headline: post.title,
     description: post.excerpt,
+    url: postUrl,
+    mainEntityOfPage: postUrl,
+    inLanguage: locale,
+    /*
+     * Raksta paša OG bildes adrese satur Next.js ģenerētu piedēkli, ko
+     * te nevar zināt, — tāpēc autora foto un vietnes vispārējā bilde.
+     */
+    image: [
+      ...(post.author?.avatar_url ? [post.author.avatar_url] : []),
+      `${SITE_URL}/${locale}/opengraph-image`,
+    ],
     datePublished: post.published_at ?? undefined,
+    dateModified: post.updated_at,
+    wordCount: post.content.split(/\s+/).filter(Boolean).length,
     author: post.author
-      ? { '@type': 'Person', name: post.author.full_name }
+      ? {
+          '@type': 'Person',
+          name: post.author.full_name,
+          url: `${SITE_URL}${localePath(locale, `/${post.author.slug}`)}`,
+        }
       : undefined,
+    publisher: { '@id': `${SITE_URL}/#org` },
   }
 
   return (

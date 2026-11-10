@@ -1,6 +1,7 @@
 import { useTranslations } from 'next-intl'
 import { ArrowRight } from 'lucide-react'
 import { LinkButton } from '@/components/link-button'
+import { NovemberSkyline } from '@/components/november-skyline'
 import { TypingHeadline } from '@/components/typing-headline'
 
 export function HeroSection({
@@ -17,11 +18,21 @@ export function HeroSection({
     <section className="relative overflow-hidden px-6 pt-20 pb-16 sm:pt-28 sm:pb-24">
       <div className="mx-auto max-w-3xl text-center">
         <h1 className="font-display text-4xl leading-[1.1] font-medium text-balance sm:text-6xl">
-          {t('greeting')}
-          <br />
-          {/* Rinda ar rotējošo vārdu — min-h tur augstumu, lai teksts zemāk nelēkā */}
-          <span className="mt-2 inline-flex min-h-[1.2em] items-center justify-center">
-            <TypingHeadline words={rotating} />
+          {/*
+            Virsrinda — tas, ko cilvēks Google ieraksta. Rotējošais vārds
+            zemāk parādās tikai pārlūkā, tāpēc virsrakstā bez šīs rindas
+            meklētājs redzēja vien "Sveiki. Tu meklē".
+          */}
+          <span className="mb-5 block font-sans text-xs font-semibold tracking-[0.22em] text-gold uppercase sm:text-sm">
+            {t('eyebrow')}
+          </span>
+          <span aria-hidden="true">
+            {t('greeting')}
+            <br />
+            {/* Rinda ar rotējošo vārdu — min-h tur augstumu, lai teksts zemāk nelēkā */}
+            <span className="mt-2 inline-flex min-h-[1.2em] items-center justify-center">
+              <TypingHeadline words={rotating} />
+            </span>
           </span>
           <span className="sr-only">
             {t('greeting')} {rotating.join(' ')}
@@ -73,6 +84,8 @@ export function HeroSection({
           </div>
         </dl>
       </div>
+      {/* Valsts svētku mēnesis — pats pazūd 25. novembrī */}
+      <NovemberSkyline />
     </section>
   )
 }

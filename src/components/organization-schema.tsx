@@ -22,8 +22,33 @@ export function OrganizationSchema() {
         '@type': 'Organization',
         '@id': `${SITE_URL}/#org`,
         name: 'MentorMe.lv',
+        alternateName: 'MentorMe',
         url: SITE_URL,
         logo: `${SITE_URL}/icon.png`,
+        email: 'info@forgecore.lv',
+        areaServed: { '@type': 'Country', name: 'Latvija' },
+        /*
+         * Kas stāv aiz vietnes — tie paši rekvizīti, kas kontaktu lapā.
+         * Google un AI rīki uzticas vietnei, kuras īpašnieks ir zināms.
+         */
+        parentOrganization: {
+          '@type': 'Organization',
+          name: 'SIA "Forge Core"',
+          vatID: 'LV40203671821',
+          address: {
+            '@type': 'PostalAddress',
+            addressLocality: 'Roja',
+            addressRegion: 'Talsu novads',
+            postalCode: 'LV-3264',
+            addressCountry: 'LV',
+          },
+        },
+        contactPoint: {
+          '@type': 'ContactPoint',
+          contactType: 'customer support',
+          email: 'info@forgecore.lv',
+          availableLanguage: ['lv', 'en', 'ru'],
+        },
         // Tā pati organizācija citur — Google to sasaista ar šo vietni
         sameAs: [LINKEDIN_URL],
         description:
@@ -47,6 +72,7 @@ export function OrganizationSchema() {
         '@id': `${SITE_URL}/#site`,
         url: SITE_URL,
         name: 'MentorMe.lv',
+        alternateName: 'MentorMe',
         inLanguage: ['lv', 'en', 'ru'],
         publisher: { '@id': `${SITE_URL}/#org` },
       },
