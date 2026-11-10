@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { alternateLanguages, localePath } from '@/i18n/routing'
+import { localePath } from '@/i18n/routing'
 import { notFound } from 'next/navigation'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { ArrowLeft, Eye } from 'lucide-react'
@@ -33,11 +33,12 @@ export async function generateMetadata({
   return {
     title: titleWithBrand(post.title),
     description: post.excerpt,
-    // Katra valoda norāda uz sevi — skat. profila lapu
-    alternates: {
-      canonical: localePath(locale, `/blog/${post.slug}`),
-      languages: alternateLanguages(`/blog/${post.slug}`),
-    },
+    /*
+     * Raksta teksts ir tikai latviski, tāpēc visas trīs adreses norāda
+     * uz latviešu versiju un hreflang te nav: tas ir viens raksts, ne
+     * trīs tulkojumi. Citādi Google indeksē trīs vienādas lapas.
+     */
+    alternates: { canonical: `/blog/${post.slug}` },
     openGraph: {
       type: 'article',
       locale: ogLocale(locale),
@@ -72,7 +73,7 @@ export default async function PostPage({ params }: PageProps<'/[locale]/blog/[sl
    * ieteikumos prasa; autors ar saiti uz profilu sasaista rakstu ar
    * cilvēku (E-E-A-T: kurš to raksta un kāpēc viņam var ticēt).
    */
-  const postUrl = `${SITE_URL}${localePath(locale, `/blog/${post.slug}`)}`
+  const postUrl = `${SITE_URL}/blog/${post.slug}`
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
@@ -80,7 +81,7 @@ export default async function PostPage({ params }: PageProps<'/[locale]/blog/[sl
     description: post.excerpt,
     url: postUrl,
     mainEntityOfPage: postUrl,
-    inLanguage: locale,
+    inLanguage: 'lv',
     /*
      * Raksta paša OG bildes adrese satur Next.js ģenerētu piedēkli, ko
      * te nevar zināt, — tāpēc autora foto un vietnes vispārējā bilde.

@@ -91,8 +91,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         listsModified
       )
     ),
-    ...posts.flatMap((post) =>
-      entry(`/blog/${post.slug}`, 'monthly', 0.7, new Date(post.updatedAt))
-    ),
+    /*
+     * Raksti ir tikai latviski. /en/blog/x un /ru/blog/x rādīja to pašu
+     * latviešu tekstu ar angļu vai krievu izvēlni, un Google tos
+     * indeksēja kā trīs lapas ar vienu saturu (Search Console: angļu
+     * adreses parādījās pēc "business accountants"). Tāpēc sitemap ir
+     * tikai latviešu adrese, un pārējās uz to norāda ar canonical.
+     */
+    ...posts.map((post) => ({
+      url: url(routing.defaultLocale, `/blog/${post.slug}`),
+      lastModified: new Date(post.updatedAt),
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    })),
   ]
 }
