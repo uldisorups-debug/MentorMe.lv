@@ -1,4 +1,5 @@
 import { ogLocale } from '@/lib/seo-title'
+import { topicGuide } from '@/content/topic-guides'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
@@ -152,6 +153,17 @@ export async function TopicLanding({
     },
   ]
 
+  const guide = topicGuide(kind, slug, locale)
+  const faqLd = guide && {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: guide.faq.map(([q, a]) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+  }
+
   const childrenTitle =
     kind === 'nozare'
       ? t('childrenSphere')
@@ -163,7 +175,7 @@ export async function TopicLanding({
     <div className="mx-auto max-w-6xl px-6 py-14">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: jsonLdHtml(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdHtml(faqLd ? [...jsonLd, faqLd] : jsonLd) }}
       />
 
       <nav aria-label={t('breadcrumb')} className="text-sm text-mist">
@@ -204,6 +216,45 @@ export async function TopicLanding({
           </li>
         ))}
       </ul>
+
+      {/*
+        Unikāls teksts un jautājumi svarīgākajām lapām — zem kartītēm,
+        lai cilvēks vispirms redz cilvēkus, bet Google un AI rīki lapā
+        atrod arī atbildi, ne tikai sarakstu.
+      */}
+      {guide && (
+        <section className="mt-14 max-w-3xl">
+          <h2 className="rule-gold font-display text-2xl">{guide.title}</h2>
+          {guide.body.map((paragraph, i) => (
+            <p key={i} className="mt-4 leading-relaxed text-mist">
+              {paragraph}
+            </p>
+          ))}
+          <dl className="mt-8 flex flex-col gap-5">
+            {guide.faq.map(([q, a]) => (
+              <div key={q}>
+                <dt className="font-medium">{q}</dt>
+                <dd className="mt-1.5 leading-relaxed text-mist">{a}</dd>
+              </div>
+            ))}
+          </dl>
+          {guide.posts && (
+            <ul className="mt-8 flex flex-col gap-2 text-sm">
+              {guide.posts.map(([postSlug, title]) => (
+                <li key={postSlug}>
+                  <Link
+                    prefetch={false}
+                    href={`/blog/${postSlug}`}
+                    className="text-gold hover:underline"
+                  >
+                    {title} →
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      )}
 
       <div className="mt-14 flex flex-col gap-8 border-t border-hairline pt-10">
         {children.length > 0 && (
