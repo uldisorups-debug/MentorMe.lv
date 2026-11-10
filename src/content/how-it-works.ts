@@ -38,7 +38,7 @@ export const HOW_IT_WORKS: Record<string, HowContent> = {
       ],
       [
         "Apskaties, kas viņš par cilvēku",
-        "Ne tikai ko prot, bet arī ko lasa, skatās un klausās. Ar dažiem cilvēkiem sanāk, ar citiem nē — to labāk saprast pirms, ne pēc."
+        "Ne tikai ko prot, bet arī ko lasa, skatās un klausās. Ar dažiem cilvēkiem sanāk, ar citiem nē. To labāk saprast pirms, ne pēc."
       ],
       [
         "Uzraksti viņam tieši",
@@ -54,7 +54,7 @@ export const HOW_IT_WORKS: Record<string, HowContent> = {
       ],
       [
         "Atstāj kontaktu, ko lieto ikdienā",
-        "WhatsApp, e-pastu, Telegram — to, ko tu tāpat atver katru dienu."
+        "WhatsApp, e-pastu, Telegram: to, ko tu tāpat atver katru dienu."
       ],
       [
         "Turpini dzīvot savu dzīvi",
@@ -62,7 +62,7 @@ export const HOW_IT_WORKS: Record<string, HowContent> = {
       ]
     ],
     "ownerNote": "Mēs neņemam komisiju no tā, par ko jūs vienojaties. Nekad.",
-    "waitTitle": "Reģistrējies vienreiz — atradīs arī pēc gada",
+    "waitTitle": "Reģistrējies vienreiz, atradīs arī pēc gada",
     "waitBody": [
       "Daudz kas ir sezonāls. Maijā vecāki meklē privātskolotāju pirms devītās klases eksāmena. Jūnijā to nemeklē neviens. Septembrī atkal.",
       "Tāpēc nav jēgas katru nedēļu nākt šeit un pārbaudīt. Uzliec profilu, atstāj kontaktu un aizmirsti. Kad kādam būs vajadzīgs tieši tas, ko tu proti, viņš tevi atradīs un uzrakstīs uz to e-pastu, ko tu lasi jebkurā gadījumā.",
@@ -100,7 +100,7 @@ export const HOW_IT_WORKS: Record<string, HowContent> = {
       ],
       [
         "See what kind of person they are",
-        "Not only what they know, but what they read, watch and listen to. Some people click and some don't — better to find that out before, not after."
+        "Not only what they know, but what they read, watch and listen to. Some people click and some don't. Better to find that out before, not after."
       ],
       [
         "Write to them directly",
@@ -116,7 +116,7 @@ export const HOW_IT_WORKS: Record<string, HowContent> = {
       ],
       [
         "Leave a contact you use every day",
-        "WhatsApp, email, Telegram — whatever you already open daily."
+        "WhatsApp, email, Telegram: whatever you already open daily."
       ],
       [
         "Go on with your life",
@@ -124,7 +124,7 @@ export const HOW_IT_WORKS: Record<string, HowContent> = {
       ]
     ],
     "ownerNote": "We take no commission on whatever you agree between you. Ever.",
-    "waitTitle": "Register once — they'll find you a year later too",
+    "waitTitle": "Register once, they'll find you a year later too",
     "waitBody": [
       "Much of this is seasonal. In May parents look for a tutor before the ninth-grade exam. In June nobody looks. In September it starts again.",
       "So there's no point coming back every week to check. Put up a profile, leave a contact, and forget about it. When someone needs exactly what you know, they'll find you and write to the inbox you read anyway.",
@@ -162,7 +162,7 @@ export const HOW_IT_WORKS: Record<string, HowContent> = {
       ],
       [
         "Посмотрите, что он за человек",
-        "Не только что умеет, но и что читает, смотрит и слушает. С кем-то совпадаешь, с кем-то нет — лучше понять это до, а не после."
+        "Не только что умеет, но и что читает, смотрит и слушает. С кем-то совпадаешь, с кем-то нет. Лучше понять это до, а не после."
       ],
       [
         "Напишите ему напрямую",
@@ -178,7 +178,7 @@ export const HOW_IT_WORKS: Record<string, HowContent> = {
       ],
       [
         "Оставьте контакт, которым пользуетесь каждый день",
-        "WhatsApp, почту, Telegram — то, что вы и так открываете ежедневно."
+        "WhatsApp, почту, Telegram: то, что вы и так открываете ежедневно."
       ],
       [
         "Живите дальше своей жизнью",
@@ -186,7 +186,7 @@ export const HOW_IT_WORKS: Record<string, HowContent> = {
       ]
     ],
     "ownerNote": "Мы не берём комиссию с того, о чём вы договоритесь. Никогда.",
-    "waitTitle": "Зарегистрируйтесь один раз — найдут и через год",
+    "waitTitle": "Зарегистрируйтесь один раз, найдут и через год",
     "waitBody": [
       "Многое здесь сезонное. В мае родители ищут репетитора перед экзаменом за девятый класс. В июне не ищет никто. В сентябре снова.",
       "Поэтому нет смысла заходить сюда каждую неделю и проверять. Поставьте профиль, оставьте контакт и забудьте. Когда кому-то понадобится именно то, что вы умеете, он найдёт вас и напишет на ту почту, которую вы читаете в любом случае.",

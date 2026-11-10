@@ -51,3 +51,27 @@ export function NovemberSkyline() {
     </svg>
   )
 }
+
+/**
+ * Lente lapas augšā: Latvijas karogs, kas pāriet Lielvārdes jostā.
+ *
+ * Zīmējums ir gatavs SVG fails (public/sezona/josta.svg); šaurā ekrānā
+ * redzams tā vidus, kur karogs kļūst par jostu. Tāpat kā torņu līnija,
+ * pazūd pati 25. novembrī.
+ */
+export function NovemberRibbon() {
+  const show = useSyncExternalStore(subscribe, isNovemberSeason, () => false)
+  if (!show) return null
+
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src="/sezona/josta.svg"
+      alt=""
+      aria-hidden="true"
+      width={1600}
+      height={100}
+      className="pointer-events-none absolute top-0 left-0 h-14 w-full animate-in object-cover fade-in duration-1000 sm:h-16 min-[1600px]:h-auto"
+    />
+  )
+}

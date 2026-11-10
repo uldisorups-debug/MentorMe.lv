@@ -12,11 +12,11 @@ export const FAQ: Record<string, { title: string; items: FaqItem[] }> = {
     items: [
       {
         q: 'Kas ir MentorMe.lv?',
-        a: 'MentorMe.lv ir Latvijas zināšanu un prasmju tirgus laukums, kur vienuviet var atrast mentorus, koučus, privātskolotājus, trenerus un meistarus, kā arī kursus, meistarklases, pieredzes un retrītus — klātienē vai attālināti.',
+        a: 'MentorMe.lv ir Latvijas zināšanu un prasmju tirgus laukums, kur vienuviet var atrast mentorus, koučus, privātskolotājus, trenerus un meistarus, kā arī kursus, meistarklases, pieredzes un retrītus, klātienē vai attālināti.',
       },
       {
         q: 'Cik maksā MentorMe.lv lietošana?',
-        a: 'Meklēt un sazināties ir bez maksas, un arī profila izveide ir bez maksas. MentorMe.lv neņem komisiju — par cenu cilvēki vienojas tieši ar mentoru, kouču vai skolotāju.',
+        a: 'Meklēt un sazināties ir bez maksas, un arī profila izveide ir bez maksas. MentorMe.lv neņem komisiju. Par cenu cilvēki vienojas tieši ar mentoru, kouču vai skolotāju.',
       },
       {
         q: 'Kā atrast mentoru vai kouču Latvijā?',
@@ -41,11 +41,11 @@ export const FAQ: Record<string, { title: string; items: FaqItem[] }> = {
     items: [
       {
         q: 'What is MentorMe.lv?',
-        a: 'MentorMe.lv is a knowledge and skills marketplace in Latvia where you can find mentors, coaches, private tutors, trainers and craftspeople in one place, as well as courses, masterclasses, experiences and retreats — in person or online.',
+        a: 'MentorMe.lv is a knowledge and skills marketplace in Latvia where you can find mentors, coaches, private tutors, trainers and craftspeople in one place, as well as courses, masterclasses, experiences and retreats, in person or online.',
       },
       {
         q: 'How much does MentorMe.lv cost?',
-        a: 'Searching, contacting and creating a profile are all free. MentorMe.lv takes no commission — you agree on the price directly with the mentor, coach or tutor.',
+        a: 'Searching, contacting and creating a profile are all free. MentorMe.lv takes no commission. You agree on the price directly with the mentor, coach or tutor.',
       },
       {
         q: 'How do I find a mentor or coach in Latvia?',
@@ -70,11 +70,11 @@ export const FAQ: Record<string, { title: string; items: FaqItem[] }> = {
     items: [
       {
         q: 'Что такое MentorMe.lv?',
-        a: 'MentorMe.lv — площадка знаний и навыков в Латвии, где в одном месте можно найти менторов, коучей, репетиторов, тренеров и мастеров, а также курсы, мастер-классы, опыт и ретриты — очно или онлайн.',
+        a: 'MentorMe.lv это площадка знаний и навыков в Латвии, где в одном месте можно найти менторов, коучей, репетиторов, тренеров и мастеров, а также курсы, мастер-классы, опыт и ретриты, очно или онлайн.',
       },
       {
         q: 'Сколько стоит пользоваться MentorMe.lv?',
-        a: 'Поиск, связь и создание профиля бесплатны. MentorMe.lv не берёт комиссию — о цене вы договариваетесь напрямую с ментором, коучем или репетитором.',
+        a: 'Поиск, связь и создание профиля бесплатны. MentorMe.lv не берёт комиссию. О цене вы договариваетесь напрямую с ментором, коучем или репетитором.',
       },
       {
         q: 'Как найти ментора или коуча в Латвии?',
@@ -82,11 +82,11 @@ export const FAQ: Record<string, { title: string; items: FaqItem[] }> = {
       },
       {
         q: 'Чем отличаются ментор, коуч и репетитор?',
-        a: 'Ментор делится опытом и даёт советы, коуч с помощью вопросов помогает вам самим найти решение и достичь цели, а репетитор обучает конкретному предмету или навыку — математике, языку или игре на инструменте.',
+        a: 'Ментор делится опытом и даёт советы, коуч с помощью вопросов помогает вам самим найти решение и достичь цели, а репетитор обучает конкретному предмету или навыку: математике, языку или игре на инструменте.',
       },
       {
         q: 'Занятия проходят очно или онлайн?',
-        a: 'Каждый сам указывает формат: очно, онлайн или оба варианта. В профиле также виден город или регион — Рига, Рижский край, Видземе или вся Латвия.',
+        a: 'Каждый сам указывает формат: очно, онлайн или оба варианта. В профиле также виден город или регион: Рига, Рижский край, Видземе или вся Латвия.',
       },
       {
         q: 'Как создать профиль и предлагать частные уроки или курсы?',
