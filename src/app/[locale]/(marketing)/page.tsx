@@ -3,10 +3,12 @@ import { CoachDirectory } from '@/components/coach-directory'
 import { ForCoaches } from '@/components/for-coaches'
 import { HeroSection } from '@/components/hero-section'
 import type { CoachCardData } from '@/lib/coaches'
-import { setRequestLocale } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { loadTaxonomy } from '@/lib/taxonomy'
 import { createPublicClient } from '@/lib/supabase/public'
-import { pageAlternates } from '@/i18n/routing'
+import { localePath, pageAlternates } from '@/i18n/routing'
+import { jsonLdHtml } from '@/lib/json-ld'
+import { SITE_URL } from '@/lib/supabase/config'
 import { TopicLinks } from '@/components/topic-links'
 import { buildTopicIndex } from '@/lib/topic-index'
 
@@ -69,9 +71,42 @@ export default async function HomePage({ params }: PageProps<'/[locale]'>) {
   setRequestLocale(locale)
 
   const { taxonomy, coaches } = await loadDirectory(locale)
+  const t = await getTranslations('Meta')
+
+  /*
+   * Sākumlapa ir saraksts — un to tā arī pasaka. Profilu kartītes
+   * Google redz kā tekstu; ItemList tās nosauc par sarakstu ar adresēm,
+   * un AI rīki no šejienes uzreiz zina, kas vietnē ir. Fona profili
+   * (mūsu pašu, ne piedāvājumi) sarakstā neiet.
+   */
+  const listed = coaches.filter((c) => !c.is_background).slice(0, 30)
+  const homeUrl = `${SITE_URL}${localePath(locale, '/')}`
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: t('title'),
+    description: t('description'),
+    url: homeUrl,
+    inLanguage: locale,
+    isPartOf: { '@id': `${SITE_URL}/#site` },
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: listed.length,
+      itemListElement: listed.map((coach, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: coach.full_name,
+        url: `${SITE_URL}${localePath(locale, `/${coach.slug}`)}`,
+      })),
+    },
+  }
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLdHtml(jsonLd) }}
+      />
       <HeroSection
         coachCount={coaches.length}
         sphereCount={taxonomy.spheres.length}

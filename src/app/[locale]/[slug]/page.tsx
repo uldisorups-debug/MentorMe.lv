@@ -25,6 +25,7 @@ import { Badge } from '@/components/ui/badge'
 import { assembleProfileDetails, qualificationKey } from '@/lib/coaches'
 import { loadCoachPage } from '@/lib/coach-profile'
 import { loadGroupNames, loadRegionName, loadSphereNames } from '@/lib/taxonomy'
+import { firstFitting, ogLocale } from '@/lib/seo-title'
 import { SITE_URL } from '@/lib/supabase/config'
 import { jsonLdHtml } from '@/lib/json-ld'
 import { Link } from '@/i18n/navigation'
@@ -73,15 +74,22 @@ export async function generateMetadata({
   const qualKeyForMeta = qualificationKey(coach.qualification)
 
   // Google nogriež virsrakstu ap 60 rakstzīmēm, un layout pieliek
-  // vēl " — MentorMe.lv". Ja tagline ir gara, ņemam sertifikātu.
-  const withTagline = t('metaTitle', { name: coach.full_name, tagline })
-  const generatedTitle =
-    withTagline.length <= 46
-      ? withTagline
-      : t('metaTitle', {
-          name: coach.full_name,
-          tagline: qualKeyForMeta ? t(qualKeyForMeta) : t('metaFallbackTagline'),
-        })
+  // vēl " — MentorMe.lv". Ja tagline ir gara, ņemam tēmu un pilsētu,
+  // tad tikai tēmu, un tikai tad sertifikātu.
+  const nicheLabel = coach.niches
+    .map((niche) => categoryNames[niche])
+    .find((label): label is string => !!label)
+  const generatedTitle = firstFitting(
+    (part) => t('metaTitle', { name: coach.full_name, tagline: part }),
+    [
+      tagline,
+      nicheLabel && coach.city ? `${nicheLabel}, ${coach.city}` : null,
+      nicheLabel,
+      qualKeyForMeta ? t(qualKeyForMeta) : null,
+      t('metaFallbackTagline'),
+    ],
+    46
+  )
 
   /*
    * Budžets pēc tā, cik vietas atliek. Google apraksta rādīšanu griež ap
@@ -126,7 +134,7 @@ export async function generateMetadata({
       canonical: localePath(locale, `/${coach.slug}`),
       languages: alternateLanguages(`/${coach.slug}`),
     },
-    openGraph: { title, description, type: 'profile' },
+    openGraph: { title, description, type: 'profile', locale: ogLocale(locale) },
   }
 }
 
@@ -212,9 +220,19 @@ export default async function CoachProfilePage({
    * Liekam tikai to, kas tiešām ir. Tukšs lauks shēmā ir sliktāk nekā
    * neviena lauka: tas ir apgalvojums bez seguma.
    */
+  const knowsAbout = [
+    ...new Set([
+      ...coach.niches.map((niche) => categoryNames[niche]).filter(Boolean),
+      ...spheres.map((sphere) => sphere.label),
+    ]),
+  ]
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'ProfilePage',
+    // Google ProfilePage ieteiktie lauki — cik svaiga ir informācija
+    dateCreated: coach.created_at,
+    dateModified: coach.updated_at,
+    inLanguage: locale,
     mainEntity: {
       '@type': 'Person',
       name: coach.full_name,
@@ -222,9 +240,12 @@ export default async function CoachProfilePage({
       ...(coach.tagline ? { jobTitle: coach.tagline } : {}),
       ...(coach.bio ? { description: coach.bio } : {}),
       ...(coach.avatar_url ? { image: coach.avatar_url } : {}),
-      ...(spheres.length > 0
-        ? { knowsAbout: spheres.map((sphere) => sphere.label) }
-        : {}),
+      /*
+       * Gan konkrētās tēmas ("Biznesa koučings"), gan nozares
+       * ("Koučings un mentorings") — AI rīki un Google pēc tām saprot,
+       * uz kādu jautājumu šis cilvēks ir atbilde.
+       */
+      ...(knowsAbout.length > 0 ? { knowsAbout } : {}),
       ...(coach.session_languages.length > 0
         ? { knowsLanguage: coach.session_languages }
         : {}),

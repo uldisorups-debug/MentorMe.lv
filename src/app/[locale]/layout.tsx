@@ -9,6 +9,7 @@ import { SiteCode } from '@/components/site-code'
 import { loadSiteCode } from '@/lib/site-code'
 import { extractMetaTags, withoutMetaTags } from '@/lib/site-code-meta'
 import { routing } from '@/i18n/routing'
+import { ogLocale } from '@/lib/seo-title'
 import { SITE_URL } from '@/lib/supabase/config'
 
 const inter = Inter({
@@ -46,7 +47,7 @@ export async function generateMetadata({
      */
     openGraph: {
       type: 'website',
-      locale,
+      locale: ogLocale(locale),
       siteName: 'MentorMe.lv',
       title: t('title'),
       description: t('description'),
