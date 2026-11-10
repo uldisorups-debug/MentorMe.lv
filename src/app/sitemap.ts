@@ -82,6 +82,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     /*
      * Tēmu, nozaru un vietu lapas — tikai tās, kurās ir vismaz viens
      * profils. Tās mainās kopā ar profiliem, tāpēc datums ir sarakstu.
+     *
+     * Tikai latviešu adrese (pirmais ieraksts), ar hreflang uz pārējām.
+     * Search Console 2026-11-10: 102 lapas "Discovered - currently not
+     * indexed" un 8 "Google chose different canonical". Jaunam domēnam
+     * Google dod maz apmeklējumu, un ~140 angļu un krievu tēmu lapas,
+     * kurās profilu teksti tāpat ir latviski, tos apēda. Lapas paliek
+     * pieejamas un sasaistītas, tikai netiek stumtas priekšā.
      */
     ...[...topics.spheres, ...topics.groups, ...topics.regions].flatMap((topic) =>
       entry(
@@ -89,7 +96,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         'weekly',
         topic.kind === 'tema' ? 0.7 : 0.8,
         listsModified
-      )
+      ).slice(0, 1)
     ),
     /*
      * Raksti ir tikai latviski. /en/blog/x un /ru/blog/x rādīja to pašu
