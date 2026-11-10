@@ -23,13 +23,13 @@ export type AboutContent = {
 
 export const ABOUT: Record<string, AboutContent> = {
   "lv": {
-    "mission": "Mērķtiecīgiem cilvēkiem, kuri meklē izaugsmes iespējas, mēs piedāvājam MentorMe.lv — zināšanu un prasmju tirgus laukumu (marketplace), kur vienuviet atrast un sazināties ar mentoriem, meistariem, privātskolotājiem un treneriem, kā arī atrast kursus, pieredzes, meistarklases un retrītus, ietaupot laiku un vieglāk atrodot sev piemērotāko attīstības iespēju un pakalpojuma sniedzēju, nevis meklējot pa neskaitāmām atsevišķām mājaslapām.",
+    "mission": "Mērķtiecīgiem cilvēkiem, kuri meklē izaugsmes iespējas, mēs piedāvājam MentorMe.lv, zināšanu un prasmju tirgus laukumu (marketplace), kur vienuviet atrast un sazināties ar mentoriem, meistariem, privātskolotājiem un treneriem, kā arī atrast kursus, pieredzes, meistarklases un retrītus, ietaupot laiku un vieglāk atrodot sev piemērotāko attīstības iespēju un pakalpojuma sniedzēju, nevis meklējot pa neskaitāmām atsevišķām mājaslapām.",
     "eyebrow": "Mūsu mērķis",
     "headline": "Zināšanas nemirst pašas. Tās mirst tad, kad tām nav, kam pāriet.",
     "intro": [
-      "Katru gadu Latvijā kļūst par vienu koklētāju mazāk. Ne tāpēc, ka kokle būtu kļuvusi nevajadzīga — bet tāpēc, ka cilvēks, kurš prot uz tās spēlēt, dzīvo otrā Latvijas galā, un neviens nekad nav uzzinājis, ka pie viņa varēja atbraukt mācīties.",
+      "Katru gadu Latvijā kļūst par vienu koklētāju mazāk. Ne tāpēc, ka kokle būtu kļuvusi nevajadzīga, bet tāpēc, ka cilvēks, kurš prot uz tās spēlēt, dzīvo otrā Latvijas galā, un neviens nekad nav uzzinājis, ka pie viņa varēja atbraukt mācīties.",
       "Talsu novadā kāda sieviete zina ievārījuma recepti, kuru neviens cits neprot pagatavot tāpat. Kad lauku māju pārdos, recepte aizies līdzi. Ne tāpēc, ka viņa to slēptu. Tāpēc, ka neviens neatnāca un nepajautāja.",
-      "Tā pazūd prasmes. Ne skaļi, ne uzreiz — vienkārši kādā brīdī vairs nav neviena, kas tās prot."
+      "Tā pazūd prasmes. Ne skaļi, ne uzreiz. Vienkārši kādā brīdī vairs nav neviena, kas tās prot."
     ],
     "pull": "Šī vietne pastāv tāpēc, ka katram cilvēkam ir zināšanas, par kurām kāds cits ir gatavs maksāt, bet abi parasti nekad viens otru nesatiek.",
     "forWhom": "Kam tas domāts",
@@ -56,7 +56,7 @@ export const ABOUT: Record<string, AboutContent> = {
       },
       {
         "title": "Šefpavāram no Itālijas",
-        "body": "Kurš dzirdējis, ka Kurzemē kāda sieviete kūpina gaļu tā, kā to darīja pirms simt gadiem, un grib to iemācīties no viņas pašas — nevis no video.",
+        "body": "Kurš dzirdējis, ka Kurzemē kāda sieviete kūpina gaļu tā, kā to darīja pirms simt gadiem, un grib to iemācīties no viņas pašas, nevis no video.",
         "emphasis": null
       },
       {
@@ -66,28 +66,28 @@ export const ABOUT: Record<string, AboutContent> = {
       },
       {
         "title": "Arī koučiem un mentoriem",
-        "body": "Sertificētiem un nesertificētiem. Tiem ar ICF MCC un divi tūkstoši piecsimt stundām, un tiem, kas tikai vāc pirmās prakses stundas. Tā ir viena nozare starp daudzām — ne vairāk, bet arī ne mazāk svarīga par pārējām.",
+        "body": "Sertificētiem un nesertificētiem. Tiem ar ICF MCC un divi tūkstoši piecsimt stundām, un tiem, kas tikai vāc pirmās prakses stundas. Tā ir viena nozare starp daudzām. Ne vairāk, bet arī ne mazāk svarīga par pārējām.",
         "emphasis": null
       }
     ],
     "howTitle": "Kā mēs to darām",
     "how": [
-      "Viena lapa, kur var atrast cilvēku pēc tā, ko viņš prot, kur viņš dzīvo un vai viņš māca klātienē vai attālināti. Jo dažas lietas var iemācīties caur ekrānu, un dažas nevar — kokli, mālu un maizes krāsni nevar.",
+      "Viena lapa, kur var atrast cilvēku pēc tā, ko viņš prot, kur viņš dzīvo un vai viņš māca klātienē vai attālināti. Jo dažas lietas var iemācīties caur ekrānu, un dažas nevar: kokli, mālu un maizes krāsni nevar.",
       "Bez maksas abām pusēm. Mēs neņemam komisiju no tā, par ko jūs vienojaties. Mēs neuzglabājam jūsu saraksti. Mēs tikai palīdzam satikties.",
       "Nav svarīgi, vai tev ir diploms. Ir svarīgi, vai tu proti kaut ko, ko kāds cits grib iemācīties."
     ],
-    "closing": "Ja tev pieder zināšanas — kāds tevi meklē. Viņš vienkārši vēl nezina, kur tu esi.",
+    "closing": "Ja tev pieder zināšanas, kāds tevi meklē. Viņš vienkārši vēl nezina, kur tu esi.",
     "ctaAdd": "Pievienot savu profilu",
     "ctaFind": "Meklēt to, kas zina"
   },
   "en": {
-    "mission": "For driven people looking to grow, we offer MentorMe.lv — a knowledge and skills marketplace where you can find and contact mentors, craftspeople, private tutors and coaches in one place, and discover courses, experiences, masterclasses and retreats — saving time and finding the development opportunity and provider that suit you best, instead of searching through countless separate websites.",
+    "mission": "For driven people looking to grow, we offer MentorMe.lv, a knowledge and skills marketplace where you can find and contact mentors, craftspeople, private tutors and coaches in one place, and discover courses, experiences, masterclasses and retreats, saving time and finding the development opportunity and provider that suit you best, instead of searching through countless separate websites.",
     "eyebrow": "Our purpose",
     "headline": "Knowledge doesn't die on its own. It dies when there's no one left to pass it to.",
     "intro": [
-      "Every year Latvia has one kokle player fewer. Not because the instrument stopped mattering — but because the person who can play it lives at the other end of the country, and nobody ever found out you could come and learn from them.",
+      "Every year Latvia has one kokle player fewer. Not because the instrument stopped mattering, but because the person who can play it lives at the other end of the country, and nobody ever found out you could come and learn from them.",
       "In the Talsi region a woman knows a jam recipe nobody else can make quite the same way. When the farmhouse is sold, the recipe goes with it. Not because she kept it secret. Because nobody came and asked.",
-      "That's how skills disappear. Not loudly, not all at once — one day there is simply nobody left who knows how."
+      "That's how skills disappear. Not loudly, not all at once. One day there is simply nobody left who knows how."
     ],
     "pull": "This site exists because every person knows something someone else would pay to learn. And the two almost never meet.",
     "forWhom": "Who it's for",
@@ -114,7 +114,7 @@ export const ABOUT: Record<string, AboutContent> = {
       },
       {
         "title": "The chef from Italy",
-        "body": "Who heard that a woman in Kurzeme smokes meat the way it was done a hundred years ago, and wants to learn it from her — not from a video.",
+        "body": "Who heard that a woman in Kurzeme smokes meat the way it was done a hundred years ago, and wants to learn it from her, not from a video.",
         "emphasis": null
       },
       {
@@ -124,28 +124,28 @@ export const ABOUT: Record<string, AboutContent> = {
       },
       {
         "title": "And coaches and mentors too",
-        "body": "Certified and not. Those with an ICF MCC and two and a half thousand hours, and those collecting their first practice hours. It's one field among many — no more important than the others, and no less.",
+        "body": "Certified and not. Those with an ICF MCC and two and a half thousand hours, and those collecting their first practice hours. It's one field among many, no more important than the others, and no less.",
         "emphasis": null
       }
     ],
     "howTitle": "How we do it",
     "how": [
-      "One page where you can find a person by what they know, where they live and whether they teach in person or online. Because some things can be learned through a screen, and some cannot — the kokle, clay and a smokehouse cannot.",
+      "One page where you can find a person by what they know, where they live and whether they teach in person or online. Because some things can be learned through a screen, and some cannot: the kokle, clay and a smokehouse cannot.",
       "Free for both sides. We take no commission on whatever you agree between you. We don't store your conversations. We only help you meet.",
       "It doesn't matter whether you have a diploma. What matters is whether you have knowledge someone else wants."
     ],
-    "closing": "If you have knowledge — someone is looking for you. They just don't know where you are yet.",
+    "closing": "If you have knowledge, someone is looking for you. They just don't know where you are yet.",
     "ctaAdd": "Add your profile",
     "ctaFind": "Find someone who knows"
   },
   "ru": {
-    "mission": "Целеустремлённым людям, которые ищут возможности для роста, мы предлагаем MentorMe.lv — площадку знаний и навыков (маркетплейс), где в одном месте можно найти менторов, мастеров, репетиторов и тренеров и связаться с ними, а также найти курсы, опыт, мастер-классы и ретриты — экономя время и легче находя подходящую возможность для развития и специалиста, вместо поиска по бесчисленным отдельным сайтам.",
+    "mission": "Целеустремлённым людям, которые ищут возможности для роста, мы предлагаем MentorMe.lv, площадку знаний и навыков (маркетплейс), где в одном месте можно найти менторов, мастеров, репетиторов и тренеров и связаться с ними, а также найти курсы, опыт, мастер-классы и ретриты, экономя время и легче находя подходящую возможность для развития и специалиста, вместо поиска по бесчисленным отдельным сайтам.",
     "eyebrow": "Наша цель",
     "headline": "Знания не умирают сами. Они умирают, когда им некому перейти.",
     "intro": [
-      "Каждый год в Латвии становится на одного игрока на кокле меньше. Не потому, что инструмент стал не нужен — а потому, что человек, который умеет на нём играть, живёт на другом конце страны, и никто так и не узнал, что к нему можно было приехать учиться.",
+      "Каждый год в Латвии становится на одного игрока на кокле меньше. Не потому, что инструмент стал не нужен, а потому, что человек, который умеет на нём играть, живёт на другом конце страны, и никто так и не узнал, что к нему можно было приехать учиться.",
       "В Талсинском крае женщина знает рецепт варенья, который больше никто не повторит так же. Когда хутор продадут, рецепт уйдёт вместе с ним. Не потому, что она его скрывала. Потому что никто не пришёл и не спросил.",
-      "Так исчезают умения. Не громко и не сразу — просто в какой-то момент не остаётся никого, кто их знает."
+      "Так исчезают умения. Не громко и не сразу. Просто в какой-то момент не остаётся никого, кто их знает."
     ],
     "pull": "Этот сайт существует потому, что у каждого человека есть знания, за которые кто-то другой готов заплатить. И эти двое почти никогда не встречаются.",
     "forWhom": "Для кого это",
@@ -172,7 +172,7 @@ export const ABOUT: Record<string, AboutContent> = {
       },
       {
         "title": "Шеф-повару из Италии",
-        "body": "Который услышал, что в Курземе женщина коптит мясо так, как это делали сто лет назад, и хочет научиться у неё самой — а не по видео.",
+        "body": "Который услышал, что в Курземе женщина коптит мясо так, как это делали сто лет назад, и хочет научиться у неё самой, а не по видео.",
         "emphasis": null
       },
       {
@@ -182,17 +182,17 @@ export const ABOUT: Record<string, AboutContent> = {
       },
       {
         "title": "И коучам с менторами тоже",
-        "body": "Сертифицированным и нет. Тем, у кого ICF MCC и две с половиной тысячи часов, и тем, кто только набирает первые часы практики. Это одна сфера из многих — не важнее остальных, но и не менее важна.",
+        "body": "Сертифицированным и нет. Тем, у кого ICF MCC и две с половиной тысячи часов, и тем, кто только набирает первые часы практики. Это одна сфера из многих: не важнее остальных, но и не менее важна.",
         "emphasis": null
       }
     ],
     "howTitle": "Как мы это делаем",
     "how": [
-      "Одна страница, где человека можно найти по тому, что он умеет, где он живёт и учит ли он очно или онлайн. Потому что чему-то можно научиться через экран, а чему-то нельзя — кокле, глине и коптильне нельзя.",
+      "Одна страница, где человека можно найти по тому, что он умеет, где он живёт и учит ли он очно или онлайн. Потому что чему-то можно научиться через экран, а чему-то нельзя: кокле, глине и коптильне нельзя.",
       "Бесплатно для обеих сторон. Мы не берём комиссию с того, о чём вы договоритесь. Мы не храним вашу переписку. Мы только помогаем встретиться.",
       "Неважно, есть ли у вас диплом. Важно, умеете ли вы то, чему кто-то хочет научиться."
     ],
-    "closing": "Если у вас есть знания — кто-то вас ищет. Он просто пока не знает, где вы.",
+    "closing": "Если у вас есть знания, кто-то вас ищет. Он просто пока не знает, где вы.",
     "ctaAdd": "Добавить профиль",
     "ctaFind": "Найти того, кто знает"
   }
