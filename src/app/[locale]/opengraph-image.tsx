@@ -1,4 +1,14 @@
 import { ImageResponse } from 'next/og'
+import { routing } from '@/i18n/routing'
+
+/*
+ * Bilde katrai valodai tiek uzzīmēta būvējot un pēc tam nemainās.
+ * Bez šī tā bija dinamiska un tika zīmēta no jauna katrā pieprasījumā,
+ * un to tagad lieto arī visas tēmu lapas.
+ */
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }))
+}
 
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'

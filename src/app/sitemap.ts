@@ -77,7 +77,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...entry('/kontakti', 'monthly', 0.3, staticModified),
     ...entry('/baneri', 'monthly', 0.2, staticModified),
     ...coaches.flatMap((coach) =>
-      entry(`/${coach.slug}`, 'weekly', 0.8, new Date(coach.updatedAt))
+      // Tikai latviešu adrese, tāpat kā tēmām: profila teksts ir tāds,
+      // kādu cilvēks to uzrakstījis, un Search Console angļu un krievu
+      // versijas atzīmēja kā dublikātus (9 lapas, 2026-11-19)
+      entry(`/${coach.slug}`, 'weekly', 0.8, new Date(coach.updatedAt)).slice(0, 1)
     ),
     /*
      * Tēmu, nozaru un vietu lapas — tikai tās, kurās ir vismaz viens

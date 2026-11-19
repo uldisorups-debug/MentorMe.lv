@@ -317,7 +317,13 @@ export function ProfileEditor({
         full_name: draft.full_name.trim(),
         tagline: draft.tagline.trim() || null,
         bio: draft.bio.trim() || null,
-        avatar_url: avatarUrl,
+        /*
+         * avatar_url te apzināti nav. Bildi profilā ieraksta pats
+         * AvatarUpload uzreiz pēc augšupielādes. Ja to rakstītu arī
+         * forma, vecā cilnē vai otrā ierīcē atvērts redaktors ar
+         * saglabāšanu atjaunotu jau izdzēsta faila adresi, un profilā
+         * paliktu salauzta bilde.
+         */
         qualification: qualification === 'unknown' ? null : qualification,
         cert_note: certNote.trim() || null,
         years_experience:

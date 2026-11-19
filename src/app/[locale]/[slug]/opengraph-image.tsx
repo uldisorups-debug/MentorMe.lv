@@ -1,6 +1,21 @@
 import { ImageResponse } from 'next/og'
 import { loadCoachPage } from '@/lib/coach-profile'
 
+/*
+ * Bilde glabājas kešā nedēļu. Bez šī katrs koplietošanas priekšskatījums
+ * (Facebook, LinkedIn, WhatsApp, Slack) un katrs robots, kas bildi
+ * pieprasa, to zīmēja no jauna: datubāzes vaicājums un ImageResponse,
+ * kas ir dārgākā lieta CPU ziņā visā vietnē. Vercel Hobby plānā CPU
+ * laiks ir ierobežots (4 h mēnesī).
+ */
+export const revalidate = 604800
+
+// Kā lapām: neko nebūvējam iepriekš, katru bildi pirmajā pieprasījumā,
+// un tad tā stāv kešā. Bez šī Next.js maršrutu uzskata par dinamisku.
+export async function generateStaticParams(): Promise<{ locale: string; slug: string }[]> {
+  return []
+}
+
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 export const alt = 'MentorMe.lv kouča profils'
