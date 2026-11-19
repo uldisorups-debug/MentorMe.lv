@@ -1,3 +1,6 @@
+'use client'
+
+import { useState } from 'react'
 import Image from 'next/image'
 import { cn } from '@/lib/utils'
 
@@ -34,7 +37,14 @@ export function CoachAvatar({
     className
   )
 
-  if (!url) {
+  /*
+   * Ja fails krātuvē pazudis, rādām iniciāļus, nevis salauztu bildi.
+   * Tā bija ar Estetik Care un vēl vienu profilu (2026. gada novembris):
+   * saite profilā palika, fails ne, un lapā bija tukšs rāmis.
+   */
+  const [broken, setBroken] = useState(false)
+
+  if (!url || broken) {
     return (
       <span
         aria-hidden="true"
@@ -54,6 +64,7 @@ export function CoachAvatar({
         fill
         sizes={`${px}px`}
         className="object-cover"
+        onError={() => setBroken(true)}
       />
     </span>
   )
