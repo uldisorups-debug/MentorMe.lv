@@ -9,6 +9,7 @@ import { PostViewTracker } from '@/components/post-view-tracker'
 import { jsonLdHtml } from '@/lib/json-ld'
 import { renderMarkdown, readingMinutes } from '@/lib/markdown'
 import { loadPost } from '@/lib/posts'
+import { extractFaq } from '@/lib/post-faq'
 import { ogLocale, titleWithBrand } from '@/lib/seo-title'
 import { SITE_URL } from '@/lib/supabase/config'
 
@@ -103,12 +104,30 @@ export default async function PostPage({ params }: PageProps<'/[locale]/blog/[sl
     publisher: { '@id': `${SITE_URL}/#org` },
   }
 
+  /*
+   * Rakstu sadaļa "Biežāk uzdotie jautājumi" kļūst arī par FAQPage shēmu.
+   * Tieši tādus pārus Google un AI rīki citē kā gatavu atbildi.
+   */
+  const faq = extractFaq(post.content)
+  const faqLd =
+    faq.length >= 2
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: faq.map(([q, a]) => ({
+            '@type': 'Question',
+            name: q,
+            acceptedAnswer: { '@type': 'Answer', text: a },
+          })),
+        }
+      : null
+
   return (
     <>
       <PostViewTracker slug={post.slug} />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: jsonLdHtml(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdHtml(faqLd ? [jsonLd, faqLd] : jsonLd) }}
       />
 
       <article className="mx-auto max-w-2xl px-6 py-16">
