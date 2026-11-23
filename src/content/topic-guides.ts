@@ -43,7 +43,7 @@ export const TOPIC_GUIDES: Record<string, TopicGuide> = {
       ['Vai koučam jābūt sertificētam?', 'Likums to neprasa. ICF vai līdzīga sertifikācija parāda, ka koučs ir mācījies un nostrādājis noteiktu stundu skaitu. Sarakstā sertificētos koučus var atlasīt ar filtru.'],
       ['Cik sesiju vajag?', 'Konkrētam mērķim parasti pietiek ar sešām līdz divpadsmit sesijām, vienu reizi divās nedēļās.'],
     ],
-    posts: [KOUCS_RAKSTS, CENAS_KOUCS, ['ka-atrast-mentoru', 'Kā atrast mentoru: 7 soļi']],
+    posts: [['jauns-vaditajs-vaditaju-koucings', 'Jauns vadītājs un vadītāju koučings'], KOUCS_RAKSTS, CENAS_KOUCS, ['ka-atrast-mentoru', 'Kā atrast mentoru: 7 soļi']],
   },
   'tema/kouc-bizness': {
     title: 'Kad uzņēmējam noder biznesa koučs',
@@ -69,7 +69,7 @@ export const TOPIC_GUIDES: Record<string, TopicGuide> = {
       ['Vai jaunam vadītājam vajag kouču?', 'Pirmais gads vadītāja amatā ir brīdis, kad koučs dod visvairāk: jāiemācās vadīt bijušos kolēģus un pārstāt darīt visu pašam.'],
       ['Kā izvēlēties vadītāju kouču?', 'Skaties, vai koučam ir pieredze ar vadītājiem tavā līmenī, un sarunā iepazīšanās sarunu. Pēc 20 minūtēm parasti ir skaidrs, vai ar šo cilvēku sanāk.'],
     ],
-    posts: [KOUCS_RAKSTS, CENAS_KOUCS],
+    posts: [['jauns-vaditajs-vaditaju-koucings', 'Jauns vadītājs: 7 izaicinājumi pirmajā gadā'], KOUCS_RAKSTS, CENAS_KOUCS],
   },
   'tema/kouc-dzive': {
     title: 'Ko dara dzīves koučs',
@@ -82,7 +82,7 @@ export const TOPIC_GUIDES: Record<string, TopicGuide> = {
       ['Cik maksā dzīves koučs?', 'MentorMe.lv profilos sesija maksā no 15 eiro, visbiežāk ap 50 eiro. Daļa kouču, kas vēl krāj prakses stundas, strādā bez maksas.'],
       ['Vai var strādāt ar kouču attālināti?', 'Jā. Dzīves koučings tiešsaistē darbojas tikpat labi kā klātienē, un tā var izvēlēties kouču no jebkuras Latvijas vietas.'],
     ],
-    posts: [['izdegsana-darba-kouc-vai-psihologs', 'Kad palīdzēs koučs un kad vajag psihologu'], CENAS_KOUCS],
+    posts: [['ka-mainit-profesiju-karjeras-maina', 'Kā mainīt profesiju: četri soļi'], ['izdegsana-darba-kouc-vai-psihologs', 'Kad palīdzēs koučs un kad vajag psihologu'], CENAS_KOUCS],
   },
   'nozare/nauda': {
     title: 'Biznesa mentori, konsultanti un kursi',
@@ -95,7 +95,7 @@ export const TOPIC_GUIDES: Record<string, TopicGuide> = {
       ['Kur atrast mentoru biznesa sākšanai?', 'Atlasi tēmu "Sava uzņēmuma sākšana" un uzraksti tieši cilvēkam, kura pieredze ir vistuvākā tavai idejai.'],
       ['Vai ir apmācības uzņēmuma komandai?', 'Jā. Vairāki pasniedzēji vada pārdošanas, vadības un mārketinga apmācības uzņēmumos. Par saturu un cenu vienojies tieši ar pasniedzēju.'],
     ],
-    posts: [['ka-sakt-biznesu-latvija-biznesa-mentors', 'Kā sākt biznesu Latvijā: 7 jautājumi mentoram'], CENAS_KOUCS],
+    posts: [['marketings-mazam-uznemumam-maza-budzeta', 'Mārketings mazam uzņēmumam ar nelielu budžetu'], ['ka-sakt-biznesu-latvija-biznesa-mentors', 'Kā sākt biznesu Latvijā: 7 jautājumi mentoram'], CENAS_KOUCS],
   },
   'tema/bizness': {
     title: 'Biznesa vadības mentori un apmācības',
@@ -108,7 +108,7 @@ export const TOPIC_GUIDES: Record<string, TopicGuide> = {
       ['Cik bieži jātiekas ar mentoru?', 'Parasti pietiek ar vienu sarunu mēnesī. Starp sarunām tu dari, un nākamajā reizē pārrunājat, kas sanāca.'],
       ['Vai mentors var palīdzēt ar biznesa plānu?', 'Jā. Mentors neuzrakstīs to tavā vietā, bet pateiks, kuri pieņēmumi tavā plānā nav reāli.'],
     ],
-    posts: [['ka-sakt-biznesu-latvija-biznesa-mentors', '7 jautājumi biznesa mentoram'], ['ka-atrast-mentoru', 'Kā atrast mentoru: 7 soļi']],
+    posts: [['pardosanas-apmacibas-ka-izveleties-treneri', 'Pārdošanas apmācības: kā izvēlēties treneri'], ['ka-sakt-biznesu-latvija-biznesa-mentors', '7 jautājumi biznesa mentoram'], ['ka-atrast-mentoru', 'Kā atrast mentoru: 7 soļi']],
   },
   'nozare/skola': {
     title: 'Privātskolotāji skolas priekšmetos un eksāmeniem',
@@ -134,7 +134,7 @@ export const TOPIC_GUIDES: Record<string, TopicGuide> = {
       ['Vai var iemācīties programmēt bez priekšzināšanām?', 'Jā. Ar vienu vai divām nodarbībām nedēļā un regulāru patstāvīgu darbu pirmo vienkāršo projektu var uzbūvēt dažu mēnešu laikā.'],
       ['Kur atrast kādu, kas iemāca lietot mākslīgo intelektu darbā?', 'Atlasi tēmu "Mākslīgais intelekts". Vairāki pasniedzēji vada gan individuālas nodarbības, gan apmācības komandām.'],
     ],
-    posts: [CENAS_STUNDAS],
+    posts: [['maksliga-intelekta-apmacibas-uznemumam', 'Mākslīgā intelekta apmācības darbiniekiem'], CENAS_STUNDAS],
   },
   'tema/mi': {
     title: 'Mākslīgā intelekta apmācības un mentori',
@@ -147,6 +147,7 @@ export const TOPIC_GUIDES: Record<string, TopicGuide> = {
       ['Cik ilgā laikā var iemācīties lietot MI darbā?', 'Pamatus var apgūt divās līdz trijās nodarbībās. Tālāk prasme aug, lietojot rīkus katru dienu.'],
       ['Vai ir apmācības uzņēmumiem?', 'Jā. Par saturu, ilgumu un cenu vienojies tieši ar pasniedzēju.'],
     ],
+    posts: [['maksliga-intelekta-apmacibas-uznemumam', 'Mākslīgā intelekta apmācības: kā ieviest MI uzņēmumā']],
   },
   'vieta/riga': {
     title: 'Mentori, kouči un privātskolotāji Rīgā',
@@ -172,7 +173,7 @@ export const TOPIC_GUIDES: Record<string, TopicGuide> = {
       ['Vai mārketingu var iemācīties pats?', 'Pamatus jā. Mentors saīsina ceļu, jo parāda, kuras kļūdas tavā nozarē maksā visdārgāk.'],
       ['Vai ir mārketinga apmācības komandai?', 'Jā. Vairāki pasniedzēji vada apmācības uzņēmumos. Par saturu un cenu vienojies tieši ar pasniedzēju.'],
     ],
-    posts: [CENAS_KOUCS],
+    posts: [['marketings-mazam-uznemumam-maza-budzeta', 'Mārketings mazam uzņēmumam: plāns 90 dienām'], CENAS_KOUCS],
   },
   'tema/pardosana': {
     title: 'Pārdošanas apmācības un kursi',
@@ -185,6 +186,7 @@ export const TOPIC_GUIDES: Record<string, TopicGuide> = {
       ['Vai pārdošanas apmācības var pielāgot nozarei?', 'Jā. Pirms apmācībām pasniedzējs noskaidro, ko pārdodat un kam, un piemērus ņem no jūsu ikdienas.'],
       ['Kā izvēlēties pārdošanas treneri?', 'Pajautā, ko viņš pats ir pārdevis un kādā nozarē. Labs treneris pārdošanu ir darījis, ne tikai mācījis.'],
     ],
+    posts: [['pardosanas-apmacibas-ka-izveleties-treneri', 'Pārdošanas apmācības: kā izvēlēties treneri']],
   },
   'tema/finanses': {
     title: 'Finanšu konsultanti un mentori',
@@ -223,7 +225,7 @@ export const TOPIC_GUIDES: Record<string, TopicGuide> = {
       ['Vai karjeras konsultants palīdz ar CV un darba interviju?', 'Jā. Daudzi piedāvā CV pārskatīšanu un izmēģinājuma interviju ar atgriezenisko saiti.'],
       ['Cik sarunu vajag?', 'CV un intervijai pietiek ar vienu vai divām. Profesijas maiņai rēķinies ar vairākām sarunām dažu mēnešu laikā.'],
     ],
-    posts: [['ka-atrast-mentoru', 'Kā atrast mentoru: 7 soļi']],
+    posts: [['ka-mainit-profesiju-karjeras-maina', 'Kā mainīt profesiju 30, 40 vai 50 gados'], ['ka-atrast-mentoru', 'Kā atrast mentoru: 7 soļi']],
   },
   'tema/uznemuma-sakums': {
     title: 'Mentori sava uzņēmuma sākšanai',
@@ -249,7 +251,7 @@ export const TOPIC_GUIDES: Record<string, TopicGuide> = {
       ['Cik ilgi jāmācās, lai izveidotu savu lapu?', 'Vienkāršu lapu ar pasniedzēja palīdzību var uzbūvēt dažās nodarbībās.'],
       ['Cik maksā nodarbība?', 'MentorMe.lv profilos nodarbība tehnoloģiju jomā maksā no 25 eiro, visbiežāk ap 40 eiro.'],
     ],
-    posts: [CENAS_STUNDAS],
+    posts: [['marketings-mazam-uznemumam-maza-budzeta', 'Mārketings mazam uzņēmumam ar nelielu budžetu'], CENAS_STUNDAS],
   },
   'tema/programmesana': {
     title: 'Programmēšanas privātstundas un mentori',
@@ -275,7 +277,7 @@ export const TOPIC_GUIDES: Record<string, TopicGuide> = {
       ['Vai ir apmācības uzņēmuma darbiniekiem?', 'Jā. Par saturu, ilgumu un cenu vienojies tieši ar pasniedzēju.'],
       ['Ar ko sākt, ja komanda strādā neefektīvi?', 'Ar vienu procesu, kas aizņem visvairāk laika. Pasniedzējs palīdz izvēlēties rīku un iemāca to lietot.'],
     ],
-    posts: [['microsoft-lists-vai-excel', 'Excel vai MS Lists kopīgam sarakstam']],
+    posts: [['maksliga-intelekta-apmacibas-uznemumam', 'Mākslīgā intelekta apmācības darbiniekiem'], ['microsoft-lists-vai-excel', 'Excel vai MS Lists kopīgam sarakstam']],
   },
   'tema/mental': {
     title: 'Atbalsts mentālajai veselībai',
@@ -314,7 +316,7 @@ export const TOPIC_GUIDES: Record<string, TopicGuide> = {
       ['Vai var runāt ar cilvēku, kurš pats to piedzīvojis?', 'Jā. Tēmā ir arī cilvēki, kas dalās tieši ar savu pieredzi, nevis ar metodi.'],
       ['Cik sarunu vajag?', 'Dažiem pietiek ar vienu, lai ieraudzītu nākamo soli. Lielākām pārmaiņām parasti tiekas vairākus mēnešus.'],
     ],
-    posts: [['pieredzes-prakse-macities-no-pieredzes', 'Kāpēc no pieredzes iemācās ātrāk']],
+    posts: [['ka-mainit-profesiju-karjeras-maina', 'Kā mainīt profesiju: četri soļi'], ['pieredzes-prakse-macities-no-pieredzes', 'Kāpēc no pieredzes iemācās ātrāk']],
   },
   'tema/dzive': {
     title: 'Mācīties no cita cilvēka dzīves pieredzes',

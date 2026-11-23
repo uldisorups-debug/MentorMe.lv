@@ -38,6 +38,7 @@ import {
 import { authErrorKey, passwordTooShort } from '../src/lib/auth-errors.ts'
 import { extractMetaTags, withoutMetaTags } from '../src/lib/site-code-meta.ts'
 import { parsePrevious, profilePaths } from '../src/lib/revalidate-paths.ts'
+import { extractFaq } from '../src/lib/post-faq.ts'
 import { isNovemberSeason } from '../src/lib/season.ts'
 import { firstFitting, titleWithBrand, ogLocale } from '../src/lib/seo-title.ts'
 import {
@@ -966,6 +967,33 @@ check('novembris: 24. vakarā vēl rāda', isNovemberSeason(new Date('2026-11-24
 check('novembris: 25. pēc Rīgas laika vairs ne', isNovemberSeason(new Date('2026-11-24T22:30:00Z')), false)
 check('novembris: oktobra beigās pēc UTC, bet Rīgā jau 1. nov.', isNovemberSeason(new Date('2026-10-31T22:30:00Z')), true)
 check('novembris: decembrī ne', isNovemberSeason(new Date('2026-12-01T12:00:00Z')), false)
+
+const faqMd = `Ievads.
+
+## Kas ir koučs
+
+Teksts.
+
+## Biežāk uzdotie jautājumi
+
+**Cik maksā?**
+No 15 līdz 50 eiro. Sk. [cenas](/blog/x).
+
+**Vai var attālināti?**
+Jā.
+Arī klātienē.
+
+**Bez atbildes?**
+
+## Nobeigums
+
+**Šis nav jautājums?**
+Nē.`
+check('BUJ: pāri no sadaļas', extractFaq(faqMd), [
+  ['Cik maksā?', 'No 15 līdz 50 eiro. Sk. cenas.'],
+  ['Vai var attālināti?', 'Jā. Arī klātienē.'],
+])
+check('BUJ: bez sadaļas tukšs', extractFaq('## Cits\n\n**A?**\nB'), [])
 
 console.log(`\n  ${passed} izturēja, ${failed} kritušas\n`)
 process.exit(failed === 0 ? 0 : 1)
