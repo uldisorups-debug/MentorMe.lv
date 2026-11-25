@@ -1,7 +1,6 @@
 import { useTranslations } from 'next-intl'
 import { ArrowRight } from 'lucide-react'
 import { LinkButton } from '@/components/link-button'
-import { NovemberRibbon, NovemberSkyline } from '@/components/november-skyline'
 import { TypingHeadline } from '@/components/typing-headline'
 
 export function HeroSection({
@@ -84,9 +83,6 @@ export function HeroSection({
           </div>
         </dl>
       </div>
-      {/* Valsts svētku mēnesis — pats pazūd 25. novembrī */}
-      <NovemberRibbon />
-      <NovemberSkyline />
     </section>
   )
 }
