@@ -26,14 +26,24 @@ export function canonicalUrl(path: string): string {
   return path === '/' ? SITE_URL : `${SITE_URL}${path}`
 }
 
+export type IndexNowResult = { sent: number; status: number | null }
+
 /**
  * Nosūta adreses IndexNow. Nekad nemet kļūdu: ja paziņojums neizdodas,
  * lapa tāpat tiks atrasta pa sitemap — tikai lēnāk. Kļūda te nedrīkst
  * salauzt profila saglabāšanu.
+ *
+ * Atgriež, cik adreses nosūtītas un ko IndexNow atbildēja (null, ja
+ * neatbildēja vispār), lai administratora poga var to parādīt.
  */
-export async function submitToIndexNow(urls: string[]): Promise<void> {
+export async function submitToIndexNow(urls: string[]): Promise<IndexNowResult> {
   // Lokāli un priekšskatījumos nav ko ziņot — tās adreses nav publiskas
-  if (!SITE_URL.startsWith('https://mentorme.lv') || urls.length === 0) return
+  if (!SITE_URL.startsWith('https://mentorme.lv') || urls.length === 0) {
+    return { sent: 0, status: null }
+  }
+
+  // Protokols pieņem līdz 10 000 adresēm vienā pieprasījumā
+  const list = [...new Set(urls)].slice(0, 10000)
 
   try {
     const response = await fetch('https://api.indexnow.org/indexnow', {
@@ -43,16 +53,18 @@ export async function submitToIndexNow(urls: string[]): Promise<void> {
         host: new URL(SITE_URL).host,
         key: INDEXNOW_KEY,
         keyLocation: `${SITE_URL}/${INDEXNOW_KEY}.txt`,
-        urlList: urls,
+        urlList: list,
       }),
-      signal: AbortSignal.timeout(5000),
+      signal: AbortSignal.timeout(10000),
     })
 
     // 200 un 202 abi nozīmē "pieņemts"
     if (!response.ok) {
       console.error('IndexNow atteica:', response.status, await response.text())
     }
+    return { sent: list.length, status: response.status }
   } catch (error) {
     console.error('IndexNow nav sasniedzams:', error)
+    return { sent: 0, status: null }
   }
 }

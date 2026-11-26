@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { ACTION_LABELS } from '@/lib/admin'
 import { createClient } from '@/lib/supabase/server'
 import { EmptyState } from '@/components/admin/admin-row'
+import { IndexNowButton } from '@/components/admin/indexnow-button'
 
 export const metadata: Metadata = { title: 'Administrācija', robots: { index: false } }
 
@@ -82,6 +83,19 @@ export default async function AdminOverviewPage() {
             {reports} neapstrādāts ziņojums par atsauksmēm — skaties sadaļā Atsauksmes.
           </p>
         )}
+      </section>
+
+      <section>
+        <h2 className="font-display text-xl">Meklētāji</h2>
+        <p className="mt-1 max-w-2xl text-sm text-mist">
+          Nosūta visas sitemap adreses Bing, Yandex un citiem IndexNow
+          meklētājiem (no Bing strādā arī ChatGPT meklēšana). Google IndexNow
+          neizmanto: tam lapas jāpieprasa Search Console. Spied pēc jauniem
+          rakstiem, ne biežāk kā reizi dienā.
+        </p>
+        <div className="mt-4">
+          <IndexNowButton />
+        </div>
       </section>
 
       <section>
