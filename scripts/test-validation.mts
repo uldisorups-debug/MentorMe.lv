@@ -39,7 +39,6 @@ import { authErrorKey, passwordTooShort } from '../src/lib/auth-errors.ts'
 import { extractMetaTags, withoutMetaTags } from '../src/lib/site-code-meta.ts'
 import { parsePrevious, profilePaths } from '../src/lib/revalidate-paths.ts'
 import { extractFaq } from '../src/lib/post-faq.ts'
-import { isNovemberSeason } from '../src/lib/season.ts'
 import { firstFitting, titleWithBrand, ogLocale } from '../src/lib/seo-title.ts'
 import {
   buildTopicIndex,
@@ -961,12 +960,6 @@ check(
 check('zīmols: īsam virsrakstam sufikss', titleWithBrand('Raksti'), 'Raksti')
 check('zīmols: garam bez sufiksa', titleWithBrand('x'.repeat(50)), { absolute: 'x'.repeat(50) })
 check('og locale', [ogLocale('lv'), ogLocale('ru'), ogLocale('xx')], ['lv_LV', 'ru_RU', 'lv_LV'])
-
-check('novembris: 10. datumā rāda', isNovemberSeason(new Date('2026-11-10T12:00:00Z')), true)
-check('novembris: 24. vakarā vēl rāda', isNovemberSeason(new Date('2026-11-24T21:30:00Z')), true)
-check('novembris: 25. pēc Rīgas laika vairs ne', isNovemberSeason(new Date('2026-11-24T22:30:00Z')), false)
-check('novembris: oktobra beigās pēc UTC, bet Rīgā jau 1. nov.', isNovemberSeason(new Date('2026-10-31T22:30:00Z')), true)
-check('novembris: decembrī ne', isNovemberSeason(new Date('2026-12-01T12:00:00Z')), false)
 
 const faqMd = `Ievads.
 

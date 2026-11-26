@@ -7,7 +7,7 @@ import {
   type ProfileFootprint,
 } from '@/lib/revalidate'
 import { parsePrevious } from '@/lib/revalidate-paths'
-import { allLocaleUrls, submitToIndexNow } from '@/lib/indexnow'
+import { canonicalUrl, submitToIndexNow } from '@/lib/indexnow'
 
 /**
  * Ko paziņot IndexNow pēc atsvaidzināšanas. Tukšs ķermenis — neko.
@@ -89,7 +89,7 @@ export async function POST(request: Request) {
    * nosūtīšanas: cilvēks nesagaida IndexNow atbildi, saglabājot profilu.
    */
   if (paths.length > 0) {
-    after(() => submitToIndexNow(paths.flatMap(allLocaleUrls)))
+    after(() => submitToIndexNow(paths.map(canonicalUrl)))
   }
 
   return NextResponse.json({ ok: true, slug: coach?.slug ?? null })

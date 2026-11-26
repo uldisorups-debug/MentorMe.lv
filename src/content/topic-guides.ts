@@ -82,7 +82,7 @@ export const TOPIC_GUIDES: Record<string, TopicGuide> = {
       ['Cik maksā dzīves koučs?', 'MentorMe.lv profilos sesija maksā no 15 eiro, visbiežāk ap 50 eiro. Daļa kouču, kas vēl krāj prakses stundas, strādā bez maksas.'],
       ['Vai var strādāt ar kouču attālināti?', 'Jā. Dzīves koučings tiešsaistē darbojas tikpat labi kā klātienē, un tā var izvēlēties kouču no jebkuras Latvijas vietas.'],
     ],
-    posts: [['ka-mainit-profesiju-karjeras-maina', 'Kā mainīt profesiju: četri soļi'], ['izdegsana-darba-kouc-vai-psihologs', 'Kad palīdzēs koučs un kad vajag psihologu'], CENAS_KOUCS],
+    posts: [['stress-darba-ka-mazinat', 'Stress darbā: 7 veidi, kā to mazināt'], ['ka-mainit-profesiju-karjeras-maina', 'Kā mainīt profesiju: četri soļi'], ['izdegsana-darba-kouc-vai-psihologs', 'Kad palīdzēs koučs un kad vajag psihologu'], CENAS_KOUCS],
   },
   'nozare/nauda': {
     title: 'Biznesa mentori, konsultanti un kursi',
@@ -95,7 +95,7 @@ export const TOPIC_GUIDES: Record<string, TopicGuide> = {
       ['Kur atrast mentoru biznesa sākšanai?', 'Atlasi tēmu "Sava uzņēmuma sākšana" un uzraksti tieši cilvēkam, kura pieredze ir vistuvākā tavai idejai.'],
       ['Vai ir apmācības uzņēmuma komandai?', 'Jā. Vairāki pasniedzēji vada pārdošanas, vadības un mārketinga apmācības uzņēmumos. Par saturu un cenu vienojies tieši ar pasniedzēju.'],
     ],
-    posts: [['marketings-mazam-uznemumam-maza-budzeta', 'Mārketings mazam uzņēmumam ar nelielu budžetu'], ['ka-sakt-biznesu-latvija-biznesa-mentors', 'Kā sākt biznesu Latvijā: 7 jautājumi mentoram'], CENAS_KOUCS],
+    posts: [['naudas-plusma-mazam-uznemumam', 'Naudas plūsma mazam uzņēmumam'], ['marketings-mazam-uznemumam-maza-budzeta', 'Mārketings mazam uzņēmumam ar nelielu budžetu'], ['ka-sakt-biznesu-latvija-biznesa-mentors', 'Kā sākt biznesu Latvijā: 7 jautājumi mentoram'], CENAS_KOUCS],
   },
   'tema/bizness': {
     title: 'Biznesa vadības mentori un apmācības',
@@ -199,7 +199,7 @@ export const TOPIC_GUIDES: Record<string, TopicGuide> = {
       ['Vai finanšu konsultants ir tas pats, kas grāmatvedis?', 'Nē. Grāmatvedis uzskaita to, kas jau noticis. Finanšu konsultants palīdz plānot, kas notiks.'],
       ['Cik maksā finanšu konsultācija?', 'MentorMe.lv profilos biznesa un finanšu konsultācija maksā no 29 eiro, visbiežāk ap 90 līdz 100 eiro.'],
     ],
-    posts: [CENAS_KOUCS],
+    posts: [['naudas-plusma-mazam-uznemumam', 'Naudas plūsma: kāpēc peļņa ir, bet naudas nav'], CENAS_KOUCS],
   },
   'tema/gramatvediba': {
     title: 'Grāmatvedības konsultācijas un apmācības',
@@ -212,7 +212,7 @@ export const TOPIC_GUIDES: Record<string, TopicGuide> = {
       ['Ko pajautāt grāmatvedim pirms uzņēmuma dibināšanas?', 'Kāda uzņēmējdarbības forma un nodokļu režīms der tavam plānotajam apgrozījumam un vai būs jāreģistrējas PVN.'],
       ['Vai grāmatvedību var iemācīties individuāli?', 'Jā. Individuālās nodarbībās var apgūt gan pamatus, gan konkrētu uzskaites programmu.'],
     ],
-    posts: [['ka-sakt-biznesu-latvija-biznesa-mentors', 'Kā sākt biznesu Latvijā: 7 jautājumi mentoram']],
+    posts: [['naudas-plusma-mazam-uznemumam', 'Naudas plūsma mazam uzņēmumam'], ['ka-sakt-biznesu-latvija-biznesa-mentors', 'Kā sākt biznesu Latvijā: 7 jautājumi mentoram']],
   },
   'tema/karjera': {
     title: 'Karjeras konsultanti un mentori',
@@ -225,7 +225,7 @@ export const TOPIC_GUIDES: Record<string, TopicGuide> = {
       ['Vai karjeras konsultants palīdz ar CV un darba interviju?', 'Jā. Daudzi piedāvā CV pārskatīšanu un izmēģinājuma interviju ar atgriezenisko saiti.'],
       ['Cik sarunu vajag?', 'CV un intervijai pietiek ar vienu vai divām. Profesijas maiņai rēķinies ar vairākām sarunām dažu mēnešu laikā.'],
     ],
-    posts: [['ka-mainit-profesiju-karjeras-maina', 'Kā mainīt profesiju 30, 40 vai 50 gados'], ['ka-atrast-mentoru', 'Kā atrast mentoru: 7 soļi']],
+    posts: [['darba-intervija-jautajumi-un-atbildes', 'Darba intervija: 10 biežākie jautājumi'], ['ka-mainit-profesiju-karjeras-maina', 'Kā mainīt profesiju 30, 40 vai 50 gados'], ['ka-atrast-mentoru', 'Kā atrast mentoru: 7 soļi']],
   },
   'tema/uznemuma-sakums': {
     title: 'Mentori sava uzņēmuma sākšanai',
@@ -238,7 +238,7 @@ export const TOPIC_GUIDES: Record<string, TopicGuide> = {
       ['Vai mentors palīdz ar biznesa plānu?', 'Viņš neuzrakstīs to tavā vietā, bet pateiks, kuri pieņēmumi nav reāli un ko pārbaudīt vispirms.'],
       ['Vai ir bezmaksas mentori iesācējiem?', 'Jā. Daļa mentoru pirmo sarunu vai visu sadarbību piedāvā bez maksas. Sarakstā tos var atlasīt ar budžeta filtru.'],
     ],
-    posts: [['ka-sakt-biznesu-latvija-biznesa-mentors', 'Kā sākt biznesu Latvijā: 7 jautājumi mentoram'], CENAS_KOUCS],
+    posts: [['naudas-plusma-mazam-uznemumam', 'Naudas plūsma mazam uzņēmumam'], ['ka-sakt-biznesu-latvija-biznesa-mentors', 'Kā sākt biznesu Latvijā: 7 jautājumi mentoram'], CENAS_KOUCS],
   },
   'tema/web': {
     title: 'Mājaslapu izstrādes mentori un pasniedzēji',
@@ -290,7 +290,7 @@ export const TOPIC_GUIDES: Record<string, TopicGuide> = {
       ['Vai konsultācijas notiek attālināti?', 'Jā, lielākā daļa speciālistu strādā arī tiešsaistē. Formāts ir redzams profilā.'],
       ['Kā izvēlēties speciālistu?', 'Paskaties izglītību un sertifikāciju profilā un sarunā iepazīšanās sarunu. Svarīgi, lai ar šo cilvēku jūties droši.'],
     ],
-    posts: [['izdegsana-darba-kouc-vai-psihologs', 'Kad palīdzēs koučs un kad vajag psihologu'], ['disciplina-mentala-gariga-fiziska-veseliba', 'Disciplīna un veselība']],
+    posts: [['stress-darba-ka-mazinat', 'Stress darbā: 7 veidi, kā to mazināt'], ['izdegsana-darba-kouc-vai-psihologs', 'Kad palīdzēs koučs un kad vajag psihologu'], ['disciplina-mentala-gariga-fiziska-veseliba', 'Disciplīna un veselība']],
   },
   'tema/garigs': {
     title: 'Garīgās izaugsmes pavadītāji',
@@ -355,7 +355,7 @@ export const TOPIC_GUIDES: Record<string, TopicGuide> = {
       ['Vai psihologa konsultācija var notikt attālināti?', 'Jā, daudzi speciālisti strādā arī tiešsaistē. Formāts ir redzams profilā.'],
       ['Ar ko psihologs atšķiras no kouča?', 'Psihologs strādā ar emocionālām grūtībām un to cēloņiem. Koučs strādā ar mērķiem un to sasniegšanu.'],
     ],
-    posts: [['izdegsana-darba-kouc-vai-psihologs', 'Kad palīdzēs koučs un kad vajag psihologu']],
+    posts: [['stress-darba-ka-mazinat', 'Stress darbā: kad meklēt palīdzību'], ['izdegsana-darba-kouc-vai-psihologs', 'Kad palīdzēs koučs un kad vajag psihologu']],
   },
   'nozare/pieredze': {
     title: 'Dzīves un pieredzes zināšanas',
