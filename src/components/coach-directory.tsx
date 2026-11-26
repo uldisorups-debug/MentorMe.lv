@@ -10,11 +10,13 @@ import { LinkButton } from '@/components/link-button'
 import {
   EMPTY_FILTERS,
   closestCoaches,
+  emptyTopics,
   filterCoaches,
+  rankByRelevance,
   sortCoaches,
   suggestedSpheres,
-  type CoachCardData,
   type CoachFilters,
+  type SearchableCoach,
 } from '@/lib/coaches'
 
 /*
@@ -30,7 +32,7 @@ export function CoachDirectory({
   coaches,
   taxonomy,
 }: {
-  coaches: CoachCardData[]
+  coaches: SearchableCoach[]
   taxonomy: FilterTaxonomy
 }) {
   const t = useTranslations('Coaches')
@@ -64,14 +66,19 @@ export function CoachDirectory({
     [taxonomy.regions]
   )
 
-  const exact = useMemo(
-    () =>
-      sortCoaches(
-        filterCoaches(coaches, filters, nicheToSphere, nicheNames, sphereNames),
-        filters.sort
-      ),
-    [coaches, filters, nicheToSphere, nicheNames, sphereNames]
-  )
+  /*
+   * Meklē visā profilā, arī aprakstā. Ja cilvēks kārtošanu nav izvēlējies,
+   * augšā tie, kam vārds ir vārdā, virsrakstā vai tēmās.
+   */
+  const exact = useMemo(() => {
+    const sorted = sortCoaches(
+      filterCoaches(coaches, filters, nicheToSphere, nicheNames, sphereNames),
+      filters.sort
+    )
+    return filters.sort === 'none'
+      ? rankByRelevance(sorted, filters.query, nicheToSphere, nicheNames, sphereNames)
+      : sorted
+  }, [coaches, filters, nicheToSphere, nicheNames, sphereNames])
 
   /*
    * Ja visiem meklētajiem vārdiem neatbilst neviens, rādām tos, kam
@@ -99,6 +106,14 @@ export function CoachDirectory({
     list.length === 0 && filters.query.trim() !== ''
       ? suggestedSpheres(filters.query, taxonomy.groups, taxonomy.spheres, nonEmptySpheres)
       : []
+
+  const missingTopics = useMemo(
+    () =>
+      list.length === 0 && filters.query.trim() !== ''
+        ? emptyTopics(filters.query, taxonomy.groups, new Set(coaches.flatMap((c) => c.niches)))
+        : [],
+    [list.length, filters.query, taxonomy.groups, coaches]
+  )
 
   /*
    * Klikšķis uz nozares kvadrāta ir jauna doma, tāpat kā meklēšana:
@@ -137,9 +152,11 @@ export function CoachDirectory({
               <p className="max-w-md">
                 {coaches.length === 0
                   ? t('emptyAll')
-                  : filters.query.trim() !== ''
-                    ? t('noMatch', { query: filters.query.trim() })
-                    : t('empty')}
+                  : missingTopics.length > 0
+                    ? t('topicEmpty', { topics: missingTopics.join(', ') })
+                    : filters.query.trim() !== ''
+                      ? t('noMatch', { query: filters.query.trim() })
+                      : t('empty')}
               </p>
 
               {suggestions.length > 0 && (

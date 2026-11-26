@@ -17,6 +17,8 @@ import {
   filtersOnNewSearch,
   closestCoaches,
   suggestedSpheres,
+  rankByRelevance,
+  emptyTopics,
   EMPTY_FILTERS,
   type CoachCardData,
 } from '../src/lib/coaches.ts'
@@ -987,6 +989,31 @@ check('BUJ: pāri no sadaļas', extractFaq(faqMd), [
   ['Vai var attālināti?', 'Jā. Arī klātienē.'],
 ])
 check('BUJ: bez sadaļas tukšs', extractFaq('## Cits\n\n**A?**\nB'), [])
+
+// Meklēšana pēc visa profila
+{
+  const base = { id: 'x', slug: 'x', avatar_url: null, qualification: null, is_verified: false,
+    years_experience: null, session_languages: [], price_tier: 'mid', price_from: null, price_to: null,
+    teaching_format: 'remote', region_slug: null, city: null, experience_kinds: [], is_background: false,
+    avg_rating: null, review_count: 0, profile_views: 0, created_at: '2026-01-01T00:00:00Z' }
+  const people = [
+    { ...base, id: 'a', full_name: 'Anna', tagline: 'Kokles skolotāja', niches: ['kokle'], bio: null },
+    { ...base, id: 'b', full_name: 'Bruno', tagline: 'Uzņēmējs', niches: ['bizness'], bio: 'Palīdzu ar kiberdrošību un datu aizsardzību.' },
+    { ...base, id: 'c', full_name: 'Cilda', tagline: 'Ādas māksliniece', niches: ['adas-darbi'], bio: null },
+    { ...base, id: 'd', full_name: 'Dace', tagline: 'Mākslīgā intelekta apmācības', niches: ['mi'], bio: null },
+    { ...base, id: 'e', full_name: 'Ēriks', tagline: 'Koučs', niches: ['kouc-dzive'], bio: 'Kokle ir mans hobijs.' },
+  ] as unknown as CoachCardData[]
+  const names = { kokle: 'Kokle', bizness: 'Bizness', 'adas-darbi': 'Ādas darbi', mi: 'Mākslīgais intelekts', 'kouc-dzive': 'Dzīves koučings' }
+  const find = (q: string) =>
+    rankByRelevance(filterCoaches(people, { ...EMPTY_FILTERS, query: q }, {}, names, {}), q, {}, names, {}).map((p) => p.id)
+  check('meklē: teikums "gribu iemācīties spēlēt kokli"', find('gribu iemācīties spēlēt kokli'), ['a', 'e'])
+  check('meklē: aprakstā atrod, bet zemāk', find('kokle'), ['a', 'e'])
+  check('meklē: tikai aprakstā', find('kiberdrošība'), ['b'])
+  check('meklē: AI nav māksliniece', find('AI'), ['d'])
+  check('meklē: chatgpt -> MI', find('chatgpt'), ['d'])
+  check('meklē: māksla nav MI', find('māksla'), ['c'])
+  check('tukša tēma', emptyTopics('kokles', [{ value: 'kokle', label: 'Kokle' }], new Set()), ['Kokle'])
+}
 
 console.log(`\n  ${passed} izturēja, ${failed} kritušas\n`)
 process.exit(failed === 0 ? 0 : 1)
