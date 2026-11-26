@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { CoachDirectory } from '@/components/coach-directory'
 import { ForCoaches } from '@/components/for-coaches'
 import { HeroSection } from '@/components/hero-section'
-import type { CoachCardData } from '@/lib/coaches'
+import type { SearchableCoach } from '@/lib/coaches'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { loadTaxonomy } from '@/lib/taxonomy'
 import { createPublicClient } from '@/lib/supabase/public'
@@ -42,7 +42,7 @@ async function loadDirectory(locale: string) {
       .from('coach_profiles')
       // Viena virkne bez salīmēšanas — citādi PostgREST tipi neizvelk kolonnas
       .select(
-        'id, slug, full_name, tagline, avatar_url, qualification, is_verified, years_experience, session_languages, price_tier, price_from, price_to, niches, teaching_format, region_slug, city, experience_kinds, is_background, avg_rating, review_count, profile_views, created_at'
+        'id, slug, full_name, tagline, bio, avatar_url, qualification, is_verified, years_experience, session_languages, price_tier, price_from, price_to, niches, teaching_format, region_slug, city, experience_kinds, is_background, avg_rating, review_count, profile_views, created_at'
       )
       .eq('is_published', true)
       .order('created_at', { ascending: false })
@@ -60,8 +60,9 @@ async function loadDirectory(locale: string) {
   }
 
   // Reitings tagad nāk līdzi pašam profilam — bez otrā vaicājuma un
-  // bez visas atsauksmju tabulas agregēšanas katrā pārbūvē
-  const dbCoaches: CoachCardData[] = coachesResult.data ?? []
+  // bez visas atsauksmju tabulas agregēšanas katrā pārbūvē.
+  // Apraksts (bio) ir tikai meklēšanai: kartītē tas netiek rādīts.
+  const dbCoaches: SearchableCoach[] = coachesResult.data ?? []
 
   return { taxonomy, coaches: dbCoaches }
 }

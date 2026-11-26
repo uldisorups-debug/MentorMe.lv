@@ -60,10 +60,15 @@ export function stem(word: string): string {
 /** Vārdi, kas meklēšanu nesašaurina un tāpēc tiek izlaisti. */
 const STOPWORDS = new Set([
   'un', 'ar', 'par', 'uz', 'no', 'pie', 'ka', 'ko', 'kas', 'kur', 'es',
-  'man', 'mani', 'gribu', 'grib', 'mekleju', 'mekle', 'vajag', 'kadu',
-  'kada', 'bet', 'vai', 'lai', 'ari', 'pa', 'the', 'a', 'an', 'and',
-  'for', 'in', 'with', 'to', 'of', 'near', 'и', 'в', 'на', 'для', 'с',
-  'по', 'к', 'у', 'или', 'мне', 'нужен', 'нужна', 'ищу',
+  'man', 'mani', 'gribu', 'grib', 'gribetu', 'velos', 'veletos', 'mekleju',
+  'mekle', 'vajag', 'vajadzetu', 'kadu', 'kada', 'kads', 'bet', 'vai', 'lai',
+  'ari', 'pa', 'cik', 'kur', 'tu', 'tev', 'sev', 'savu', 'sava', 'mans',
+  'manu', 'mums', 'mes', 'jus', 'ja', 'jo', 'ta', 'tas', 'to', 'so', 'sis',
+  'labu', 'labs', 'laba', 'labako', 'labakais', 'tuvuma', 'kurs',
+  'the', 'a', 'an', 'and', 'for', 'in', 'with', 'to', 'of', 'near', 'i',
+  'me', 'my', 'want', 'need', 'how', 'find', 'best', 'looking', 'who', 'can',
+  'и', 'в', 'на', 'для', 'с', 'по', 'к', 'у', 'или', 'мне', 'нужен', 'нужна',
+  'ищу', 'хочу', 'как', 'где', 'лучший', 'найти',
 ])
 
 /*
@@ -75,36 +80,73 @@ const GENERIC_PREFIXES = [
   'skolotaj', 'privatskolotaj', 'pasniedzej', 'repetitor', 'stund',
   'privatstund', 'nodarbib', 'apmacib', 'macib', 'macit', 'iemacit',
   'macities', 'instruktor', 'teacher', 'tutor', 'lesson', 'class',
-  'учител', 'репетитор', 'урок', 'заняти', 'преподават',
+  // darbības vārdi: "gribu iemācīties spēlēt kokli" nozīmē "kokle"
+  'spelet', 'speleju', 'apgut', 'apguvu', 'learn', 'play', 'study',
+  // "excel kursi" nozīmē Excel; kursu formātam ir atsevišķs filtrs
+  'kurss', 'kursi', 'kursu', 'kursus', 'kursos', 'course', 'konsultacij', 'sesij',
+  'speciali', 'cena', 'maksa',
+  'учител', 'репетитор', 'урок', 'заняти', 'преподават', 'научит', 'играт',
+  'курс',
 ]
 
 /*
  * Sinonīmi un citas valodas. Ja vārds sākas ar kreiso pusi, meklē arī
  * labo — tā, kā tas rakstīts profilos un tēmu nosaukumos.
  */
-const SYNONYMS: [string[], string][] = [
-  [['coach', 'коуч', 'kouc'], 'kouc'],
-  [['english', 'англ'], 'angl'],
-  [['russian', 'русск'], 'krievu'],
-  [['german', 'немец', 'немецк'], 'vacu'],
-  [['latvian', 'латыш'], 'latviesu'],
-  [['guitar', 'гитар'], 'gitar'],
-  [['piano', 'фортепиан', 'пианин'], 'klavier'],
-  [['drum', 'барабан'], 'bung'],
-  [['sing', 'вокал', 'dziedat', 'dziedas'], 'vokal'],
-  [['yoga', 'йог'], 'jog'],
-  [['barber', 'барбер'], 'barddzin'],
-  [['hair', 'парикмах', 'frizur', 'matu'], 'frizier'],
-  [['nail', 'маникюр', 'nagu', 'nagi'], 'manikir'],
-  [['makeup', 'макияж', 'grim'], 'grim'],
-  [['psycholog', 'психолог'], 'psiholog'],
-  [['math', 'матем'], 'matemat'],
-  [['business', 'бизнес'], 'biznes'],
-  [['accounting', 'бухгалт', 'gramatved'], 'gramatved'],
-  [['computer', 'компьют', 'excel', 'dator'], 'dator'],
-  [['bread', 'хлеб'], 'maiz'],
-  [['pottery', 'керамик', 'podniec'], 'keramik'],
-  [['beekeep', 'пчел', 'bites'], 'biskop'],
+/*
+ * "=mi" nozīmē: tikai tieši šis vārds, ne katrs, kas ar to sākas
+ * ("mi" nav "mikropigmentācija"). Pārējie — pēc sākuma.
+ */
+const SYNONYMS: [string[], string[]][] = [
+  [['coach', 'коуч', 'kouc'], ['kouc']],
+  [['english', 'англ'], ['angl']],
+  [['russian', 'русск'], ['krievu']],
+  [['german', 'немец', 'немецк'], ['vacu']],
+  [['latvian', 'латыш'], ['latviesu']],
+  [['italian', 'итальян', 'itali', 'italu'], ['ital']],
+  [['korean', 'корей', 'korej'], ['korej', 'korean']],
+  [['spanish', 'испан', 'spanu'], ['span']],
+  [['french', 'француз', 'franc'], ['franc', 'french']],
+  [['guitar', 'гитар'], ['gitar']],
+  [['piano', 'фортепиан', 'пианин'], ['klavier']],
+  [['drum', 'барабан'], ['bung']],
+  [['sing', 'вокал', 'dziedat', 'dziedas'], ['vokal']],
+  [['yoga', 'йог'], ['jog']],
+  [['meditat', 'медитац'], ['medit']],
+  [['barber', 'барбер'], ['barddzin', 'barber']],
+  [['hair', 'парикмах', 'frizur', 'matu'], ['frizier']],
+  [['nail', 'маникюр', 'nagu', 'nagi'], ['manikir']],
+  [['makeup', 'макияж', 'grim'], ['grim']],
+  [['lash', 'ресниц'], ['skropst']],
+  [['cosmet', 'косметолог'], ['kosmetolog']],
+  [['massag', 'массаж'], ['masaz']],
+  [['sauna', 'бан', 'pirtn'], ['pirt']],
+  [['psycholog', 'психолог'], ['psiholog']],
+  [['stres', 'стресс', 'izdeg', 'выгоран', 'burnout', 'trauksm', 'тревож', 'anxiet', 'depres', 'депресс'], ['mental', 'stres', 'trauksm', 'izdeg']],
+  [['math', 'матем'], ['matemat']],
+  [['business', 'бизнес'], ['biznes']],
+  [['=sakt', 'sakum', 'uzsakt', 'start', 'стартап'], ['saksan', 'uzsak']],
+  [['sales', 'продаж', 'pardot'], ['pardosan']],
+  [['marketing', 'маркетинг'], ['marketing']],
+  [['instagram', 'facebook', 'tiktok', '=smm', 'social', 'соцсет'], ['socialo', 'instagram']],
+  [['leader', 'lider', 'руковод', 'vaditaj'], ['vaditaj', 'lider', 'leader']],
+  [['career', 'карьер', '=cv', 'interv'], ['karjer']],
+  [['finance', 'финанс'], ['finans']],
+  [['accounting', 'бухгалт', 'gramatved'], ['gramatved']],
+  [['=ai', '=mi', 'chatgpt', '=gpt', 'artificial', 'нейросет', 'искусствен'], ['makslig']],
+  [['excel', 'word', 'office', 'microsoft', 'powerpoint', 'outlook'], ['excel', 'microsoft']],
+  [['computer', 'компьют', 'dator'], ['dator']],
+  [['website', 'сайт', 'majaslap'], ['majaslap', 'web']],
+  [['programm', 'coding', '=code', 'developer', 'программ'], ['programm', 'developer', 'izstrad']],
+  [['cyber', 'кибер', 'kiber', 'security'], ['kiber', 'cyber', 'security']],
+  [['glezno', 'painting', 'живопис'], ['glezn']],
+  [['zimet', 'zimej', 'drawing', 'рисова'], ['zimes']],
+  [['fitnes', 'fitness', 'спорт', 'trener'], ['sport', 'fitnes', 'trener']],
+  [['parent', 'родител', 'vecak'], ['vecak']],
+  [['relationship', 'отношен', 'attiecib'], ['attiecib']],
+  [['bread', 'хлеб'], ['maiz']],
+  [['pottery', 'керамик', 'podniec'], ['keramik']],
+  [['beekeep', 'пчел', 'bites'], ['biskop']],
 ]
 
 /*
@@ -141,7 +183,11 @@ export function fieldWords(fields: {
 export type QueryTerm = {
   /** Kā cilvēks to uzrakstīja — lai varētu parādīt atpakaļ */
   raw: string
-  /** Saknes, ko meklēt: pati sakne plus sinonīmi */
+  /**
+   * Saknes, ko meklēt: pirmā ir paša ierakstītā (tai pieļaujam
+   * pārrakstīšanās), pārējās ir sinonīmi (tiem tikai pēc sākuma —
+   * citādi "mākslīg" atrastu "māksliniece").
+   */
   stems: string[]
 }
 
@@ -156,9 +202,13 @@ export function parseQuery(query: string): QueryTerm[] {
     if (GENERIC_PREFIXES.some((prefix) => raw.startsWith(prefix))) continue
 
     const stems = [stem(raw)]
-    for (const [variants, canonical] of SYNONYMS) {
-      if (variants.some((v) => raw.startsWith(v)) && !stems.includes(canonical)) {
-        stems.push(canonical)
+    for (const [variants, canonicals] of SYNONYMS) {
+      const hit = variants.some((v) =>
+        v.startsWith('=') ? raw === v.slice(1) : raw.startsWith(v)
+      )
+      if (!hit) continue
+      for (const canonical of canonicals) {
+        if (!stems.includes(canonical)) stems.push(canonical)
       }
     }
     terms.push({ raw, stems })
@@ -192,10 +242,26 @@ function allowedTypos(length: number): number {
   return 0
 }
 
+/*
+ * Vārdi, kas sākas vienādi, bet nozīmē ko citu: "māksla" nav
+ * "mākslīgais intelekts".
+ */
+const FALSE_FRIENDS: [string, string][] = [['maksl', 'makslig']]
+
+function falseFriend(needle: string, word: string): boolean {
+  return FALSE_FRIENDS.some(
+    ([stemPart, other]) => needle.startsWith(stemPart) && !needle.startsWith(other) && word.startsWith(other)
+  )
+}
+
 /** Vai viena meklētā sakne atrodama starp teksta vārdiem. */
-function stemMatches(needle: string, words: string[]): boolean {
-  const typos = allowedTypos(needle.length)
+function stemMatches(needle: string, words: string[], allowTypos = true): boolean {
+  // "ai", "cv", "it": tik īsam vārdam der tikai pilnīga sakritība,
+  // citādi "ai" atrastu katru "aizsardzību" un "airbnb"
+  if (needle.length <= 2) return words.includes(needle)
+  const typos = allowTypos ? allowedTypos(needle.length) : 0
   return words.some((word) => {
+    if (falseFriend(needle, word)) return false
     // "kok" -> "kokle": cilvēks vēl raksta
     if (word.startsWith(needle)) return true
     // "grāmatvedības" -> "grāmatvedība": garāks locījums par tekstā esošo
@@ -212,7 +278,7 @@ function stemMatches(needle: string, words: string[]): boolean {
 
 /** Vai meklētais vārds (jebkurš no tā variantiem) ir tekstā. */
 export function termMatches(term: QueryTerm, words: string[]): boolean {
-  return term.stems.some((s) => stemMatches(s, words))
+  return term.stems.some((s, i) => stemMatches(s, words, i === 0))
 }
 
 /** Teksts -> vārdu saraksts, gatavs salīdzināšanai. */

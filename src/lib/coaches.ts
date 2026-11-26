@@ -38,6 +38,13 @@ export type CoachCardData = Pick<
 >
 
 /**
+ * Kartīte plus apraksts — tikai meklēšanai sākumlapā. Kartītē apraksts
+ * netiek rādīts, bet cilvēks, kurš meklē "kiberdrošība", grib atrast
+ * arī tos, kam šis vārds ir tikai garajā aprakstā "Par mani".
+ */
+export type SearchableCoach = CoachCardData & { bio?: string | null }
+
+/**
  * 'none' nozīmē, ka cilvēks kārtošanu nav izvēlējies. Tas nav tas pats,
  * kas 'popular' — saraksts tad neizceļ ne skatītākos, ne jaunākos.
  */
@@ -138,27 +145,94 @@ export function qualificationKey(
  * atrod ģitāristu) un vārdi no laukiem ("meistarklase", "attālināti",
  * "bezmaksas"), kas profila tekstā var nebūt.
  */
-function searchWords(
+/** Kas cilvēks ir un ko viņš māca: vārds, virsraksts, tēmas, vieta. */
+function strongText(coach: CoachCardData, nicheNames: Record<string, string>): string {
+  return [
+    coach.full_name,
+    coach.tagline ?? '',
+    coach.city ?? '',
+    coach.region_slug ?? '',
+    ...coach.niches.map((n) => nicheNames[n] ?? n),
+    ...coach.niches,
+  ].join(' ')
+}
+
+/** Plašāks konteksts: nozare un vārdi no laukiem (formāts, cena). */
+function weakText(
   coach: CoachCardData,
+  nicheToSphere: Record<string, string>,
+  sphereNames: Record<string, string>
+): string {
+  return [
+    ...coach.niches.map((n) => sphereNames[nicheToSphere[n]] ?? ''),
+    fieldWords({
+      experienceKinds: coach.experience_kinds,
+      teachingFormat: coach.teaching_format,
+      isFree: coach.price_tier === 'free',
+    }),
+  ].join(' ')
+}
+
+function primaryText(
+  coach: CoachCardData,
+  nicheNames: Record<string, string>,
+  nicheToSphere: Record<string, string>,
+  sphereNames: Record<string, string>
+): string {
+  return `${strongText(coach, nicheNames)} ${weakText(coach, nicheToSphere, sphereNames)}`
+}
+
+/** Viss profila teksts, arī apraksts. Pēc šī atlasa. */
+function searchWords(
+  coach: SearchableCoach,
   nicheNames: Record<string, string>,
   nicheToSphere: Record<string, string>,
   sphereNames: Record<string, string>
 ): string[] {
   return toWords(
-    [
-      coach.full_name,
-      coach.tagline ?? '',
-      coach.city ?? '',
-      coach.region_slug ?? '',
-      ...coach.niches.map((n) => nicheNames[n] ?? n),
-      ...coach.niches,
-      ...coach.niches.map((n) => sphereNames[nicheToSphere[n]] ?? ''),
-      fieldWords({
-        experienceKinds: coach.experience_kinds,
-        teachingFormat: coach.teaching_format,
-        isFree: coach.price_tier === 'free',
-      }),
-    ].join(' ')
+    `${primaryText(coach, nicheNames, nicheToSphere, sphereNames)} ${coach.bio ?? ''}`
+  )
+}
+
+/**
+ * Meklēšanas rezultātu secība: augšā tie, kam meklētais vārds ir
+ * vārdā, virsrakstā vai tēmās (3 punkti), tad nozarē vai formātā
+ * (1 punkts), zemāk tie, kam tikai aprakstā (0). Starp vienādiem paliek
+ * iepriekšējā secība. Fona profili paliek beigās.
+ */
+export function rankByRelevance<T extends CoachCardData>(
+  coaches: T[],
+  query: string,
+  nicheToSphere: Record<string, string> = {},
+  nicheNames: Record<string, string> = {},
+  sphereNames: Record<string, string> = {}
+): T[] {
+  const terms = parseQuery(query)
+  if (terms.length === 0) return coaches
+  return coaches
+    .map((coach, index) => ({
+      coach,
+      index,
+      score: relevance(
+        terms,
+        toWords(strongText(coach, nicheNames)),
+        toWords(weakText(coach, nicheToSphere, sphereNames))
+      ),
+    }))
+    .sort((a, b) => {
+      if (a.coach.is_background !== b.coach.is_background) {
+        return a.coach.is_background ? 1 : -1
+      }
+      return b.score - a.score || a.index - b.index
+    })
+    .map((entry) => entry.coach)
+}
+
+function relevance(terms: QueryTerm[], strong: string[], weak: string[]): number {
+  return terms.reduce(
+    (sum, term) =>
+      sum + (termMatches(term, strong) ? 3 : termMatches(term, weak) ? 1 : 0),
+    0
   )
 }
 
@@ -167,8 +241,8 @@ function matchCount(terms: QueryTerm[], words: string[]): number {
   return terms.filter((term) => termMatches(term, words)).length
 }
 
-export function filterCoaches(
-  coaches: CoachCardData[],
+export function filterCoaches<T extends SearchableCoach>(
+  coaches: T[],
   filters: CoachFilters,
   /** grupas slug -> sfēras slug; vajadzīgs filtram pēc nozares */
   nicheToSphere: Record<string, string> = {},
@@ -176,7 +250,7 @@ export function filterCoaches(
   nicheNames: Record<string, string> = {},
   /** sfēras slug -> nosaukums; "Mūzika" atrod arī ģitāristu */
   sphereNames: Record<string, string> = {}
-): CoachCardData[] {
+): T[] {
   // Katrs vārds jāatrod atsevišķi, lai "kokle Kurzeme" strādā
   const terms = parseQuery(filters.query)
 
@@ -267,13 +341,13 @@ export function filterCoaches(
  * filtri (formāts, budžets, valoda) paliek spēkā; kārtots pēc tā, cik
  * vārdu sakrita.
  */
-export function closestCoaches(
-  coaches: CoachCardData[],
+export function closestCoaches<T extends SearchableCoach>(
+  coaches: T[],
   filters: CoachFilters,
   nicheToSphere: Record<string, string> = {},
   nicheNames: Record<string, string> = {},
   sphereNames: Record<string, string> = {}
-): CoachCardData[] {
+): T[] {
   const terms = parseQuery(filters.query)
   if (terms.length < 2) return []
 
@@ -286,6 +360,27 @@ export function closestCoaches(
     .filter((entry) => entry.score > 0)
     .sort((a, b) => b.score - a.score)
     .map((entry) => entry.coach)
+}
+
+/**
+ * Tēmas, kas atbilst meklētajam, bet kurās vēl nav neviena profila.
+ *
+ * "gribu iemācīties spēlēt kokli": tēma "Kokle" ir, cilvēku vēl nav.
+ * Labāk to pateikt tieši, nekā rādīt "neviens neatbilst" vai, vēl
+ * sliktāk, aizvest uz nozari, kurā ir kāds pavisam cits.
+ */
+export function emptyTopics(
+  query: string,
+  groups: { value: string; label: string }[],
+  usedNiches: Set<string>
+): string[] {
+  const terms = parseQuery(query)
+  if (terms.length === 0) return []
+  return groups
+    .filter((g) => !usedNiches.has(g.value))
+    .filter((g) => terms.some((term) => termMatches(term, toWords(g.label))))
+    .map((g) => g.label)
+    .slice(0, 3)
 }
 
 /**
