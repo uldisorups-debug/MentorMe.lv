@@ -1,4 +1,3 @@
-import { routing } from '@/i18n/routing'
 import { SITE_URL } from '@/lib/supabase/config'
 
 /**
@@ -15,14 +14,16 @@ import { SITE_URL } from '@/lib/supabase/config'
  */
 export const INDEXNOW_KEY = 'be8433cd719558ae75e8c4f39c3c1a90'
 
-/** Visas valodu versijas vienam ceļam: /x, /en/x, /ru/x */
-export function allLocaleUrls(path: string): string[] {
-  const clean = path === '/' ? '' : path
-  return routing.locales.map((locale) =>
-    locale === routing.defaultLocale
-      ? `${SITE_URL}${clean || '/'}`
-      : `${SITE_URL}/${locale}${clean}`
-  )
+/**
+ * Kanoniskā (latviešu) adrese ceļam.
+ *
+ * Agrāk ziņojām visas trīs valodas. Profiliem, tēmām un rakstiem
+ * angļu un krievu versija tagad nav sitemap un raksta gadījumā norāda
+ * ar canonical uz latviešu. Ziņot meklētājam adresi, kuru pati lapa
+ * sauc par kopiju, ir pretrunīgs signāls.
+ */
+export function canonicalUrl(path: string): string {
+  return path === '/' ? SITE_URL : `${SITE_URL}${path}`
 }
 
 /**
